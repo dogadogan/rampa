@@ -7,17 +7,18 @@ public class RotateJoints : MonoBehaviour
 
 {
     
-    public float speed ;
-    public ArticulationBody joint;
+    //public float speed ;
+    private ArticulationBody joint ;
     public Slider slider ;
     
     // Start is called before the first frame update
     void Start()
 
     {
+        joint = this.GetComponent<ArticulationBody>();
         ArticulationDrive currentDrive = joint.xDrive;
-        currentDrive.stiffness = 10f;
-        currentDrive.damping = 10f;
+        currentDrive.stiffness = 10000f;
+        currentDrive.damping = 100f;
         joint.xDrive = currentDrive;
 
     }
@@ -27,7 +28,7 @@ public class RotateJoints : MonoBehaviour
     {
         
         ArticulationDrive currentDrive = joint.xDrive;
-        float newTargetDelta = slider.value * Time.fixedDeltaTime * speed;
+        /*float newTargetDelta = slider.value * Time.fixedDeltaTime * speed;
         if (newTargetDelta + currentDrive.target > currentDrive.upperLimit)
         {
             currentDrive.target = currentDrive.upperLimit;
@@ -39,7 +40,8 @@ public class RotateJoints : MonoBehaviour
         else
         {
             currentDrive.target += newTargetDelta;
-        }
+        }*/
+        currentDrive.target = slider.value * 180;
         joint.xDrive = currentDrive;
         
     }

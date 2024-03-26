@@ -513,6 +513,7 @@ GameObject:
   - component: {fileID: 174131418}
   - component: {fileID: 174131417}
   - component: {fileID: 174131416}
+  - component: {fileID: 174131420}
   m_Layer: 0
   m_Name: wrist_3_link
   m_TagString: Untagged
@@ -652,6 +653,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsBaseLink: 0
+--- !u!114 &174131420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 174131414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5e703628c56249a6924244f144f1903, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slider: {fileID: 357598229}
 --- !u!1001 &191618125
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1426,8 +1440,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5e703628c56249a6924244f144f1903, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 90
-  joint: {fileID: 346162285}
   slider: {fileID: 768908707}
 --- !u!1 &346916335
 GameObject:
@@ -1777,7 +1789,7 @@ MonoBehaviour:
   m_FillRect: {fileID: 691963399}
   m_HandleRect: {fileID: 1035890207}
   m_Direction: 0
-  m_MinValue: 0
+  m_MinValue: -1
   m_MaxValue: 1
   m_WholeNumbers: 0
   m_Value: 0
@@ -2335,7 +2347,7 @@ MonoBehaviour:
   m_FillRect: {fileID: 1571344278}
   m_HandleRect: {fileID: 68819982}
   m_Direction: 0
-  m_MinValue: 0
+  m_MinValue: -1
   m_MaxValue: 1
   m_WholeNumbers: 0
   m_Value: 0
@@ -2621,7 +2633,7 @@ MonoBehaviour:
   m_FillRect: {fileID: 698813993}
   m_HandleRect: {fileID: 2116046142}
   m_Direction: 0
-  m_MinValue: 0
+  m_MinValue: -1
   m_MaxValue: 1
   m_WholeNumbers: 0
   m_Value: 0
@@ -3857,7 +3869,7 @@ MonoBehaviour:
   m_FillRect: {fileID: 1801289323}
   m_HandleRect: {fileID: 956221291}
   m_Direction: 0
-  m_MinValue: 0
+  m_MinValue: -1
   m_MaxValue: 1
   m_WholeNumbers: 0
   m_Value: 0
@@ -4381,6 +4393,7 @@ GameObject:
   - component: {fileID: 1210830124}
   - component: {fileID: 1210830123}
   - component: {fileID: 1210830122}
+  - component: {fileID: 1210830126}
   m_Layer: 0
   m_Name: upper_arm_link
   m_TagString: Untagged
@@ -4519,6 +4532,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsBaseLink: 0
+--- !u!114 &1210830126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1210830120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5e703628c56249a6924244f144f1903, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slider: {fileID: 578031258}
 --- !u!1 &1215970735
 GameObject:
   m_ObjectHideFlags: 0
@@ -4918,6 +4944,7 @@ GameObject:
   - component: {fileID: 1292747581}
   - component: {fileID: 1292747580}
   - component: {fileID: 1292747579}
+  - component: {fileID: 1292747582}
   m_Layer: 0
   m_Name: ur10
   m_TagString: robot
@@ -4980,6 +5007,24 @@ Transform:
   - {fileID: 2108890273}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1292747582
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1292747578}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 432c9e748cb2141558c34ba795956da8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stiffness: 10000
+  damping: 1000
+  forceLimit: 1000
+  speed: 5
+  torque: 100
+  acceleration: 5
 --- !u!1 &1328882223
 GameObject:
   m_ObjectHideFlags: 8
@@ -5282,6 +5327,7 @@ GameObject:
   - component: {fileID: 1406947444}
   - component: {fileID: 1406947443}
   - component: {fileID: 1406947442}
+  - component: {fileID: 1406947446}
   m_Layer: 0
   m_Name: forearm_link
   m_TagString: Untagged
@@ -5420,6 +5466,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsBaseLink: 0
+--- !u!114 &1406947446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1406947440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5e703628c56249a6924244f144f1903, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slider: {fileID: 1955563683}
 --- !u!1 &1410293785
 GameObject:
   m_ObjectHideFlags: 8
@@ -7349,7 +7408,7 @@ MonoBehaviour:
   m_FillRect: {fileID: 420636404}
   m_HandleRect: {fileID: 968599845}
   m_Direction: 0
-  m_MinValue: 0
+  m_MinValue: -1
   m_MaxValue: 1
   m_WholeNumbers: 0
   m_Value: 0
@@ -7508,6 +7567,7 @@ GameObject:
   - component: {fileID: 2032696375}
   - component: {fileID: 2032696374}
   - component: {fileID: 2032696373}
+  - component: {fileID: 2032696377}
   m_Layer: 0
   m_Name: wrist_1_link
   m_TagString: Untagged
@@ -7646,6 +7706,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsBaseLink: 0
+--- !u!114 &2032696377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2032696371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5e703628c56249a6924244f144f1903, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slider: {fileID: 700013117}
 --- !u!1 &2034607892
 GameObject:
   m_ObjectHideFlags: 8
@@ -7937,6 +8010,7 @@ GameObject:
   - component: {fileID: 2116316030}
   - component: {fileID: 2116316029}
   - component: {fileID: 2116316028}
+  - component: {fileID: 2116316032}
   m_Layer: 0
   m_Name: wrist_2_link
   m_TagString: Untagged
@@ -8075,6 +8149,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsBaseLink: 0
+--- !u!114 &2116316032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2116316026}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5e703628c56249a6924244f144f1903, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slider: {fileID: 1032911338}
 --- !u!1 &2139542344
 GameObject:
   m_ObjectHideFlags: 0
