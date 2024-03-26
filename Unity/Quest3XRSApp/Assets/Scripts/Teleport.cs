@@ -10,7 +10,7 @@ public class Teleport: MonoBehaviour
     // public GameObject from;
     // public GameObject target;
     // private float timeCount = 0.0f;
-    public GameObject grabable;
+    public GameObject grabbable;
 
     private void Start()
     {
@@ -25,6 +25,6 @@ public class Teleport: MonoBehaviour
     {
         //Quaternion rotation  = Quaternion.Slerp(from.transform.rotation, target.transform.rotation, timeCount);
         //timeCount += Time.deltaTime;
-        ab.TeleportRoot(grabable.transform.position,grabable.transform.rotation);
+        ab.TeleportRoot(grabbable.transform.position,grabbable.transform.rotation);
     }
 }

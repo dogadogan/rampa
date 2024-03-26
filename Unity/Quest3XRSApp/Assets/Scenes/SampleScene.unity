@@ -583,7 +583,7 @@ ArticulationBody:
   m_Enabled: 1
   serializedVersion: 5
   m_Mass: 0.202
-  m_ParentAnchorPosition: {x: 0.000000029802322, y: 0.11570005, z: -0.00000073015684}
+  m_ParentAnchorPosition: {x: 0, y: 0.11570005, z: -0.00000073015684}
   m_ParentAnchorRotation: {x: 0, y: 0, z: 0, w: 1.0000002}
   m_AnchorPosition: {x: 0, y: 0, z: 0}
   m_AnchorRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -1275,6 +1275,7 @@ GameObject:
   - component: {fileID: 346162285}
   - component: {fileID: 346162284}
   - component: {fileID: 346162283}
+  - component: {fileID: 346162287}
   m_Layer: 0
   m_Name: shoulder_link
   m_TagString: Untagged
@@ -1344,7 +1345,7 @@ ArticulationBody:
   m_Enabled: 1
   serializedVersion: 5
   m_Mass: 7.778
-  m_ParentAnchorPosition: {x: 0, y: 0.12730002, z: 0}
+  m_ParentAnchorPosition: {x: 0, y: 0.1273, z: 0}
   m_ParentAnchorRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
   m_AnchorPosition: {x: 0, y: 0, z: 0}
   m_AnchorRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
@@ -1413,6 +1414,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsBaseLink: 0
+--- !u!114 &346162287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 346162281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5e703628c56249a6924244f144f1903, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 90
+  joint: {fileID: 346162285}
+  slider: {fileID: 768908707}
 --- !u!1 &346916335
 GameObject:
   m_ObjectHideFlags: 0
@@ -2789,7 +2805,7 @@ MonoBehaviour:
   m_FillRect: {fileID: 1874385894}
   m_HandleRect: {fileID: 290025594}
   m_Direction: 0
-  m_MinValue: 0
+  m_MinValue: -1
   m_MaxValue: 1
   m_WholeNumbers: 0
   m_Value: 0
@@ -3356,7 +3372,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ab: {fileID: 888906140}
-  grabable: {fileID: 1940733295}
+  grabbable: {fileID: 1940733295}
 --- !u!1 &927604431
 GameObject:
   m_ObjectHideFlags: 0
@@ -4434,7 +4450,7 @@ ArticulationBody:
   m_Enabled: 1
   serializedVersion: 5
   m_Mass: 12.93
-  m_ParentAnchorPosition: {x: -0.220941, y: 0.000000029802322, z: 0}
+  m_ParentAnchorPosition: {x: -0.220941, y: 0, z: 0}
   m_ParentAnchorRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_AnchorPosition: {x: 0, y: 0, z: 0}
   m_AnchorRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -4916,7 +4932,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1292747578}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d607ea46a579d44c4b19a6322ce4b9b2, type: 3}
   m_Name: 
@@ -4924,9 +4940,9 @@ MonoBehaviour:
   selectedJoint: 
   selectedIndex: 0
   control: 0
-  stiffness: 0
-  damping: 0
-  forceLimit: 0
+  stiffness: 100
+  damping: 10
+  forceLimit: 10
   speed: 5
   torque: 100
   acceleration: 5
@@ -5335,7 +5351,7 @@ ArticulationBody:
   m_Enabled: 1
   serializedVersion: 5
   m_Mass: 3.87
-  m_ParentAnchorPosition: {x: 0.17190003, y: 0.6120002, z: 0.000000059604645}
+  m_ParentAnchorPosition: {x: 0.1719, y: 0.6120002, z: 0}
   m_ParentAnchorRotation: {x: 0, y: 0, z: 0, w: 1.0000001}
   m_AnchorPosition: {x: 0, y: 0, z: 0}
   m_AnchorRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -6972,7 +6988,7 @@ GameObject:
   - component: {fileID: 1940733306}
   - component: {fileID: 1940733305}
   m_Layer: 0
-  m_Name: GrabableCube
+  m_Name: GrabbableCube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7141,13 +7157,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1940733295}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.5, y: 1, z: 0.5}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0.5, y: 0, z: 0.5}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!114 &1940733304
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7561,7 +7577,7 @@ ArticulationBody:
   m_Enabled: 1
   serializedVersion: 5
   m_Mass: 1.96
-  m_ParentAnchorPosition: {x: 0.000000029802322, y: 0.5723008, z: 0}
+  m_ParentAnchorPosition: {x: 0, y: 0.5723008, z: 0}
   m_ParentAnchorRotation: {x: 0.7071069, y: 0, z: 0, w: 0.7071069}
   m_AnchorPosition: {x: 0, y: 0, z: 0}
   m_AnchorRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -7990,7 +8006,7 @@ ArticulationBody:
   m_Enabled: 1
   serializedVersion: 5
   m_Mass: 1.96
-  m_ParentAnchorPosition: {x: -0.11489996, y: -1.1368684e-13, z: -0.00000071525585}
+  m_ParentAnchorPosition: {x: -0.11489999, y: -1.1368684e-13, z: -0.00000071525585}
   m_ParentAnchorRotation: {x: 0, y: 0, z: -0.707107, w: 0.707107}
   m_AnchorPosition: {x: 0, y: 0, z: 0}
   m_AnchorRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
