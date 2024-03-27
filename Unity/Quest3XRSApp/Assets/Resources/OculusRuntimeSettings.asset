@@ -18,6 +18,6 @@ MonoBehaviour:
   hasSentConsentEvent: 0
   hasSetTelemetryEnabled: 0
   telemetryEnabled: 0
-  telemetryProjectGuid: d57dfdac-4077-4032-a02c-85a623d976a6
+  telemetryProjectGuid: c8c2aeeb-e714-49c7-bcab-954b13f2894f
   bodyTrackingFidelity: 1
   bodyTrackingJointSet: 0
