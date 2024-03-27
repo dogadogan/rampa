@@ -8,7 +8,7 @@ public class RotateJoints : MonoBehaviour
 {
     
     //public float speed ;
-    private ArticulationBody joint ;
+    public ArticulationBody joint ;
     public Slider slider ;
     
     // Start is called before the first frame update
