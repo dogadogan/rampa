@@ -12,7 +12,7 @@ public class SourceDestinationPublisher : MonoBehaviour
     const int k_NumRobotJoints = 6;
 
     public static readonly string[] LinkNames =
-        { "world/base_link/shoulder_link", "/arm_link", "/elbow_link", "/forearm_link", "/wrist_link", "/hand_link" };
+        { "world/base_link/shoulder_link", "/upper_arm_link", "/forearm_link", "/wrist_1_link", "/wrist_2_link","/wrist_3_link" };
 
     // Variables required for ROS communication
     [SerializeField]
