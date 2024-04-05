@@ -19,10 +19,11 @@ public class TrajectoryPlanner : MonoBehaviour
     [SerializeField]
     string m_RosServiceName = "niryo_moveit";
     public string RosServiceName { get => m_RosServiceName; set => m_RosServiceName = value; }
+    
 
-    [SerializeField]
-    GameObject m_UR10;
-    public GameObject NiryoOne { get => m_UR10; set => m_UR10 = value; }
+    public GameObject baseLink;
+
+    //public GameObject NiryoOne { get => m_UR10; set => m_UR10 = value; }
     [SerializeField]
     GameObject m_Target;
     public GameObject Target { get => m_Target; set => m_Target = value; }
@@ -35,7 +36,7 @@ public class TrajectoryPlanner : MonoBehaviour
     readonly Vector3 m_PickPoseOffset = Vector3.up * 0.1f;
 
     // Articulation Bodies
-    ArticulationBody[] m_JointArticulationBodies;
+    public ArticulationBody[] m_JointArticulationBodies;
     // ArticulationBody m_LeftGripper;
     // ArticulationBody m_RightGripper;
 
@@ -53,14 +54,17 @@ public class TrajectoryPlanner : MonoBehaviour
         m_Ros = ROSConnection.GetOrCreateInstance();
         m_Ros.RegisterRosService<MoverServiceRequest, MoverServiceResponse>(m_RosServiceName);
 
-        m_JointArticulationBodies = new ArticulationBody[k_NumRobotJoints];
+        //m_JointArticulationBodies = new ArticulationBody[k_NumRobotJoints];
 
-        var linkName = string.Empty;
+        /*var linkName = string.Empty;
         for (var i = 0; i < k_NumRobotJoints; i++)
         {
             linkName += SourceDestinationPublisher.LinkNames[i];
             m_JointArticulationBodies[i] = m_UR10.transform.Find(linkName).GetComponent<ArticulationBody>();
-        }
+            Debug.Log( m_UR10.transform.Find(linkName));
+           
+        }*/
+        
 
         // Find left and right fingers
         // var rightGripper = linkName + "/tool_link/gripper_base/servo_head/control_rod_right/right_gripper";
@@ -111,6 +115,8 @@ public class TrajectoryPlanner : MonoBehaviour
         for (var i = 0; i < k_NumRobotJoints; i++)
         {
             joints.joints[i] = m_JointArticulationBodies[i].xDrive.target * Mathf.Deg2Rad;
+            Debug.LogWarning(i);
+            Debug.LogWarning(m_JointArticulationBodies[i].name);
         }
 
         return joints;
@@ -131,36 +137,36 @@ public class TrajectoryPlanner : MonoBehaviour
         // Pick Pose
         request.pick_pose = new PoseMsg
         {
-            position = (m_Target.transform.position - m_UR10.transform.position + m_PickPoseOffset).To<FLU>(),
+            position = (m_Target.transform.position - baseLink.transform.position).To<FLU>(),
         
             // The hardcoded x/z angles assure that the gripper is always positioned above the target cube before grasping.
-            orientation = Quaternion.Euler(90, m_Target.transform.eulerAngles.y, 0).To<FLU>()
+            orientation = m_PickOrientation.To<FLU>()
         };
 
         //Place Pose
         request.place_pose = new PoseMsg
         {
-            position = (m_TargetPlacement.transform.position - m_UR10.transform.position + m_PickPoseOffset).To<FLU>(),
+            position = (m_TargetPlacement.transform.position - baseLink.transform.position ).To<FLU>(),
             orientation = m_PickOrientation.To<FLU>()
         };
+
         
-        Debug.LogWarning("in publish joints");
-        Debug.LogWarning(request.joints_input);
+        Debug.LogWarning(request);
 
         m_Ros.SendServiceMessage<MoverServiceResponse>(m_RosServiceName, request, TrajectoryResponse);
     }
 
     void TrajectoryResponse(MoverServiceResponse response)
     {
-        Debug.LogWarning("in response");
-        Debug.LogWarning(response);
+        //Debug.LogWarning("in response");
+        /*Debug.LogWarning(response);
         Debug.LogWarning(response.trajectories.Length);
         Debug.LogWarning(response.trajectories[0].joint_trajectory.points[0].positions[0] + "------------------- joints");
-        Debug.LogWarning(response.trajectories[0].joint_trajectory.header);
+        Debug.LogWarning(response.trajectories[0].joint_trajectory.header);*/
         
         if (response.trajectories.Length > 0)
         {
-            Debug.Log("Trajectory returned.");
+            //Debug.Log("Trajectory returned.");
             StartCoroutine(ExecuteTrajectories(response));
         }
         else
