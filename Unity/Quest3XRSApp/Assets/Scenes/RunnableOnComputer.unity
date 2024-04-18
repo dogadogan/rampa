@@ -1845,7 +1845,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2488693025208843342, guid: c5852c29842fa4cfc9d69ea0aea3f795, type: 3}
       propertyPath: max_range
-      value: 180
+      value: 360
       objectReference: {fileID: 0}
     - target: {fileID: 4491370047518180940, guid: c5852c29842fa4cfc9d69ea0aea3f795, type: 3}
       propertyPath: m_Pivot.x

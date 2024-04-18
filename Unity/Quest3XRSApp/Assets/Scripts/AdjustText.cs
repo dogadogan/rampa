@@ -10,7 +10,6 @@ public class AdjustText : MonoBehaviour
     // Start is called before the first frame update
     public Slider Slider;
     public TextMeshProUGUI textMeshPro;
-    public int max_range = 360;
     void Start()
     {
         
@@ -19,7 +18,7 @@ public class AdjustText : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        textMeshPro.text = (Slider.value * max_range).ToString("0.000") + "°";
+        textMeshPro.text = (Slider.value * 360).ToString("0.000") + "°";
 
     }
 }
