@@ -8,10 +8,8 @@ public class CustomController : MonoBehaviour
     public float stiffness;
     public float damping;
     public float forceLimit;
-    public float speed = 5f; // Units: degree/s
-    public float torque = 100f; // Units: Nm or N
-    public float acceleration = 5f;// Units: m/s^2 / degree/s^2
     int defDyanmicVal = 10;
+    public ArticulationDriveType driveType = ArticulationDriveType.Force;
     void Start()
     
     {
@@ -25,6 +23,7 @@ public class CustomController : MonoBehaviour
             currentDrive.forceLimit = forceLimit;
             currentDrive.damping = damping;
             currentDrive.stiffness = stiffness;
+            currentDrive.driveType = driveType;
             joint.xDrive = currentDrive;
         }
         

@@ -364,7 +364,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slider: {fileID: 768908707}
-  max_range: 360
 --- !u!114 &174131421
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1055,7 +1054,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slider: {fileID: 1072897143}
-  max_range: 360
 --- !u!114 &346162288
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2045,7 +2043,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -2843,6 +2841,8 @@ MonoBehaviour:
   - {fileID: 1663257857}
   - {fileID: 1932305097}
   - {fileID: 768908707}
+  objectsToBeRemoveColliders:
+  - {fileID: 604625996}
 --- !u!1 &888906136
 GameObject:
   m_ObjectHideFlags: 0
@@ -4003,7 +4003,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slider: {fileID: 352361279}
-  max_range: 360
 --- !u!114 &1210830127
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4393,9 +4392,7 @@ MonoBehaviour:
   stiffness: 10000
   damping: 1000
   forceLimit: 1000
-  speed: 5
-  torque: 100
-  acceleration: 5
+  driveType: 0
 --- !u!114 &1292747583
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4873,7 +4870,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slider: {fileID: 537583663}
-  max_range: 180
 --- !u!114 &1406947447
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7123,7 +7119,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slider: {fileID: 1663257857}
-  max_range: 360
 --- !u!114 &2032696378
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7505,7 +7500,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slider: {fileID: 1932305097}
-  max_range: 360
 --- !u!114 &2116316033
 MonoBehaviour:
   m_ObjectHideFlags: 0

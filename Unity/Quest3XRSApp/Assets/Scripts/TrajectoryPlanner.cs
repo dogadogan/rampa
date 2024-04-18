@@ -43,6 +43,7 @@ public class TrajectoryPlanner : MonoBehaviour
     // ROS Connector
     ROSConnection m_Ros;
     public Slider[] Sliders;
+    public GameObject[] objectsToBeRemoveColliders;
 
     /// <summary>
     ///     Find all robot joints in Awake() and add them to the jointArticulationBodies array.
@@ -115,8 +116,8 @@ public class TrajectoryPlanner : MonoBehaviour
         for (var i = 0; i < k_NumRobotJoints; i++)
         {
             joints.joints[i] = m_JointArticulationBodies[i].xDrive.target * Mathf.Deg2Rad;
-            Debug.LogWarning(i);
-            Debug.LogWarning(m_JointArticulationBodies[i].name);
+            //Debug.LogWarning(i);
+            //Debug.LogWarning(m_JointArticulationBodies[i].name);
         }
 
         return joints;
@@ -130,7 +131,7 @@ public class TrajectoryPlanner : MonoBehaviour
     /// </summary>
     public void PublishJoints()
     {
-        Debug.LogWarning("in publish joints");
+       // Debug.LogWarning("in publish joints");
         var request = new MoverServiceRequest();
         request.joints_input = CurrentJointConfig();
 
@@ -151,7 +152,7 @@ public class TrajectoryPlanner : MonoBehaviour
         };
 
         
-        Debug.LogWarning(request);
+        //Debug.LogWarning(request);
 
         m_Ros.SendServiceMessage<MoverServiceResponse>(m_RosServiceName, request, TrajectoryResponse);
     }
@@ -164,6 +165,12 @@ public class TrajectoryPlanner : MonoBehaviour
         Debug.LogWarning(response.trajectories[0].joint_trajectory.points[0].positions[0] + "------------------- joints");
         Debug.LogWarning(response.trajectories[0].joint_trajectory.header);*/
         
+        foreach (var removeObject in objectsToBeRemoveColliders)
+        {
+            Debug.Log(removeObject.GetComponent<BoxCollider>().name);
+            removeObject.GetComponent<BoxCollider>().enabled = false;
+        }
+        
         if (response.trajectories.Length > 0)
         {
             //Debug.Log("Trajectory returned.");
@@ -172,6 +179,10 @@ public class TrajectoryPlanner : MonoBehaviour
         else
         {
             Debug.LogError("No trajectory returned from MoverService.");
+            foreach (var removeObject in objectsToBeRemoveColliders)
+            {
+                removeObject.GetComponent<Collider>().enabled = true;
+            }
         }
     }
 
@@ -199,21 +210,21 @@ public class TrajectoryPlanner : MonoBehaviour
                 {
                     var jointPositions = t.positions;
                     var result = jointPositions.Select(r => (float)r * Mathf.Rad2Deg).ToArray();
-                    Debug.LogWarning("------------");
-                    Debug.LogWarning(string.Join(", ", result)  + " joint angles in degrees");
+                    //Debug.LogWarning("------------");
+                    //Debug.LogWarning(string.Join(", ", result)  + " joint angles in degrees");
 
                     // Set the joint values for every joint
                     for (var joint = 0; joint < m_JointArticulationBodies.Length; joint++)
                     {
                         ArticulationDrive joint1XDrive = m_JointArticulationBodies[joint].xDrive;
                         
-                        Debug.LogWarning(joint);
-                        Debug.LogWarning(joint1XDrive.target);
-                        Debug.LogWarning(result[joint] + "before assigning");
+                        //Debug.LogWarning(joint);
+                        //Debug.LogWarning(joint1XDrive.target);
+                        //Debug.LogWarning(result[joint] + "before assigning");
                         // joint1XDrive.target = result[joint];
                         Sliders[joint].value = result[joint] / 360;
-                        Debug.LogWarning(result[joint] + "after assigning");
-                        Debug.LogWarning("------------");
+                        //Debug.LogWarning(result[joint] + "after assigning");
+                        //Debug.LogWarning("------------");
                         //m_JointArticulationBodies[joint].xDrive = joint1XDrive;
                     }
 
@@ -234,6 +245,11 @@ public class TrajectoryPlanner : MonoBehaviour
             // All trajectories have been executed, open the gripper to place the target cube
             // OpenGripper();
         }
+        foreach (var removeObject in objectsToBeRemoveColliders)
+        {
+            removeObject.GetComponent<Collider>().enabled = true;
+        }
+
     }
 
     // enum Poses
