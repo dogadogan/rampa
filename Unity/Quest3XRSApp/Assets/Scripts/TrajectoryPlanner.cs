@@ -211,14 +211,14 @@ public class TrajectoryPlanner : MonoBehaviour
                         Debug.LogWarning(joint1XDrive.target);
                         Debug.LogWarning(result[joint] + "before assigning");
                         // joint1XDrive.target = result[joint];
-                        Sliders[joint].value = result[joint] / 180;
+                        Sliders[joint].value = result[joint] / 360;
                         Debug.LogWarning(result[joint] + "after assigning");
                         Debug.LogWarning("------------");
                         //m_JointArticulationBodies[joint].xDrive = joint1XDrive;
                     }
 
                     // Wait for robot to achieve pose for all joint assignments
-                    yield return new WaitForSeconds(k_JointAssignmentWait);
+                    yield return new WaitForSeconds(0.1f);
                 }
 
                 // Close the gripper if completed executing the trajectory for the Grasp pose

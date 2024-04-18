@@ -25,6 +25,6 @@ public class Teleport: MonoBehaviour
     {
         //Quaternion rotation  = Quaternion.Slerp(from.transform.rotation, target.transform.rotation, timeCount);
         //timeCount += Time.deltaTime;
-        ab.TeleportRoot(grabbable.transform.position,grabbable.transform.rotation);
+        ab.TeleportRoot(grabbable.transform.position + new Vector3(0,0.1f,0),grabbable.transform.rotation);
     }
 }
