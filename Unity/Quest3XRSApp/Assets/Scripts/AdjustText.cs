@@ -18,7 +18,7 @@ public class AdjustText : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        textMeshPro.text = (Slider.value * 180).ToString("0.000") + "°";
+        textMeshPro.text = (Slider.value * 360).ToString("0.000") + "°";
 
     }
 }

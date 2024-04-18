@@ -8,7 +8,7 @@ public class RotateJoints : MonoBehaviour
 {
     
     //public float speed ;
-    public ArticulationBody joint ;
+    private ArticulationBody joint ;
     public Slider slider ;
     
     // Start is called before the first frame update
@@ -41,7 +41,7 @@ public class RotateJoints : MonoBehaviour
         {
             currentDrive.target += newTargetDelta;
         }*/
-        currentDrive.target = slider.value * 180;
+        currentDrive.target = slider.value * 360;
         joint.xDrive = currentDrive;
         
     }
