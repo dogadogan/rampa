@@ -1,8 +1,7 @@
-using System;
 using System.Collections;
 using System.Linq;
 using RosMessageTypes.Geometry;
-using RosMessageTypes.NiryoMoveit;
+using RosMessageTypes.Ros;
 using Unity.Robotics.ROSTCPConnector;
 using Unity.Robotics.ROSTCPConnector.ROSGeometry;
 using UnityEngine;
@@ -44,6 +43,10 @@ public class TrajectoryPlanner : MonoBehaviour
     ROSConnection m_Ros;
     public Slider[] Sliders;
     public GameObject[] objectsToBeRemoveColliders;
+    public Text text;
+    public LineRenderer line;
+    public DrawService drawService;
+    public Transform handTransform;
 
     /// <summary>
     ///     Find all robot joints in Awake() and add them to the jointArticulationBodies array.
@@ -109,13 +112,13 @@ public class TrajectoryPlanner : MonoBehaviour
     ///     Get the current values of the robot's joint angles.
     /// </summary>
     /// <returns>NiryoMoveitJoints</returns>
-    NiryoMoveitJointsMsg CurrentJointConfig()
+    double[] CurrentJointConfig()
     {
-        var joints = new NiryoMoveitJointsMsg();
+        double[] joints = new double[k_NumRobotJoints] ;
 
         for (var i = 0; i < k_NumRobotJoints; i++)
         {
-            joints.joints[i] = m_JointArticulationBodies[i].xDrive.target * Mathf.Deg2Rad;
+            joints[i] = m_JointArticulationBodies[i].xDrive.target * Mathf.Deg2Rad;
             //Debug.LogWarning(i);
             //Debug.LogWarning(m_JointArticulationBodies[i].name);
         }
@@ -131,39 +134,60 @@ public class TrajectoryPlanner : MonoBehaviour
     /// </summary>
     public void PublishJoints()
     {
+
+        line.positionCount = 0;
+
        // Debug.LogWarning("in publish joints");
         var request = new MoverServiceRequest();
         request.joints_input = CurrentJointConfig();
 
         // Pick Pose
-        request.pick_pose = new PoseMsg
+
+        PoseMsg[] pose_list = new PoseMsg[1];
+        pose_list[0] = new PoseMsg
         {
             position = (m_Target.transform.position - baseLink.transform.position).To<FLU>(),
-        
+
             // The hardcoded x/z angles assure that the gripper is always positioned above the target cube before grasping.
-            orientation = m_PickOrientation.To<FLU>()
+            orientation = Quaternion.Euler(90, m_Target.transform.eulerAngles.y, 0).To<FLU>()
         };
-
-        //Place Pose
-        request.place_pose = new PoseMsg
-        {
-            position = (m_TargetPlacement.transform.position - baseLink.transform.position ).To<FLU>(),
-            orientation = m_PickOrientation.To<FLU>()
-        };
-
+        request.pose_list = pose_list;
         
-        //Debug.LogWarning(request);
-
+        text.text = "Waiting for the response...";
         m_Ros.SendServiceMessage<MoverServiceResponse>(m_RosServiceName, request, TrajectoryResponse);
     }
 
+
+    public void PublishJointsWithPoses(Vector3[] poses)
+    {
+        Debug.LogWarning("--------inside PublishJointsWithPoses --------");
+        Debug.LogWarning(poses);
+        var request = new MoverServiceRequest();
+        request.joints_input = CurrentJointConfig();
+
+        PoseMsg[] pose_list = new PoseMsg[poses.Length];
+        for (int i = 0; i < poses.Length; i++)
+        {
+            pose_list[i] = new PoseMsg
+            {
+                position = (poses[i] - baseLink.transform.position).To<FLU>(),
+
+                // The hardcoded x/z angles assure that the gripper is always positioned above the target cube before grasping.
+                orientation = Quaternion.Euler(90, m_Target.transform.eulerAngles.y, 0).To<FLU>()
+            };
+        }
+        
+        request.pose_list = pose_list;
+        
+        text.text = "Waiting for the response...";
+        m_Ros.SendServiceMessage<MoverServiceResponse>(m_RosServiceName, request, TrajectoryResponse);
+    } 
+    
+    
+
     void TrajectoryResponse(MoverServiceResponse response)
     {
-        //Debug.LogWarning("in response");
-        /*Debug.LogWarning(response);
-        Debug.LogWarning(response.trajectories.Length);
-        Debug.LogWarning(response.trajectories[0].joint_trajectory.points[0].positions[0] + "------------------- joints");
-        Debug.LogWarning(response.trajectories[0].joint_trajectory.header);*/
+        text.text = "Trajectory calculated";
         
         foreach (var removeObject in objectsToBeRemoveColliders)
         {
@@ -179,11 +203,17 @@ public class TrajectoryPlanner : MonoBehaviour
         else
         {
             Debug.LogError("No trajectory returned from MoverService.");
+            text.text = "No trajectory returned";
             foreach (var removeObject in objectsToBeRemoveColliders)
             {
                 removeObject.GetComponent<Collider>().enabled = true;
             }
+
+            text.text = response.output_msg ;
+            
+            line.positionCount = 0;
         }
+        drawService.state = DrawService.State.DrawTrajectory;
     }
 
     /// <summary>
@@ -229,7 +259,7 @@ public class TrajectoryPlanner : MonoBehaviour
                     }
 
                     // Wait for robot to achieve pose for all joint assignments
-                    yield return new WaitForSeconds(0.1f);
+                    yield return new WaitForSeconds(k_JointAssignmentWait);
                 }
 
                 // Close the gripper if completed executing the trajectory for the Grasp pose
@@ -249,6 +279,8 @@ public class TrajectoryPlanner : MonoBehaviour
         {
             removeObject.GetComponent<Collider>().enabled = true;
         }
+        line.positionCount = 0;
+        text.text = "Ready for another execution";
 
     }
 

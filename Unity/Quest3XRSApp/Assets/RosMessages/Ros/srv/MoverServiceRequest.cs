@@ -5,54 +5,55 @@ using System.Collections.Generic;
 using System.Text;
 using Unity.Robotics.ROSTCPConnector.MessageGeneration;
 
-namespace RosMessageTypes.NiryoMoveit
+namespace RosMessageTypes.Ros
 {
     [Serializable]
     public class MoverServiceRequest : Message
     {
-        public const string k_RosMessageName = "niryo_moveit/MoverService";
+        public const string k_RosMessageName = "Ros/MoverService";
         public override string RosMessageName => k_RosMessageName;
 
-        public NiryoMoveitJointsMsg joints_input;
-        public Geometry.PoseMsg pick_pose;
-        public Geometry.PoseMsg place_pose;
+        public string input_msg;
+        public double[] joints_input;
+        public Geometry.PoseMsg[] pose_list;
 
         public MoverServiceRequest()
         {
-            this.joints_input = new NiryoMoveitJointsMsg();
-            this.pick_pose = new Geometry.PoseMsg();
-            this.place_pose = new Geometry.PoseMsg();
+            this.input_msg = "";
+            this.joints_input = new double[6];
+            this.pose_list = new Geometry.PoseMsg[0];
         }
 
-        public MoverServiceRequest(NiryoMoveitJointsMsg joints_input, Geometry.PoseMsg pick_pose, Geometry.PoseMsg place_pose)
+        public MoverServiceRequest(string input_msg, double[] joints_input, Geometry.PoseMsg[] pose_list)
         {
+            this.input_msg = input_msg;
             this.joints_input = joints_input;
-            this.pick_pose = pick_pose;
-            this.place_pose = place_pose;
+            this.pose_list = pose_list;
         }
 
         public static MoverServiceRequest Deserialize(MessageDeserializer deserializer) => new MoverServiceRequest(deserializer);
 
         private MoverServiceRequest(MessageDeserializer deserializer)
         {
-            this.joints_input = NiryoMoveitJointsMsg.Deserialize(deserializer);
-            this.pick_pose = Geometry.PoseMsg.Deserialize(deserializer);
-            this.place_pose = Geometry.PoseMsg.Deserialize(deserializer);
+            deserializer.Read(out this.input_msg);
+            deserializer.Read(out this.joints_input, sizeof(double), 6);
+            deserializer.Read(out this.pose_list, Geometry.PoseMsg.Deserialize, deserializer.ReadLength());
         }
 
         public override void SerializeTo(MessageSerializer serializer)
         {
+            serializer.Write(this.input_msg);
             serializer.Write(this.joints_input);
-            serializer.Write(this.pick_pose);
-            serializer.Write(this.place_pose);
+            serializer.WriteLength(this.pose_list);
+            serializer.Write(this.pose_list);
         }
 
         public override string ToString()
         {
             return "MoverServiceRequest: " +
-            "\njoints_input: " + joints_input.ToString() +
-            "\npick_pose: " + pick_pose.ToString() +
-            "\nplace_pose: " + place_pose.ToString();
+            "\ninput_msg: " + input_msg.ToString() +
+            "\njoints_input: " + System.String.Join(", ", joints_input.ToList()) +
+            "\npose_list: " + System.String.Join(", ", pose_list.ToList());
         }
 
 #if UNITY_EDITOR

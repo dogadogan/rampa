@@ -5,23 +5,26 @@ using System.Collections.Generic;
 using System.Text;
 using Unity.Robotics.ROSTCPConnector.MessageGeneration;
 
-namespace RosMessageTypes.NiryoMoveit
+namespace RosMessageTypes.Ros
 {
     [Serializable]
     public class MoverServiceResponse : Message
     {
-        public const string k_RosMessageName = "niryo_moveit/MoverService";
+        public const string k_RosMessageName = "Ros/MoverService";
         public override string RosMessageName => k_RosMessageName;
 
+        public string output_msg;
         public Moveit.RobotTrajectoryMsg[] trajectories;
 
         public MoverServiceResponse()
         {
+            this.output_msg = "";
             this.trajectories = new Moveit.RobotTrajectoryMsg[0];
         }
 
-        public MoverServiceResponse(Moveit.RobotTrajectoryMsg[] trajectories)
+        public MoverServiceResponse(string output_msg, Moveit.RobotTrajectoryMsg[] trajectories)
         {
+            this.output_msg = output_msg;
             this.trajectories = trajectories;
         }
 
@@ -29,11 +32,13 @@ namespace RosMessageTypes.NiryoMoveit
 
         private MoverServiceResponse(MessageDeserializer deserializer)
         {
+            deserializer.Read(out this.output_msg);
             deserializer.Read(out this.trajectories, Moveit.RobotTrajectoryMsg.Deserialize, deserializer.ReadLength());
         }
 
         public override void SerializeTo(MessageSerializer serializer)
         {
+            serializer.Write(this.output_msg);
             serializer.WriteLength(this.trajectories);
             serializer.Write(this.trajectories);
         }
@@ -41,6 +46,7 @@ namespace RosMessageTypes.NiryoMoveit
         public override string ToString()
         {
             return "MoverServiceResponse: " +
+            "\noutput_msg: " + output_msg.ToString() +
             "\ntrajectories: " + System.String.Join(", ", trajectories.ToList());
         }
 

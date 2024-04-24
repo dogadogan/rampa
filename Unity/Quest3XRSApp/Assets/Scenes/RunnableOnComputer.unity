@@ -2843,6 +2843,7 @@ MonoBehaviour:
   - {fileID: 768908707}
   objectsToBeRemoveColliders:
   - {fileID: 604625996}
+  text: {fileID: 1681991069}
 --- !u!1 &888906136
 GameObject:
   m_ObjectHideFlags: 0
