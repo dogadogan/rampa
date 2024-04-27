@@ -1,13 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class RotateJoints : MonoBehaviour
 
 {
-    
-    //public float speed ;
     private ArticulationBody joint ;
     public Slider slider ;
     
@@ -16,10 +12,6 @@ public class RotateJoints : MonoBehaviour
 
     {
         joint = this.GetComponent<ArticulationBody>();
-        ArticulationDrive currentDrive = joint.xDrive;
-        currentDrive.stiffness = 10000f;
-        currentDrive.damping = 100f;
-        joint.xDrive = currentDrive;
 
     }
 
@@ -28,19 +20,6 @@ public class RotateJoints : MonoBehaviour
     {
         
         ArticulationDrive currentDrive = joint.xDrive;
-        /*float newTargetDelta = slider.value * Time.fixedDeltaTime * speed;
-        if (newTargetDelta + currentDrive.target > currentDrive.upperLimit)
-        {
-            currentDrive.target = currentDrive.upperLimit;
-        }
-        else if (newTargetDelta + currentDrive.target < currentDrive.lowerLimit)
-        {
-            currentDrive.target = currentDrive.lowerLimit;
-        }
-        else
-        {
-            currentDrive.target += newTargetDelta;
-        }*/
         currentDrive.target = slider.value * 360;
         joint.xDrive = currentDrive;
         

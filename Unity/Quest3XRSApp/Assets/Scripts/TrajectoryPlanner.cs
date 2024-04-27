@@ -191,4 +191,12 @@ public class TrajectoryPlanner : MonoBehaviour
         text.text = "Ready for another execution";
 
     }
+
+    public void ResetSliders()
+    {
+        foreach ( Slider slider in Sliders)
+        {
+            slider.value = 0;
+        }   
+    }
 }
