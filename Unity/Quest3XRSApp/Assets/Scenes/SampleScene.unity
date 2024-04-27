@@ -3025,9 +3025,7 @@ MonoBehaviour:
   - {fileID: 604625996}
   - {fileID: 2080776122}
   text: {fileID: 1279366341}
-  line: {fileID: 255347229}
   drawService: {fileID: 2138264122}
-  handTransform: {fileID: 2138264126}
 --- !u!1 &888906136
 GameObject:
   m_ObjectHideFlags: 0
@@ -3738,6 +3736,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trajectoryPlanner: {fileID: 886951535}
+  drawService: {fileID: 2138264122}
 --- !u!1 &1178012626
 GameObject:
   m_ObjectHideFlags: 8
@@ -4721,8 +4720,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2138264122}
-        m_TargetAssemblyTypeName: LogPosition, Assembly-CSharp
-        m_MethodName: EnableTrajectory
+        m_TargetAssemblyTypeName: DrawService, Assembly-CSharp
+        m_MethodName: UpdateDrawingState
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8673,11 +8672,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hand: {fileID: 2138264125}
   lineRenderer: {fileID: 255347229}
-  counter: {fileID: 328429906}
-  threshold: 0.01
-  ButtonText: {fileID: 1833590380}
+  InfoText: {fileID: 328429906}
   trajectoryPlanner: {fileID: 886951535}
-  state: 0
+  button: {fileID: 1278984137}
+  ButtonText: {fileID: 1833590380}
 --- !u!114 &2138264125 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7215171682644439251, guid: f54012181eacade4ea242c65f804720f, type: 3}
@@ -8689,11 +8687,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb7623a8f0b49cf4dbaa40aea4d4be64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &2138264126 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7215171682644439253, guid: f54012181eacade4ea242c65f804720f, type: 3}
-  m_PrefabInstance: {fileID: 1225196482}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6568663634563112216
 PrefabInstance:
   m_ObjectHideFlags: 0

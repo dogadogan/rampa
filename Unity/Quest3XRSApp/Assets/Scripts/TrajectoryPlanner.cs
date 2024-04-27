@@ -32,9 +32,7 @@ public class TrajectoryPlanner : MonoBehaviour
     public Slider[] Sliders;
     public GameObject[] objectsToRemoveColliders;
     public Text text;
-    public LineRenderer line;
     public DrawService drawService;
-    public Transform handTransform;
 
     void Start()
     {
@@ -62,9 +60,6 @@ public class TrajectoryPlanner : MonoBehaviour
     /// </summary>
     public void PublishJoints()
     {
-
-        line.positionCount = 0;
-        
         var request = new MoverServiceRequest();
         request.joints_input = CurrentJointConfig();
         
@@ -105,7 +100,6 @@ public class TrajectoryPlanner : MonoBehaviour
         
         request.pose_list = pose_list;
         
-        text.text = "Waiting for the response...";
         m_Ros.SendServiceMessage<MoverServiceResponse>(m_RosServiceName, request, TrajectoryResponse);
     } 
     
@@ -114,10 +108,10 @@ public class TrajectoryPlanner : MonoBehaviour
     void TrajectoryResponse(MoverServiceResponse response)
     {
         text.text = "Trajectory calculated";
+        drawService.UpdateDrawingState();
         
         foreach (var removeObject in objectsToRemoveColliders)
         {
-            Debug.Log(removeObject.GetComponent<BoxCollider>().name);
             removeObject.GetComponent<BoxCollider>().enabled = false;
         }
         
@@ -133,12 +127,9 @@ public class TrajectoryPlanner : MonoBehaviour
             {
                 removeObject.GetComponent<Collider>().enabled = true;
             }
-
-            text.text = response.output_msg ;
-            
-            line.positionCount = 0;
+            drawService.UpdateDrawingState();
         }
-        drawService.state = DrawService.State.DrawTrajectory;
+
     }
 
     /// <summary>
@@ -187,8 +178,8 @@ public class TrajectoryPlanner : MonoBehaviour
         {
             removeObject.GetComponent<Collider>().enabled = true;
         }
-        line.positionCount = 0;
         text.text = "Ready for another execution";
+        drawService.UpdateDrawingState();
 
     }
 

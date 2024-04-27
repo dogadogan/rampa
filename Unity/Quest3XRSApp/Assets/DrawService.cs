@@ -1,32 +1,23 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
-using Random = UnityEngine.Random;
+
 
 
 public class DrawService : MonoBehaviour
 {
     public OVRHand hand;
     public LineRenderer lineRenderer;
-    public Text counter;
+    public Text InfoText;
     private Color lineColor = Color.magenta;
     private float lineWidth = 0.005f;
     private List<Vector3> targetPoints = new List<Vector3>();
-    public float threshold = 0.01f;
-    public Text ButtonText;
+    private float threshold = 0.01f;
     public TrajectoryPlanner trajectoryPlanner;
-    public enum State
-    {
-        DrawTrajectory,
-        ExecuteTrajectory
-        
-    }
-
-    public State state = State.DrawTrajectory; 
+    private State state;
+    public Button button;
+    public Text ButtonText;
 
     // Start is called before the first frame update
     void Start()
@@ -37,24 +28,11 @@ public class DrawService : MonoBehaviour
         lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
         lineRenderer.startColor = lineColor;
         lineRenderer.endColor = lineColor;
+        ResetDrawingState();
     }
-
-    private void Update()
+    IEnumerator DrawTrajectory(float interval)
     {
-        if (state == State.DrawTrajectory)
-        {
-            ButtonText.text = "Record a trajectory";
-        }
-        else if (state == State.ExecuteTrajectory)
-        {
-            ButtonText.text = "Execute the trajectory";
-
-        }
-    }
-
-    IEnumerator LogPositionPeriodically(float interval)
-    {
-        counter.text = "Drawing trajectory";
+        InfoText.text = "Drawing trajectory";
         int numberOfPoints = 0;
         while (true)
         {
@@ -62,8 +40,7 @@ public class DrawService : MonoBehaviour
             {
                 if (targetPoints.Count != 0 && Vector3.Distance(targetPoints[targetPoints.Count - 1], hand.PointerPose.position) < threshold)
                 {
-                    counter.text = "Trajectory recorded";
-                    state = State.ExecuteTrajectory;
+                    UpdateDrawingState();
                     break;
                 }
                 targetPoints.Add(hand.PointerPose.position);
@@ -86,39 +63,73 @@ public class DrawService : MonoBehaviour
         while (currentTime > 0)
         {
             currentTime -= 1; // Decrease the current time by 1 second
-            counter.text = currentTime.ToString();
+            InfoText.text = currentTime.ToString();
             yield return new WaitForSeconds(1f); // Wait for 1 second
-            
-            // Optionally, you can update UI or perform other actions here
-            Debug.Log("Time left: " + currentTime.ToString("0"));
         }
         
-        // When the countdown is finished
-        Debug.Log("Countdown finished!");
-        StartCoroutine(LogPositionPeriodically(0.05f));
+        StartCoroutine(DrawTrajectory(0.05f));
     }
     
-    
-
-    public void EnableTrajectory()
-    {
-        switch (state)
-        {
-            case State.DrawTrajectory:
-                StartCoroutine(CountdownCoroutine());
-                break;
-            case  State.ExecuteTrajectory:
-                TriggerPublishMethod();
-                break;
-        }
-    }
-
-    public void TriggerPublishMethod()
+    private void TriggerPublishMethod()
     {
         Debug.LogWarning("--------TriggerPublishMethod --------");
         Vector3[] poses = targetPoints.ToArray();
-        targetPoints.Clear();
         trajectoryPlanner.PublishJointsWithPoses(poses);
     }
-    
+
+    public void UpdateDrawingState()
+    {
+        switch (state)
+        {
+            case State.Initial:
+                state = State.DrawTrajectory;
+                button.interactable = false;
+                lineRenderer.positionCount = 0;
+                StartCoroutine(CountdownCoroutine());
+                break;
+            case State.DrawTrajectory:
+                state = State.WaitingForExecution;
+                InfoText.text = "Trajectory Recorded";
+                ButtonText.text = "Execute the trajectory";
+                button.interactable = true;
+                break;
+            case State.WaitingForExecution:
+                state = State.WaitingForResponse;
+                TriggerPublishMethod();
+                InfoText.text = "Waiting for calculation of the trajectory";
+                button.interactable = false;
+                break;
+            case State.WaitingForResponse:
+                state = State.ExecuteTrajectory;
+                InfoText.text = "Executing Trajectory";
+                button.interactable = false;
+                break;
+            case  State.ExecuteTrajectory:
+                state = State.Initial;
+                ButtonText.text = "Record a trajectory";
+                button.interactable = true;
+                InfoText.text = "";
+                targetPoints.Clear();
+                break;
+        }
+        
+    }
+
+    public void ResetDrawingState()
+    {
+        state = State.Initial;
+        ButtonText.text = "Record a trajectory";
+        InfoText.text = "";
+        button.interactable = true;
+        targetPoints.Clear();
+        lineRenderer.positionCount = 0;
+    }
+    public enum State
+    {
+        Initial,
+        DrawTrajectory,
+        WaitingForExecution,
+        WaitingForResponse,
+        ExecuteTrajectory,
+    }
 }

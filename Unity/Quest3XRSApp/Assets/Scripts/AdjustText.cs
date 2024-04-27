@@ -19,6 +19,5 @@ public class AdjustText : MonoBehaviour
     void Update()
     {
         textMeshPro.text = (Slider.value * 360).ToString("0.000") + "°";
-
     }
 }
