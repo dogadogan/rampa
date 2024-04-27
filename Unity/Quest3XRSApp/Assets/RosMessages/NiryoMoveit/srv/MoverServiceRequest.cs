@@ -5,12 +5,12 @@ using System.Collections.Generic;
 using System.Text;
 using Unity.Robotics.ROSTCPConnector.MessageGeneration;
 
-namespace RosMessageTypes.Ros
+namespace RosMessageTypes.NiryoMoveit
 {
     [Serializable]
     public class MoverServiceRequest : Message
     {
-        public const string k_RosMessageName = "Ros/MoverService";
+        public const string k_RosMessageName = "niryo_moveit/MoverService";
         public override string RosMessageName => k_RosMessageName;
 
         public string input_msg;

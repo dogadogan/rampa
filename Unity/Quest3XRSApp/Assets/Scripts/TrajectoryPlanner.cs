@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Linq;
 using RosMessageTypes.Geometry;
-using RosMessageTypes.Ros;
+using RosMessageTypes.NiryoMoveit;
 using Unity.Robotics.ROSTCPConnector;
 using Unity.Robotics.ROSTCPConnector.ROSGeometry;
 using UnityEngine;
