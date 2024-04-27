@@ -191,9 +191,17 @@ public class TrajectoryPlanner : MonoBehaviour
 
     public void ResetSliders()
     {
-        foreach ( Slider slider in Sliders)
+        for (int i = 0; i < Sliders.Length; i++)
         {
-            slider.value = 0;
-        }   
+            if (i == 1 || i == 3)
+            {
+                Sliders[i].value = -0.25f;
+            }
+            else
+            {
+                Sliders[i].value = 0f;
+            }
+            
+        }
     }
 }

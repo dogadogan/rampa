@@ -6,12 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="52630e7e-4dfe-48dd-ad03-1f23ac0209ec" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Quest3XRSApp/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Quest3XRSApp/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/CollisionLog.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/CollisionLog.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/DrawService.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/DrawService.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/FixedRotation.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/FixedRotation.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/ROSConnectionPrefab.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/ROSConnectionPrefab.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/TrajectoryPlanner.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/TrajectoryPlanner.cs" afterDir="false" />
     </list>

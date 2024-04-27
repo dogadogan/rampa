@@ -96,7 +96,7 @@ public class DrawService : MonoBehaviour
             case State.WaitingForExecution:
                 state = State.WaitingForResponse;
                 TriggerPublishMethod();
-                InfoText.text = "Waiting for calculation of the trajectory";
+                InfoText.text = "Waiting for calculations";
                 button.interactable = false;
                 break;
             case State.WaitingForResponse:
