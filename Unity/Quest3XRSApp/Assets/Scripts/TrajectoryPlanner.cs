@@ -108,7 +108,11 @@ public class TrajectoryPlanner : MonoBehaviour
     void TrajectoryResponse(MoverServiceResponse response)
     {
         text.text = "Trajectory calculated";
-        drawService.UpdateDrawingState();
+        if (response.trajectories.Length > 1)
+        {
+            drawService.UpdateDrawingState();
+        }
+
         
         foreach (var removeObject in objectsToRemoveColliders)
         {
@@ -168,18 +172,20 @@ public class TrajectoryPlanner : MonoBehaviour
                 }
                 
                 // Wait for the robot to achieve the final pose from joint assignment
-                yield return new WaitForSeconds(k_PoseAssignmentWait);
+                //yield return new WaitForSeconds(k_PoseAssignmentWait);
             }
-
-            // All trajectories have been executed, open the gripper to place the target cube
-            // OpenGripper();
+            
         }
         foreach (var removeObject in objectsToRemoveColliders)
         {
             removeObject.GetComponent<Collider>().enabled = true;
         }
         text.text = "Ready for another execution";
-        drawService.UpdateDrawingState();
+        if (response.trajectories.Length > 1)
+        {
+            drawService.UpdateDrawingState();
+        }
+       
 
     }
 
