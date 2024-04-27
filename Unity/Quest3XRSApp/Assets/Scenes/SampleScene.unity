@@ -174,7 +174,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _position: {x: 0, y: 0, z: 0}
-  _size: {x: 1500, y: 800, z: 1}
+  _size: {x: 300, y: 450, z: 1}
 --- !u!114 &159892811
 MonoBehaviour:
   m_ObjectHideFlags: 0
