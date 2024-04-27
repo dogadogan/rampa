@@ -6,25 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="52630e7e-4dfe-48dd-ad03-1f23ac0209ec" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Quest3XRSApp/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Quest3XRSApp/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/RosMessages/NiryoMoveit.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/RosMessages/NiryoMoveit/msg.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/RosMessages/NiryoMoveit/msg/NiryoMoveitJointsMsg.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/RosMessages/NiryoMoveit/msg/NiryoMoveitJointsMsg.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/RosMessages/NiryoMoveit/msg/NiryoTrajectoryMsg.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/RosMessages/NiryoMoveit/msg/NiryoTrajectoryMsg.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/RosMessages/NiryoMoveit/srv.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/RosMessages/NiryoMoveit/srv/MoverServiceRequest.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/RosMessages/NiryoMoveit/srv/MoverServiceRequest.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/RosMessages/NiryoMoveit/srv/MoverServiceResponse.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/RosMessages/NiryoMoveit/srv/MoverServiceResponse.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/RunnableOnComputer.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/RunnableOnComputer.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/SourceDestinationPublisher.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/SourceDestinationPublisher.cs.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/TrajectoryPlanner.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/TrajectoryPlanner.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/msgbrowser_settings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/msgbrowser_settings.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,27 +46,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;hand__tracking__trajectory&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.sourceCode.C#&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.sourceCode.C#",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;rider.external.source.directories&quot;: [
-      &quot;/Users/batu/Library/Application Support/JetBrains/Rider2023.3/resharper-host/DecompilerCache&quot;,
-      &quot;/Users/batu/Library/Application Support/JetBrains/Rider2023.3/resharper-host/SourcesCache&quot;,
-      &quot;/Users/batu/.local/share/Symbols/src&quot;
+  "keyToStringList": {
+    "rider.external.source.directories": [
+      "/Users/batu/Library/Application Support/JetBrains/Rider2023.3/resharper-host/DecompilerCache",
+      "/Users/batu/Library/Application Support/JetBrains/Rider2023.3/resharper-host/SourcesCache",
+      "/Users/batu/.local/share/Symbols/src"
     ]
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
     <configuration name="Start Unity" type="RunUnityExe" factoryName="Unity Executable">
       <option name="EXE_PATH" value="/Applications/Unity/Hub/Editor/2022.3.22f1/Unity.app/Contents/MacOS/Unity" />

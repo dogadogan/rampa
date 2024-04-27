@@ -15,103 +15,33 @@ public class TrajectoryPlanner : MonoBehaviour
     const float k_PoseAssignmentWait = 0.5f;
 
     // Variables required for ROS communication
-    [SerializeField]
-    string m_RosServiceName = "niryo_moveit";
-    public string RosServiceName { get => m_RosServiceName; set => m_RosServiceName = value; }
+    private string m_RosServiceName = "niryo_moveit";
     
 
     public GameObject baseLink;
+    
 
-    //public GameObject NiryoOne { get => m_UR10; set => m_UR10 = value; }
-    [SerializeField]
-    GameObject m_Target;
-    public GameObject Target { get => m_Target; set => m_Target = value; }
-    [SerializeField]
-    GameObject m_TargetPlacement;
-    public GameObject TargetPlacement { get => m_TargetPlacement; set => m_TargetPlacement = value; }
-
-    // Assures that the gripper is always positioned above the m_Target cube before grasping.
-    readonly Quaternion m_PickOrientation = Quaternion.Euler(90, 90, 0);
-    readonly Vector3 m_PickPoseOffset = Vector3.up * 0.1f;
+    public GameObject m_Target;
+    
 
     // Articulation Bodies
     public ArticulationBody[] m_JointArticulationBodies;
-    // ArticulationBody m_LeftGripper;
-    // ArticulationBody m_RightGripper;
 
     // ROS Connector
     ROSConnection m_Ros;
     public Slider[] Sliders;
-    public GameObject[] objectsToBeRemoveColliders;
+    public GameObject[] objectsToRemoveColliders;
     public Text text;
     public LineRenderer line;
     public DrawService drawService;
     public Transform handTransform;
 
-    /// <summary>
-    ///     Find all robot joints in Awake() and add them to the jointArticulationBodies array.
-    ///     Find left and right finger joints and assign them to their respective articulation body objects.
-    /// </summary>
     void Start()
     {
-        // Get ROS connection static instance
         m_Ros = ROSConnection.GetOrCreateInstance();
         m_Ros.RegisterRosService<MoverServiceRequest, MoverServiceResponse>(m_RosServiceName);
-
-        //m_JointArticulationBodies = new ArticulationBody[k_NumRobotJoints];
-
-        /*var linkName = string.Empty;
-        for (var i = 0; i < k_NumRobotJoints; i++)
-        {
-            linkName += SourceDestinationPublisher.LinkNames[i];
-            m_JointArticulationBodies[i] = m_UR10.transform.Find(linkName).GetComponent<ArticulationBody>();
-            Debug.Log( m_UR10.transform.Find(linkName));
-           
-        }*/
-        
-
-        // Find left and right fingers
-        // var rightGripper = linkName + "/tool_link/gripper_base/servo_head/control_rod_right/right_gripper";
-        // var leftGripper = linkName + "/tool_link/gripper_base/servo_head/control_rod_left/left_gripper";
-
-        // m_RightGripper = m_NiryoOne.transform.Find(rightGripper).GetComponent<ArticulationBody>();
-        // m_LeftGripper = m_NiryoOne.transform.Find(leftGripper).GetComponent<ArticulationBody>();
     }
-
-    /// <summary>
-    ///     Close the gripper
-    /// </summary>
-    // void CloseGripper()
-    // {
-    //     var leftDrive = m_LeftGripper.xDrive;
-    //     var rightDrive = m_RightGripper.xDrive;
-    //
-    //     leftDrive.target = -0.01f;
-    //     rightDrive.target = 0.01f;
-    //
-    //     m_LeftGripper.xDrive = leftDrive;
-    //     m_RightGripper.xDrive = rightDrive;
-    // }
-
-    /// <summary>
-    ///     Open the gripper
-    /// </summary>
-    // void OpenGripper()
-    // {
-    //     var leftDrive = m_LeftGripper.xDrive;
-    //     var rightDrive = m_RightGripper.xDrive;
-    //
-    //     leftDrive.target = 0.01f;
-    //     rightDrive.target = -0.01f;
-    //
-    //     m_LeftGripper.xDrive = leftDrive;
-    //     m_RightGripper.xDrive = rightDrive;
-    // }
-
-    /// <summary>
-    ///     Get the current values of the robot's joint angles.
-    /// </summary>
-    /// <returns>NiryoMoveitJoints</returns>
+    
     double[] CurrentJointConfig()
     {
         double[] joints = new double[k_NumRobotJoints] ;
@@ -119,8 +49,6 @@ public class TrajectoryPlanner : MonoBehaviour
         for (var i = 0; i < k_NumRobotJoints; i++)
         {
             joints[i] = m_JointArticulationBodies[i].xDrive.target * Mathf.Deg2Rad;
-            //Debug.LogWarning(i);
-            //Debug.LogWarning(m_JointArticulationBodies[i].name);
         }
 
         return joints;
@@ -136,12 +64,10 @@ public class TrajectoryPlanner : MonoBehaviour
     {
 
         line.positionCount = 0;
-
-       // Debug.LogWarning("in publish joints");
+        
         var request = new MoverServiceRequest();
         request.joints_input = CurrentJointConfig();
-
-        // Pick Pose
+        
 
         PoseMsg[] pose_list = new PoseMsg[1];
         pose_list[0] = new PoseMsg
@@ -189,7 +115,7 @@ public class TrajectoryPlanner : MonoBehaviour
     {
         text.text = "Trajectory calculated";
         
-        foreach (var removeObject in objectsToBeRemoveColliders)
+        foreach (var removeObject in objectsToRemoveColliders)
         {
             Debug.Log(removeObject.GetComponent<BoxCollider>().name);
             removeObject.GetComponent<BoxCollider>().enabled = false;
@@ -197,14 +123,13 @@ public class TrajectoryPlanner : MonoBehaviour
         
         if (response.trajectories.Length > 0)
         {
-            //Debug.Log("Trajectory returned.");
             StartCoroutine(ExecuteTrajectories(response));
         }
         else
         {
             Debug.LogError("No trajectory returned from MoverService.");
             text.text = "No trajectory returned";
-            foreach (var removeObject in objectsToBeRemoveColliders)
+            foreach (var removeObject in objectsToRemoveColliders)
             {
                 removeObject.GetComponent<Collider>().enabled = true;
             }
@@ -240,34 +165,17 @@ public class TrajectoryPlanner : MonoBehaviour
                 {
                     var jointPositions = t.positions;
                     var result = jointPositions.Select(r => (float)r * Mathf.Rad2Deg).ToArray();
-                    //Debug.LogWarning("------------");
-                    //Debug.LogWarning(string.Join(", ", result)  + " joint angles in degrees");
 
                     // Set the joint values for every joint
                     for (var joint = 0; joint < m_JointArticulationBodies.Length; joint++)
                     {
-                        ArticulationDrive joint1XDrive = m_JointArticulationBodies[joint].xDrive;
-                        
-                        //Debug.LogWarning(joint);
-                        //Debug.LogWarning(joint1XDrive.target);
-                        //Debug.LogWarning(result[joint] + "before assigning");
-                        // joint1XDrive.target = result[joint];
                         Sliders[joint].value = result[joint] / 360;
-                        //Debug.LogWarning(result[joint] + "after assigning");
-                        //Debug.LogWarning("------------");
-                        //m_JointArticulationBodies[joint].xDrive = joint1XDrive;
                     }
 
                     // Wait for robot to achieve pose for all joint assignments
                     yield return new WaitForSeconds(k_JointAssignmentWait);
                 }
-
-                // Close the gripper if completed executing the trajectory for the Grasp pose
-                // if (poseIndex == (int)Poses.Grasp)
-                // {
-                //     CloseGripper();
-                // }
-
+                
                 // Wait for the robot to achieve the final pose from joint assignment
                 yield return new WaitForSeconds(k_PoseAssignmentWait);
             }
@@ -275,7 +183,7 @@ public class TrajectoryPlanner : MonoBehaviour
             // All trajectories have been executed, open the gripper to place the target cube
             // OpenGripper();
         }
-        foreach (var removeObject in objectsToBeRemoveColliders)
+        foreach (var removeObject in objectsToRemoveColliders)
         {
             removeObject.GetComponent<Collider>().enabled = true;
         }
@@ -283,12 +191,4 @@ public class TrajectoryPlanner : MonoBehaviour
         text.text = "Ready for another execution";
 
     }
-
-    // enum Poses
-    // {
-    //     PreGrasp,
-    //     Grasp,
-    //     PickUp,
-    //     Place
-    // }
 }

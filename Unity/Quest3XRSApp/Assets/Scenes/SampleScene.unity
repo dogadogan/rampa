@@ -3005,10 +3005,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a6e02da043b44c3291e0f6c0148f6a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_RosServiceName: niryo_moveit
   baseLink: {fileID: 888906136}
   m_Target: {fileID: 604625996}
-  m_TargetPlacement: {fileID: 604625996}
   m_JointArticulationBodies:
   - {fileID: 346162285}
   - {fileID: 1210830124}
@@ -3023,7 +3021,7 @@ MonoBehaviour:
   - {fileID: 1663257857}
   - {fileID: 1932305097}
   - {fileID: 768908707}
-  objectsToBeRemoveColliders:
+  objectsToRemoveColliders:
   - {fileID: 604625996}
   - {fileID: 2080776122}
   text: {fileID: 1279366341}
