@@ -1,0 +1,4 @@
+string input_msg
+---
+string output_msg
+float64[6] current_joint_angles
