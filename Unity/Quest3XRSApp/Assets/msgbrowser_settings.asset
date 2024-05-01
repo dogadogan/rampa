@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c444d6f85828f1b4f9b89c7c387f9ddd, type: 3}
   m_Name: msgbrowser_settings
   m_EditorClassIdentifier: 
-  inputPath: /Users/batu/Desktop/cmpe492/ARobot/Ros
+  inputPath: /Users/batu/Desktop/cmpe492/ARobot/Ros/niryo_moveit
   relativeOutPath: RosMessages

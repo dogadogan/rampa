@@ -12,7 +12,7 @@ public class TrajectoryPlanner : MonoBehaviour
     // Hardcoded variables
     const int k_NumRobotJoints = 6;
     const float k_JointAssignmentWait = 0.1f;
-    const float k_PoseAssignmentWait = 0.5f;
+    //const float k_PoseAssignmentWait = 0.5f;
 
     // Variables required for ROS communication
     private string m_RosServiceName = "niryo_moveit";
@@ -112,12 +112,12 @@ public class TrajectoryPlanner : MonoBehaviour
         {
             drawService.UpdateDrawingState();
         }
-
         
         foreach (var removeObject in objectsToRemoveColliders)
         {
             removeObject.GetComponent<BoxCollider>().enabled = false;
         }
+        
         
         if (response.trajectories.Length > 0)
         {
@@ -185,22 +185,14 @@ public class TrajectoryPlanner : MonoBehaviour
         {
             drawService.UpdateDrawingState();
         }
-       
-
+        
     }
 
-    public void ResetSliders()
+    public void ResetSliders(double[] jointAngles)
     {
         for (int i = 0; i < Sliders.Length; i++)
         {
-            if (i == 1 || i == 3)
-            {
-                Sliders[i].value = -0.25f;
-            }
-            else
-            {
-                Sliders[i].value = 0f;
-            }
+            Sliders[i].value = (float)jointAngles[i];
             
         }
     }

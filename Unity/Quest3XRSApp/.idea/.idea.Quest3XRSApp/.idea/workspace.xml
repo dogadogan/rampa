@@ -6,9 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="52630e7e-4dfe-48dd-ad03-1f23ac0209ec" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Quest3XRSApp/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Quest3XRSApp/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/ROSConnectionPrefab.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/ROSConnectionPrefab.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/AdjustText.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/AdjustText.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/DrawService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/DrawService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Reset.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Reset.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/TrajectoryPlanner.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/TrajectoryPlanner.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -125,6 +128,7 @@
       <workItem from="1713796813333" duration="5170000" />
       <workItem from="1713880205499" duration="13940000" />
       <workItem from="1713964092053" duration="611000" />
+      <workItem from="1714390798770" duration="2631000" />
     </task>
     <servers />
   </component>

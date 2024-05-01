@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-
-
 public class DrawService : MonoBehaviour
 {
     public OVRHand hand;
@@ -124,7 +122,7 @@ public class DrawService : MonoBehaviour
         targetPoints.Clear();
         lineRenderer.positionCount = 0;
     }
-    public enum State
+    private enum State
     {
         Initial,
         DrawTrajectory,
