@@ -1,0 +1,8 @@
+string input_msg
+string request_type
+float64[6] joints_input
+geometry_msgs/Pose[] pose_list
+---
+string output_msg
+string request_type
+moveit_msgs/RobotTrajectory[] trajectories

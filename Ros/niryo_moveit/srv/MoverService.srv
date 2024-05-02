@@ -1,6 +1,0 @@
-string input_msg
-float64[6] joints_input
-geometry_msgs/Pose[] pose_list
----
-string output_msg
-moveit_msgs/RobotTrajectory[] trajectories
