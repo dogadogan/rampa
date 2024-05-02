@@ -8,7 +8,8 @@ public class Reset : MonoBehaviour
     public DrawService drawService;
     ROSConnection m_Ros;
     private string m_RosServiceName = "get_joint_state";
-    
+    public TrajectoryHelperFunctions HelperFunctions;
+    private double[] resetCondition = {0f, 0f, 0f, 0f, 0f, 0f};
     void Start()
     {
         m_Ros = ROSConnection.GetOrCreateInstance();
@@ -17,7 +18,8 @@ public class Reset : MonoBehaviour
     public void ResetSystem()
     {
 
-        SendJointStateRequest();
+        //SendJointStateRequest();
+        HelperFunctions.SetSliders(resetCondition);
         drawService.ResetDrawingState();
     }
     
@@ -29,6 +31,6 @@ public class Reset : MonoBehaviour
 
     private void JointStateResponse(StateServiceResponse response)
     {
-        trajectoryPlanner.ResetSliders(response.current_joint_angles);
+        HelperFunctions.SetSliders(response.current_joint_angles);
     }
 }
