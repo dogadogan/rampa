@@ -1,8 +1,7 @@
 using System.Collections;
 using System.Linq;
 using RosMessageTypes.Geometry;
-using RosMessageTypes.NiryoMoveit;
-using Unity.Robotics.ROSTCPConnector;
+using RosMessageTypes.Ur10Mover;
 using Unity.Robotics.ROSTCPConnector.ROSGeometry;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,22 +12,15 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
     private string m_RosServiceName = "niryo_moveit";
     public GameObject baseLink;
     public GameObject m_Target;
-    
-    public Slider[] Sliders;
-    public GameObject[] objectsToRemoveColliders;
     public Text text;
     public DrawService drawService;
     public TrajectoryHelperFunctions HelperFunctions;
     public TrajectoryPlanner TrajectoryPlanner;
-
-    void Start()
-    {
-
-    }
+    
     public void GenerateRequest(Vector3 pose)
     {
-        var request = new MoverServiceRequest();
-
+        var request = new PlannerServiceRequest();
+        request.request_type = "realTime";
         request.joints_input =  HelperFunctions.CurrentJointConfig();
 
         PoseMsg[] pose_list = new PoseMsg[1];
@@ -44,45 +36,12 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
         TrajectoryPlanner.SendRquest(request);
     } 
     
-    public void ProcessResponse(MoverServiceResponse response)
+    public void ProcessResponse(PlannerServiceResponse response)
     {
         
     }
     
-    void TrajectoryResponse(MoverServiceResponse response)
-    {
-        text.text = "Trajectory calculated";
-        if (response.trajectories.Length > 1)
-        {
-            //drawService.UpdateDrawingState();
-        }
-        
-        foreach (var removeObject in objectsToRemoveColliders)
-        {
-            removeObject.GetComponent<BoxCollider>().enabled = false;
-        }
-        
-        
-        if (response.trajectories.Length > 0)
-        {
-            StartCoroutine(ExecuteTrajectories(response));
-        }
-        else
-        {
-            Debug.LogError("No trajectory returned from MoverService.");
-            text.text = "No trajectory returned";
-            foreach (var removeObject in objectsToRemoveColliders)
-            {
-                removeObject.GetComponent<Collider>().enabled = true;
-            }
-            //drawService.UpdateDrawingState();
-        }
-
-    }
-    
-    
-    
-    IEnumerator ExecuteTrajectories(MoverServiceResponse response)
+    IEnumerator ExecuteTrajectories(PlannerServiceResponse response)
     {
         if (response.trajectories != null)
         {
@@ -94,7 +53,7 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
                 foreach (var t in response.trajectories[poseIndex].joint_trajectory.points)
                 {
                     var jointPositions = t.positions;
-                    var result = jointPositions.Select(r => r * Mathf.Rad2Deg).ToArray();
+                    var result = jointPositions.Select(r => r * Mathf.Rad2Deg / 360).ToArray();
                     HelperFunctions.SetSliders(result);
                     yield return new WaitForSeconds(k_JointAssignmentWait);
                 }
@@ -102,12 +61,8 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
             
             
         }
-        foreach (var removeObject in objectsToRemoveColliders)
-        {
-            removeObject.GetComponent<Collider>().enabled = true;
-        }
         text.text = "Ready for another execution";
-        drawService.UpdateDrawingState();
+        HelperFunctions.openPopUp();
         
     }
     

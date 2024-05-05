@@ -5,29 +5,29 @@ using System.Collections.Generic;
 using System.Text;
 using Unity.Robotics.ROSTCPConnector.MessageGeneration;
 
-namespace RosMessageTypes.NiryoMoveit
+namespace RosMessageTypes.Ur10Mover
 {
     [Serializable]
-    public class StateServiceRequest : Message
+    public class ExecutionServiceRequest : Message
     {
-        public const string k_RosMessageName = "niryo_moveit/StateService";
+        public const string k_RosMessageName = "ur10_mover/ExecutionService";
         public override string RosMessageName => k_RosMessageName;
 
         public string input_msg;
 
-        public StateServiceRequest()
+        public ExecutionServiceRequest()
         {
             this.input_msg = "";
         }
 
-        public StateServiceRequest(string input_msg)
+        public ExecutionServiceRequest(string input_msg)
         {
             this.input_msg = input_msg;
         }
 
-        public static StateServiceRequest Deserialize(MessageDeserializer deserializer) => new StateServiceRequest(deserializer);
+        public static ExecutionServiceRequest Deserialize(MessageDeserializer deserializer) => new ExecutionServiceRequest(deserializer);
 
-        private StateServiceRequest(MessageDeserializer deserializer)
+        private ExecutionServiceRequest(MessageDeserializer deserializer)
         {
             deserializer.Read(out this.input_msg);
         }
@@ -39,7 +39,7 @@ namespace RosMessageTypes.NiryoMoveit
 
         public override string ToString()
         {
-            return "StateServiceRequest: " +
+            return "ExecutionServiceRequest: " +
             "\ninput_msg: " + input_msg.ToString();
         }
 

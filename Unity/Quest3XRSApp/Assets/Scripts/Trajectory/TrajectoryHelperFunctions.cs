@@ -4,6 +4,8 @@ using UnityEngine.UI;
 public class TrajectoryHelperFunctions : MonoBehaviour
 {
     public Slider[] Sliders;
+    public GameObject mainPanel;
+    public GameObject popUpPanel;
     
     public double[] CurrentJointConfig()
     {
@@ -19,11 +21,17 @@ public class TrajectoryHelperFunctions : MonoBehaviour
     
     public void SetSliders(double[] jointAngles)
     {
-        for (int i = 0; i < Sliders.Length; i++)
+        for (var i = 0; i < Sliders.Length; i++)
         {
             Sliders[i].value = (float)jointAngles[i];
             
         }
+    }
+
+    public void openPopUp()
+    {
+        mainPanel.SetActive(false);
+        popUpPanel.SetActive(true);
     }
 
     

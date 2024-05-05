@@ -1,6 +1,8 @@
 using UnityEngine;
-using RosMessageTypes.NiryoMoveit;
+using RosMessageTypes.Ur10Mover;
 using Unity.Robotics.ROSTCPConnector;
+using UnityEngine.UI;
+using System.Linq;
 
 public class Reset : MonoBehaviour
 {
@@ -9,7 +11,8 @@ public class Reset : MonoBehaviour
     ROSConnection m_Ros;
     private string m_RosServiceName = "get_joint_state";
     public TrajectoryHelperFunctions HelperFunctions;
-    private double[] resetCondition = {0f, 0f, 0f, 0f, 0f, 0f};
+    private double[] _resetCondition = {0f, -0.25f, 0f, -0.25f, 0f, 0f};
+    public Text text;
     void Start()
     {
         m_Ros = ROSConnection.GetOrCreateInstance();
@@ -18,9 +21,11 @@ public class Reset : MonoBehaviour
     public void ResetSystem()
     {
 
-        //SendJointStateRequest();
-        HelperFunctions.SetSliders(resetCondition);
+        // SendJointStateRequest();
+        HelperFunctions.SetSliders(_resetCondition);
+        text.text = "Ready for execution";
         drawService.ResetDrawingState();
+        
     }
     
     public void SendJointStateRequest()
@@ -31,6 +36,7 @@ public class Reset : MonoBehaviour
 
     private void JointStateResponse(StateServiceResponse response)
     {
-        HelperFunctions.SetSliders(response.current_joint_angles);
+        var result = response.current_joint_angles.Select(r => r * Mathf.Rad2Deg / 360).ToArray();
+        HelperFunctions.SetSliders(result);
     }
 }

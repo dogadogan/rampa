@@ -3,9 +3,9 @@ using UnityEngine;
 public class CustomController : MonoBehaviour
 {
     private ArticulationBody[] articulationChain;
-    public float stiffness;
-    public float damping;
-    public float forceLimit;
+    public float stiffness = 10000;
+    public float damping= 1000;
+    public float forceLimit = 1000;
     int defDyanmicVal = 10;
     public ArticulationDriveType driveType = ArticulationDriveType.Force;
     void Start()

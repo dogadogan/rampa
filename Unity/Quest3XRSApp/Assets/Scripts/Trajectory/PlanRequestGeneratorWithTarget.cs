@@ -1,42 +1,23 @@
 using System.Collections;
 using System.Linq;
 using RosMessageTypes.Geometry;
-using RosMessageTypes.NiryoMoveit;
-using Unity.Robotics.ROSTCPConnector;
+using RosMessageTypes.Ur10Mover;
 using Unity.Robotics.ROSTCPConnector.ROSGeometry;
-using UnityEditor.Compilation;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PlanRequestGeneratorWithTarget : MonoBehaviour
 {
     const float k_JointAssignmentWait = 0.1f;
-    //const float k_PoseAssignmentWait = 0.5f;
-
-    // Variables required for ROS communication
-    private string m_RosServiceName = "niryo_moveit";
-    
-
     public GameObject baseLink;
-    
-
     public GameObject m_Target;
-
-    // ROS Connector
-    ROSConnection m_Ros;
-    public GameObject[] objectsToRemoveColliders;
     public Text text;
     public TrajectoryHelperFunctions HelperFunctions;
     public TrajectoryPlanner TrajectoryPlanner;
-
-    void Start()
-    {
-
-    }
-    
     public void GenerateRequest()
     {
-        var request = new MoverServiceRequest();
+        var request = new PlannerServiceRequest();
+        request.request_type = "target";
         request.joints_input = HelperFunctions.CurrentJointConfig();
         
 
@@ -53,12 +34,12 @@ public class PlanRequestGeneratorWithTarget : MonoBehaviour
     }
 
 
-    public void ProcessResponse(MoverServiceResponse response)
+    public void ProcessResponse(PlannerServiceResponse response)
     {
-        StartCoroutine(ExecuteTrajectories());
+        StartCoroutine(ExecuteTrajectories(response));
     }
     
-    IEnumerator ExecuteTrajectories(MoverServiceResponse response)
+    IEnumerator ExecuteTrajectories(PlannerServiceResponse response)
     {
 
         if (response.trajectories != null)
@@ -71,18 +52,14 @@ public class PlanRequestGeneratorWithTarget : MonoBehaviour
                 foreach (var t in response.trajectories[poseIndex].joint_trajectory.points)
                 {
                     var jointPositions = t.positions;
-                    var result = jointPositions.Select(r => r * Mathf.Rad2Deg).ToArray();
+                    var result = jointPositions.Select(r => r * Mathf.Rad2Deg / 360).ToArray();
+                    Debug.LogWarning(result);
                     HelperFunctions.SetSliders(result);
                     yield return new WaitForSeconds(k_JointAssignmentWait);
                 }
             }
-            
-            
         }
-        foreach (var removeObject in objectsToRemoveColliders)
-        {
-            removeObject.GetComponent<Collider>().enabled = true;
-        }
+        HelperFunctions.openPopUp();
         text.text = "Ready for another execution";
         
     }

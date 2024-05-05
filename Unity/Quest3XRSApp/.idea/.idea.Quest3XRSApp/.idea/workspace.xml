@@ -6,12 +6,28 @@
   <component name="ChangeListManager">
     <list default="true" id="52630e7e-4dfe-48dd-ad03-1f23ac0209ec" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Quest3XRSApp/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Quest3XRSApp/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/RosMessages/NiryoMoveit.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/RosMessages/NiryoMoveit/srv.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/RosMessages/NiryoMoveit/srv/MoverServiceRequest.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/RosMessages/NiryoMoveit/srv/MoverServiceRequest.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/RosMessages/NiryoMoveit/srv/MoverServiceResponse.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/RosMessages/NiryoMoveit/srv/MoverServiceResponse.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/RosMessages/NiryoMoveit/srv/StateServiceRequest.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/RosMessages/NiryoMoveit/srv/StateServiceRequest.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/RosMessages/NiryoMoveit/srv/StateServiceResponse.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/RosMessages/NiryoMoveit/srv/StateServiceResponse.cs.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/CustomController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/CustomController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/DrawService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/DrawService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/FixedRotation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/FixedRotation.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Reset.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Reset.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TrajectoryPlanner.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TrajectoryPlanner.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Trajectory/PlanRequestGeneratorRealTime.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Trajectory/PlanRequestGeneratorRealTime.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Trajectory/PlanRequestGeneratorWithPoses.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Trajectory/PlanRequestGeneratorWithPoses.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Trajectory/PlanRequestGeneratorWithTarget.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Trajectory/PlanRequestGeneratorWithTarget.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Trajectory/TrajectoryHelperFunctions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Trajectory/TrajectoryHelperFunctions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Trajectory/TrajectoryPlanner.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Trajectory/TrajectoryPlanner.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/msgbrowser_settings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/msgbrowser_settings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.testtools.codecoverage/Settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.testtools.codecoverage/Settings.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -23,11 +39,17 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Assets/AdjustTransform.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/LogControllerTransform.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/AdjustText.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Trajectory/PlanRequestGeneratorRealTime.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Trajectory/TrajectoryHelperFunctions.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Trajectory/TrajectoryPlanner.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.meta.xr.sdk.interaction.ovr@62.0.0/Runtime/Scripts/Input/OVRControllerVisual.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.meta.xr.sdk.interaction@62.0.0/Runtime/Scripts/Interaction/Models/Ray/RayInteractable.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.meta.xr.sdk.interaction@62.0.0/Runtime/Scripts/PoseDetection/ShapeRecognizerActiveState.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.meta.xr.sdk.interaction@62.0.0/Runtime/Scripts/Unity/InteractableUnityEventWrapper.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.meta.xr.sdk.interaction@62.0.0/Runtime/Scripts/Unity/PhysicsGrabbable.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.robotics.ros-tcp-connector@c27f00c6cf/Runtime/Messages/Geometry/msg/PoseMsg.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.robotics.ros-tcp-connector@c27f00c6cf/Runtime/Messages/Trajectory/msg/JointTrajectoryMsg.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.robotics.ros-tcp-connector@c27f00c6cf/Runtime/ROSGeometry/CoordinateSpaces.cs" root0="SKIP_HIGHLIGHTING" />
@@ -168,6 +190,9 @@
       <workItem from="1714560532738" duration="5835000" />
       <workItem from="1714645317391" duration="1471000" />
       <workItem from="1714665783826" duration="2308000" />
+      <workItem from="1714741837741" duration="3021000" />
+      <workItem from="1714766829835" duration="704000" />
+      <workItem from="1714907150055" duration="11691000" />
     </task>
     <servers />
   </component>

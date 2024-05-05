@@ -5,48 +5,42 @@ using System.Collections.Generic;
 using System.Text;
 using Unity.Robotics.ROSTCPConnector.MessageGeneration;
 
-namespace RosMessageTypes.NiryoMoveit
+namespace RosMessageTypes.Ur10Mover
 {
     [Serializable]
-    public class StateServiceResponse : Message
+    public class ExecutionServiceResponse : Message
     {
-        public const string k_RosMessageName = "niryo_moveit/StateService";
+        public const string k_RosMessageName = "ur10_mover/ExecutionService";
         public override string RosMessageName => k_RosMessageName;
 
         public string output_msg;
-        public double[] current_joint_angles;
 
-        public StateServiceResponse()
+        public ExecutionServiceResponse()
         {
             this.output_msg = "";
-            this.current_joint_angles = new double[6];
         }
 
-        public StateServiceResponse(string output_msg, double[] current_joint_angles)
+        public ExecutionServiceResponse(string output_msg)
         {
             this.output_msg = output_msg;
-            this.current_joint_angles = current_joint_angles;
         }
 
-        public static StateServiceResponse Deserialize(MessageDeserializer deserializer) => new StateServiceResponse(deserializer);
+        public static ExecutionServiceResponse Deserialize(MessageDeserializer deserializer) => new ExecutionServiceResponse(deserializer);
 
-        private StateServiceResponse(MessageDeserializer deserializer)
+        private ExecutionServiceResponse(MessageDeserializer deserializer)
         {
             deserializer.Read(out this.output_msg);
-            deserializer.Read(out this.current_joint_angles, sizeof(double), 6);
         }
 
         public override void SerializeTo(MessageSerializer serializer)
         {
             serializer.Write(this.output_msg);
-            serializer.Write(this.current_joint_angles);
         }
 
         public override string ToString()
         {
-            return "StateServiceResponse: " +
-            "\noutput_msg: " + output_msg.ToString() +
-            "\ncurrent_joint_angles: " + System.String.Join(", ", current_joint_angles.ToList());
+            return "ExecutionServiceResponse: " +
+            "\noutput_msg: " + output_msg.ToString();
         }
 
 #if UNITY_EDITOR
