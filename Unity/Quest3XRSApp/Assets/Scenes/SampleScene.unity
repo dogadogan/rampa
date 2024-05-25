@@ -5287,7 +5287,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -6969,7 +6969,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &836644812
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7034,9 +7034,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2138264122}
-        m_TargetAssemblyTypeName: DrawService, Assembly-CSharp
-        m_MethodName: TriggerRealTimeExecution
+      - m_Target: {fileID: 2138264128}
+        m_TargetAssemblyTypeName: DrawServiceRealTime, Assembly-CSharp
+        m_MethodName: UpdateDrawingState
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7487,7 +7487,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   text: {fileID: 1279366341}
-  drawService: {fileID: 2138264122}
   PlanRequestGeneratorWithTarget: {fileID: 886951536}
   PlanRequestGeneratorWithPoses: {fileID: 886951537}
   PlanRequestGeneratorRealTime: {fileID: 886951538}
@@ -7503,7 +7502,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cabb45e4862764badbb94a213bb54617, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseLink: {fileID: 318227045}
   m_Target: {fileID: 604625996}
   text: {fileID: 1279366341}
   HelperFunctions: {fileID: 886951539}
@@ -7520,13 +7518,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfb01763364f247db98d14d53a2449d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseLink: {fileID: 318227045}
-  m_Target: {fileID: 604625996}
-  text: {fileID: 1279366341}
   drawService: {fileID: 2138264122}
   HelperFunctions: {fileID: 886951539}
   TrajectoryPlanner: {fileID: 886951535}
-  baselink: {fileID: 0}
 --- !u!114 &886951538
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7539,10 +7533,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d0fa728e01fb4767a68c660815679a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseLink: {fileID: 318227045}
-  m_Target: {fileID: 604625996}
   text: {fileID: 1279366341}
-  drawService: {fileID: 2138264122}
   HelperFunctions: {fileID: 886951539}
   TrajectoryPlanner: {fileID: 886951535}
 --- !u!114 &886951539
@@ -7566,6 +7557,7 @@ MonoBehaviour:
   - {fileID: 768908707}
   mainPanel: {fileID: 1216560649}
   popUpPanel: {fileID: 126788664}
+  baseLink: {fileID: 318227049}
 --- !u!114 &886951540
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9192,6 +9184,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trajectoryPlanner: {fileID: 886951535}
   drawService: {fileID: 2138264122}
+  drawServiceRealTime: {fileID: 0}
   HelperFunctions: {fileID: 886951539}
   text: {fileID: 1279366341}
 --- !u!1001 &1141976289
@@ -9697,7 +9690,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1193335395
 RectTransform:
   m_ObjectHideFlags: 0
@@ -19312,6 +19305,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d95716e8763444fbad76660b820d9ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hand: {fileID: 2138264125}
+  lineRenderer: {fileID: 255347229}
+  InfoText: {fileID: 328429906}
+  button: {fileID: 836644813}
+  ButtonText: {fileID: 1659086755}
+  PlanRequestGeneratorRealTime: {fileID: 886951538}
 --- !u!1 &2142900714
 GameObject:
   m_ObjectHideFlags: 0

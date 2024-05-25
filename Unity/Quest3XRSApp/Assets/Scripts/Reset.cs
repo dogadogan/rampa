@@ -8,6 +8,7 @@ public class Reset : MonoBehaviour
 {
     public TrajectoryPlanner trajectoryPlanner;
     public DrawService drawService;
+    public DrawServiceRealTime drawServiceRealTime;
     ROSConnection m_Ros;
     private string m_RosServiceName = "get_joint_state";
     public TrajectoryHelperFunctions HelperFunctions;
@@ -25,7 +26,7 @@ public class Reset : MonoBehaviour
         HelperFunctions.SetSliders(_resetCondition);
         text.text = "Ready for execution";
         drawService.ResetDrawingState();
-        
+        drawServiceRealTime.ResetDrawingState();
     }
     
     public void SendJointStateRequest()

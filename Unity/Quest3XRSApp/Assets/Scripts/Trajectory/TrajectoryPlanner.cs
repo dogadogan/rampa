@@ -11,7 +11,6 @@ public class TrajectoryPlanner : MonoBehaviour
     ROSConnection m_Ros;
     
     public Text text;
-    public DrawService drawService;
     public PlanRequestGeneratorWithTarget PlanRequestGeneratorWithTarget;
     public PlanRequestGeneratorWithPoses PlanRequestGeneratorWithPoses;
     public PlanRequestGeneratorRealTime PlanRequestGeneratorRealTime;
@@ -22,7 +21,7 @@ public class TrajectoryPlanner : MonoBehaviour
         m_Ros.RegisterRosService<PlannerServiceRequest, PlannerServiceResponse>(m_RosServiceName);
     }
     
-    public void SendRquest(PlannerServiceRequest request)
+    public void SendRequest(PlannerServiceRequest request)
     {
         text.text = "Waiting for the response...";
         m_Ros.SendServiceMessage<PlannerServiceResponse>(m_RosServiceName, request, TrajectoryResponse);

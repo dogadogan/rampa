@@ -72,7 +72,6 @@ public class DrawService : MonoBehaviour
     
     private void TriggerPublishMethod()
     {
-        Debug.LogWarning("--------TriggerPublishMethod --------");
         Vector3[] poses = targetPoints.ToArray();
         PlanRequestGeneratorWithPoses.GenerateRequest(poses);
     } 
@@ -132,60 +131,4 @@ public class DrawService : MonoBehaviour
         WaitingForResponse,
         ExecuteTrajectory,
     }
-    
-    
-    
-    
-   /* IEnumerator FollowTrajectory(float interval)
-    {
-        InfoText.text = "Following trajectory";
-        int numberOfPoints = 0;
-        while (true)
-        {
-            if (numberOfPoints % 10 == 0)
-            {
-                if (targetPoints.Count != 0 && Vector3.Distance(targetPoints[targetPoints.Count - 1], hand.PointerPose.position) < threshold)
-                {
-                    InfoText.text = "done";
-                    targetPoints.Clear();
-                    break;
-                }
-                targetPoints.Add(hand.PointerPose.position);
-                Vector3[] pose = { hand.PointerPose.position};
-                TriggerPublishMethodForRealTimeExecution(pose,targetPoints.Count - 1);
-            }
-
-            numberOfPoints++;
-            lineRenderer.positionCount = numberOfPoints;
-            lineRenderer.SetPosition(numberOfPoints - 1,  hand.PointerPose.position);
-            
-
-            yield return new WaitForSeconds(interval);
-        }
-    }
-
-
-    public void TriggerRealTimeExecution()
-    {
-        lineRenderer.positionCount = 0;
-        StartCoroutine(CountdownCoroutine(DrawingType.RealTime));
-    }
-    
-    private void TriggerPublishMethodForRealTimeExecution(Vector3[] pose,int requestNumber)
-    {
-        waitForTheTurn(requestNumber,pose);
-    }
-
-    private IEnumerator waitForTheTurn(int requestNumber,Vector3[] pose)
-    {
-            InfoText.text = "Following trajectory " + trajectoryPlanner.requestNumber;
-            Debug.LogWarning("---" + requestNumber + "---");
-            Debug.LogWarning("---" + trajectoryPlanner.requestNumber + "---");
-            while (trajectoryPlanner.requestNumber != requestNumber)
-            {
-                yield return null;
-            }
-            PlanRequestGeneratorRealTime.GenerateRequest(pose);
-
-    }*/
 }

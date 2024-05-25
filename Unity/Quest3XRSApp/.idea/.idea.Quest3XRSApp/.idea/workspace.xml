@@ -6,18 +6,16 @@
   <component name="ChangeListManager">
     <list default="true" id="52630e7e-4dfe-48dd-ad03-1f23ac0209ec" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Quest3XRSApp/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Quest3XRSApp/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/AdjustTransform.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/AdjustTransform.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GetTransform.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GetTransform.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/LogControllerTransform.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/LogControllerTransform.cs.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Resources/ROSConnectionPrefab.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/ROSConnectionPrefab.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/FixedRotation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/FixedRotation.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/DrawService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/DrawService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/DrawServiceRealTime.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/DrawServiceRealTime.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Reset.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Reset.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Trajectory/PlanRequestGeneratorRealTime.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Trajectory/PlanRequestGeneratorRealTime.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Trajectory/PlanRequestGeneratorWithPoses.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Trajectory/PlanRequestGeneratorWithPoses.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/writeIt.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/writeIt.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Trajectory/PlanRequestGeneratorWithTarget.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Trajectory/PlanRequestGeneratorWithTarget.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Trajectory/TrajectoryHelperFunctions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Trajectory/TrajectoryHelperFunctions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Trajectory/TrajectoryPlanner.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Trajectory/TrajectoryPlanner.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -186,7 +184,7 @@
       <workItem from="1715075071684" duration="708000" />
       <workItem from="1715852720489" duration="134000" />
       <workItem from="1715887862236" duration="4460000" />
-      <workItem from="1716630300581" duration="3235000" />
+      <workItem from="1716630300581" duration="16522000" />
     </task>
     <servers />
   </component>

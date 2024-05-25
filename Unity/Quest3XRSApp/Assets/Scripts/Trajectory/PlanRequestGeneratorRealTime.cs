@@ -1,69 +1,96 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
-using RosMessageTypes.Geometry;
 using RosMessageTypes.Ur10Mover;
-using Unity.Robotics.ROSTCPConnector.ROSGeometry;
 using UnityEngine;
+using RosMessageTypes.Geometry;
 using UnityEngine.UI;
 
 public class PlanRequestGeneratorRealTime : MonoBehaviour
 {
-    const float k_JointAssignmentWait = 0.1f;
-    private string m_RosServiceName = "niryo_moveit";
-    public GameObject baseLink;
-    public GameObject m_Target;
+    const float k_JointAssignmentWait = 0.05f;
     public Text text;
-    public DrawService drawService;
     public TrajectoryHelperFunctions HelperFunctions;
     public TrajectoryPlanner TrajectoryPlanner;
     
-    public void GenerateRequest(Vector3 pose)
+    private Queue<Vector3> requestQueue = new Queue<Vector3>();
+    private bool waitingForResponse = false;
+    private double[] jointConfig;
+
+    public void Start()
+    {
+        jointConfig = HelperFunctions.CurrentJointConfig();
+        StartCoroutine(ProcessRequests());
+    }
+
+    public void AddRequestToQueue(Vector3 target)
+    {
+        Debug.LogWarning("target added " + target);
+        requestQueue.Enqueue(target);
+    } 
+    private IEnumerator ProcessRequests()
+    {
+        while (true)
+        {
+            if (requestQueue.Count > 0 && !waitingForResponse)
+            {
+                waitingForResponse = true;
+                Vector3 pose = requestQueue.Dequeue();
+                Debug.LogWarning("target popped " + pose);
+                GenerateRequest(pose);
+            }
+            yield return new WaitForSeconds(0.1f);
+        }
+        
+    }
+
+    private void GenerateRequest(Vector3 pose)
     {
         var request = new PlannerServiceRequest();
         request.request_type = "realTime";
-        request.joints_input =  HelperFunctions.CurrentJointConfig();
-
-        PoseMsg[] pose_list = new PoseMsg[1];
-        pose_list[0] = new PoseMsg
-        {
-            position = (pose - baseLink.transform.position).To<FLU>(),
-
-            // The hardcoded x/z angles assure that the gripper is always positioned above the target cube before grasping.
-            orientation = Quaternion.Euler(90, m_Target.transform.eulerAngles.y, 0).To<FLU>()
-        };
+        request.joints_input = jointConfig;
         
+        PoseMsg[] pose_list = new PoseMsg[1];
+        pose_list[0] = HelperFunctions.GeneratePoseMsg(pose);
         request.pose_list = pose_list;
-        TrajectoryPlanner.SendRquest(request);
+        Debug.LogWarning("Request Sent");
+        Debug.LogWarning(request);
+        TrajectoryPlanner.SendRequest(request);
     } 
     
     public void ProcessResponse(PlannerServiceResponse response)
     {
-        
+        jointConfig = response.trajectories[0].joint_trajectory.points.Last().positions;
+        StartCoroutine(ExecuteTrajectories(response));
+
     }
     
     IEnumerator ExecuteTrajectories(PlannerServiceResponse response)
     {
-        if (response.trajectories != null)
-        {
-            // For every trajectory plan returned
-            for (var poseIndex = 0; poseIndex < response.trajectories.Length; poseIndex++)
-                
-            { 
-                // For every robot pose in trajectory plan
-                foreach (var t in response.trajectories[poseIndex].joint_trajectory.points)
-                {
-                    var jointPositions = t.positions;
-                    var result = jointPositions.Select(r => r * Mathf.Rad2Deg / 360).ToArray();
-                    HelperFunctions.SetSliders(result);
-                    yield return new WaitForSeconds(k_JointAssignmentWait);
-                }
+
+
+        // For every trajectory plan returned
+        for (var poseIndex = 0; poseIndex < response.trajectories.Length; poseIndex++)
+            
+        { 
+            // For every robot pose in trajectory plan
+            foreach (var t in response.trajectories[poseIndex].joint_trajectory.points)
+            {
+                HelperFunctions.SetJointAngles(t);
+                yield return new WaitForSeconds(k_JointAssignmentWait);
+                waitingForResponse = false;
             }
-            
-            
         }
-        text.text = "Ready for another execution";
-        HelperFunctions.openPopUp();
         
+        text.text = "Ready for another execution";
+    }
+
+    public void ResetGenerator()
+    {
+        jointConfig = HelperFunctions.CurrentJointConfig();
+        waitingForResponse = false;
+        requestQueue.Clear();
+
     }
     
 }

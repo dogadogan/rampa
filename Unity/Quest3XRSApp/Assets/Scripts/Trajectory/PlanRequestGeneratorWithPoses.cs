@@ -2,21 +2,14 @@ using System.Collections;
 using System.Linq;
 using RosMessageTypes.Geometry;
 using RosMessageTypes.Ur10Mover;
-using Unity.Robotics.ROSTCPConnector;
-using Unity.Robotics.ROSTCPConnector.ROSGeometry;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class PlanRequestGeneratorWithPoses : MonoBehaviour
 {
     const float k_JointAssignmentWait = 0.1f;
-    public GameObject baseLink;
-    public GameObject m_Target;
-    public Text text;
     public DrawService drawService;
     public TrajectoryHelperFunctions HelperFunctions;
     public TrajectoryPlanner TrajectoryPlanner;
-    public GameObject baselink;
     
     
     public void GenerateRequest(Vector3[] poses)
@@ -28,34 +21,14 @@ public class PlanRequestGeneratorWithPoses : MonoBehaviour
         PoseMsg[] pose_list = new PoseMsg[poses.Length];
         for (int i = 0; i < poses.Length; i++)
         {
-            Vector3 direction = poses[i] - baseLink.transform.position;
-
-            // Create a rotation quaternion around the pivotPoint
-            Quaternion rotation = Quaternion.Euler(0, -baseLink.transform.eulerAngles.y, 0);
-
-            // Rotate the direction vector
-            Vector3 rotatedDirection = rotation * direction;
-
-            Vector3 rotatedPoint = baseLink.transform.position + rotatedDirection;
-            pose_list[i] = new PoseMsg
-            {
-                position = (rotatedPoint- baseLink.transform.position).To<FLU>(),
-
-                // The hardcoded x/z angles assure that the gripper is always positioned above the target cube before grasping.
-                orientation = Quaternion.Euler(90, m_Target.transform.eulerAngles.y, 0).To<FLU>()
-            };
+            pose_list[i] = HelperFunctions.GeneratePoseMsg(poses[i]);
         }
-        
         request.pose_list = pose_list;
-        Debug.LogWarning("-----request:" );
-        Debug.LogWarning(request);
-        TrajectoryPlanner.SendRquest(request);
+        TrajectoryPlanner.SendRequest(request);
     } 
     
     public void ProcessResponse(PlannerServiceResponse response)
     {
-        Debug.LogWarning("-----response:" );
-        Debug.LogWarning(response);
         drawService.UpdateDrawingState();
         StartCoroutine(ExecuteTrajectories(response));
     }
@@ -72,9 +45,7 @@ public class PlanRequestGeneratorWithPoses : MonoBehaviour
                 // For every robot pose in trajectory plan
                 foreach (var t in response.trajectories[poseIndex].joint_trajectory.points)
                 {
-                    var jointPositions = t.positions;
-                    var result = jointPositions.Select(r => r * Mathf.Rad2Deg / 360).ToArray();
-                    HelperFunctions.SetSliders(result);
+                    HelperFunctions.SetJointAngles(t);
                     yield return new WaitForSeconds(k_JointAssignmentWait);
                 }
             }

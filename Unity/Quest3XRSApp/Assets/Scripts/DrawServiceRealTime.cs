@@ -1,44 +1,42 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class DrawServiceRealTime: MonoBehaviour
 {
-   /*public OVRHand hand;
+    public OVRHand hand;
     public LineRenderer lineRenderer;
-    public Text InfoText;
-    private Color lineColor = Color.magenta;
-    private float lineWidth = 0.005f;
-    private List<Vector3> targetPoints = new List<Vector3>();
-    private float threshold = 0.01f;
-    public TrajectoryPlanner trajectoryPlanner;
-    private State state;
+    public Text InfoText; 
     public Button button;
     public Text ButtonText;
-    public PlanRequestGeneratorWithPoses PlanRequestGeneratorWithPoses;
-    public PlanRequestGeneratorWithPoses PlanRequestGeneratorRealTime;
+    public PlanRequestGeneratorRealTime PlanRequestGeneratorRealTime;
+    
+    private State state = State.Initial;
+    
+    private float threshold = 0.01f;
 
-    void Start()
-    {
-        ResetDrawingState();
-    }
+    
     IEnumerator DrawTrajectory(float interval)
     {
         InfoText.text = "Drawing trajectory";
         int numberOfPoints = 0;
+        Vector3 prevPoint = Vector3.zero;
         while (true)
         {
             if (numberOfPoints % 5 == 0)
             {
-                if (targetPoints.Count != 0 && Vector3.Distance(targetPoints[targetPoints.Count - 1], hand.PointerPose.position) < threshold)
+                if (numberOfPoints != 0 && Vector3.Distance(prevPoint, hand.PointerPose.position) < threshold)
                 {
                     UpdateDrawingState();
                     break;
                 }
-                targetPoints.Add(hand.PointerPose.position);
+                prevPoint = hand.PointerPose.position;
             }
-
+            if (numberOfPoints % 10 == 0)
+            {
+                PlanRequestGeneratorRealTime.AddRequestToQueue(hand.PointerPose.position);
+            }
+            
             numberOfPoints++;
             lineRenderer.positionCount = numberOfPoints;
             lineRenderer.SetPosition(numberOfPoints - 1,  hand.PointerPose.position);
@@ -49,7 +47,7 @@ public class DrawServiceRealTime: MonoBehaviour
     }
     
     
-    IEnumerator CountdownCoroutine(DrawingType type)
+    IEnumerator CountdownCoroutine()
     {
         int currentTime = 3;
 
@@ -60,70 +58,41 @@ public class DrawServiceRealTime: MonoBehaviour
             yield return new WaitForSeconds(1f); // Wait for 1 second
         }
 
-        if (type == DrawingType.PreDrawn)
-        {
-            StartCoroutine(DrawTrajectory(0.05f));
-        }
-        else
-        {
-            //StartCoroutine(FollowTrajectory(0.05f));
-        }
+        StartCoroutine(DrawTrajectory(0.05f));
         
 
     }
     
-    
-    
-   /* IEnumerator FollowTrajectory(float interval)
+    public void UpdateDrawingState()
     {
-        InfoText.text = "Following trajectory";
-        int numberOfPoints = 0;
-        while (true)
+        switch (state)
         {
-            if (numberOfPoints % 10 == 0)
-            {
-                if (targetPoints.Count != 0 && Vector3.Distance(targetPoints[targetPoints.Count - 1], hand.PointerPose.position) < threshold)
-                {
-                    InfoText.text = "done";
-                    targetPoints.Clear();
-                    break;
-                }
-                targetPoints.Add(hand.PointerPose.position);
-                Vector3[] pose = { hand.PointerPose.position};
-                TriggerPublishMethodForRealTimeExecution(pose,targetPoints.Count - 1);
-            }
-
-            numberOfPoints++;
-            lineRenderer.positionCount = numberOfPoints;
-            lineRenderer.SetPosition(numberOfPoints - 1,  hand.PointerPose.position);
-            
-
-            yield return new WaitForSeconds(interval);
+            case State.Initial:
+                state = State.DrawTrajectory;
+                button.interactable = false;
+                lineRenderer.positionCount = 0;
+                StartCoroutine(CountdownCoroutine());
+                break;
+            case State.DrawTrajectory:
+                ResetDrawingState();
+                break;
         }
+        
     }
 
-
-    public void TriggerRealTimeExecution()
+    public void ResetDrawingState()
     {
+        state = State.Initial;
+        ButtonText.text = "Real Time Execution";
+        InfoText.text = "";
+        button.interactable = true;
         lineRenderer.positionCount = 0;
-        StartCoroutine(CountdownCoroutine(DrawingType.RealTime));
+        PlanRequestGeneratorRealTime.ResetGenerator();
+        
     }
-    
-    private void TriggerPublishMethodForRealTimeExecution(Vector3[] pose,int requestNumber)
+    private enum State
     {
-        waitForTheTurn(requestNumber,pose);
+        Initial,
+        DrawTrajectory,
     }
-
-    private IEnumerator waitForTheTurn(int requestNumber,Vector3[] pose)
-    {
-            InfoText.text = "Following trajectory " + trajectoryPlanner.requestNumber;
-            Debug.LogWarning("---" + requestNumber + "---");
-            Debug.LogWarning("---" + trajectoryPlanner.requestNumber + "---");
-            while (trajectoryPlanner.requestNumber != requestNumber)
-            {
-                yield return null;
-            }
-            PlanRequestGeneratorRealTime.GenerateRequest(pose);
-
-    }*/
 }
