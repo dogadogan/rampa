@@ -1,0 +1,96 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using RosMessageTypes.Ur10Mover;
+using UnityEngine;
+using RosMessageTypes.Geometry;
+using UnityEngine.UI;
+
+public class PlanRequestGeneratorRealTime : MonoBehaviour
+{
+    const float k_JointAssignmentWait = 0.05f;
+    public Text text;
+    public TrajectoryHelperFunctions HelperFunctions;
+    public TrajectoryPlanner TrajectoryPlanner;
+    
+    private Queue<Vector3> requestQueue = new Queue<Vector3>();
+    private bool waitingForResponse = false;
+    private double[] jointConfig;
+
+    public void Start()
+    {
+        jointConfig = HelperFunctions.CurrentJointConfig();
+        StartCoroutine(ProcessRequests());
+    }
+
+    public void AddRequestToQueue(Vector3 target)
+    {
+        Debug.LogWarning("target added " + target);
+        requestQueue.Enqueue(target);
+    } 
+    private IEnumerator ProcessRequests()
+    {
+        while (true)
+        {
+            if (requestQueue.Count > 0 && !waitingForResponse)
+            {
+                waitingForResponse = true;
+                Vector3 pose = requestQueue.Dequeue();
+                Debug.LogWarning("target popped " + pose);
+                GenerateRequest(pose);
+            }
+            yield return new WaitForSeconds(0.1f);
+        }
+        
+    }
+
+    private void GenerateRequest(Vector3 pose)
+    {
+        var request = new PlannerServiceRequest();
+        request.request_type = "realTime";
+        request.joints_input = jointConfig;
+        
+        PoseMsg[] pose_list = new PoseMsg[1];
+        pose_list[0] = HelperFunctions.GeneratePoseMsg(pose);
+        request.pose_list = pose_list;
+        Debug.LogWarning("Request Sent");
+        Debug.LogWarning(request);
+        TrajectoryPlanner.SendRequest(request);
+    } 
+    
+    public void ProcessResponse(PlannerServiceResponse response)
+    {
+        jointConfig = response.trajectories[0].joint_trajectory.points.Last().positions;
+        StartCoroutine(ExecuteTrajectories(response));
+
+    }
+    
+    IEnumerator ExecuteTrajectories(PlannerServiceResponse response)
+    {
+
+
+        // For every trajectory plan returned
+        for (var poseIndex = 0; poseIndex < response.trajectories.Length; poseIndex++)
+            
+        { 
+            // For every robot pose in trajectory plan
+            foreach (var t in response.trajectories[poseIndex].joint_trajectory.points)
+            {
+                HelperFunctions.SetJointAngles(t);
+                yield return new WaitForSeconds(k_JointAssignmentWait);
+                waitingForResponse = false;
+            }
+        }
+        
+        text.text = "Ready for another execution";
+    }
+
+    public void ResetGenerator()
+    {
+        jointConfig = HelperFunctions.CurrentJointConfig();
+        waitingForResponse = false;
+        requestQueue.Clear();
+
+    }
+    
+}

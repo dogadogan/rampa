@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-
-
 public class DrawService : MonoBehaviour
 {
     public OVRHand hand;
@@ -14,10 +12,10 @@ public class DrawService : MonoBehaviour
     private float lineWidth = 0.005f;
     private List<Vector3> targetPoints = new List<Vector3>();
     private float threshold = 0.01f;
-    public TrajectoryPlanner trajectoryPlanner;
     private State state;
     public Button button;
     public Text ButtonText;
+    public PlanRequestGeneratorWithPoses PlanRequestGeneratorWithPoses;
 
     // Start is called before the first frame update
     void Start()
@@ -66,16 +64,17 @@ public class DrawService : MonoBehaviour
             InfoText.text = currentTime.ToString();
             yield return new WaitForSeconds(1f); // Wait for 1 second
         }
-        
+
         StartCoroutine(DrawTrajectory(0.05f));
+        
+
     }
     
     private void TriggerPublishMethod()
     {
-        Debug.LogWarning("--------TriggerPublishMethod --------");
         Vector3[] poses = targetPoints.ToArray();
-        trajectoryPlanner.PublishJointsWithPoses(poses);
-    }
+        PlanRequestGeneratorWithPoses.GenerateRequest(poses);
+    } 
 
     public void UpdateDrawingState()
     {
@@ -124,7 +123,7 @@ public class DrawService : MonoBehaviour
         targetPoints.Clear();
         lineRenderer.positionCount = 0;
     }
-    public enum State
+    private enum State
     {
         Initial,
         DrawTrajectory,

@@ -5,37 +5,41 @@ using System.Collections.Generic;
 using System.Text;
 using Unity.Robotics.ROSTCPConnector.MessageGeneration;
 
-namespace RosMessageTypes.NiryoMoveit
+namespace RosMessageTypes.Ur10Mover
 {
     [Serializable]
-    public class MoverServiceRequest : Message
+    public class PlannerServiceRequest : Message
     {
-        public const string k_RosMessageName = "niryo_moveit/MoverService";
+        public const string k_RosMessageName = "ur10_mover/PlannerService";
         public override string RosMessageName => k_RosMessageName;
 
         public string input_msg;
+        public string request_type;
         public double[] joints_input;
         public Geometry.PoseMsg[] pose_list;
 
-        public MoverServiceRequest()
+        public PlannerServiceRequest()
         {
             this.input_msg = "";
+            this.request_type = "";
             this.joints_input = new double[6];
             this.pose_list = new Geometry.PoseMsg[0];
         }
 
-        public MoverServiceRequest(string input_msg, double[] joints_input, Geometry.PoseMsg[] pose_list)
+        public PlannerServiceRequest(string input_msg, string request_type, double[] joints_input, Geometry.PoseMsg[] pose_list)
         {
             this.input_msg = input_msg;
+            this.request_type = request_type;
             this.joints_input = joints_input;
             this.pose_list = pose_list;
         }
 
-        public static MoverServiceRequest Deserialize(MessageDeserializer deserializer) => new MoverServiceRequest(deserializer);
+        public static PlannerServiceRequest Deserialize(MessageDeserializer deserializer) => new PlannerServiceRequest(deserializer);
 
-        private MoverServiceRequest(MessageDeserializer deserializer)
+        private PlannerServiceRequest(MessageDeserializer deserializer)
         {
             deserializer.Read(out this.input_msg);
+            deserializer.Read(out this.request_type);
             deserializer.Read(out this.joints_input, sizeof(double), 6);
             deserializer.Read(out this.pose_list, Geometry.PoseMsg.Deserialize, deserializer.ReadLength());
         }
@@ -43,6 +47,7 @@ namespace RosMessageTypes.NiryoMoveit
         public override void SerializeTo(MessageSerializer serializer)
         {
             serializer.Write(this.input_msg);
+            serializer.Write(this.request_type);
             serializer.Write(this.joints_input);
             serializer.WriteLength(this.pose_list);
             serializer.Write(this.pose_list);
@@ -50,8 +55,9 @@ namespace RosMessageTypes.NiryoMoveit
 
         public override string ToString()
         {
-            return "MoverServiceRequest: " +
+            return "PlannerServiceRequest: " +
             "\ninput_msg: " + input_msg.ToString() +
+            "\nrequest_type: " + request_type.ToString() +
             "\njoints_input: " + System.String.Join(", ", joints_input.ToList()) +
             "\npose_list: " + System.String.Join(", ", pose_list.ToList());
         }
