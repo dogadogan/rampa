@@ -16,7 +16,7 @@ public class PlanRequestGeneratorWithPoses : MonoBehaviour
     public DrawService drawService;
     public TrajectoryHelperFunctions HelperFunctions;
     public TrajectoryPlanner TrajectoryPlanner;
-    
+    public GameObject baselink;
     
     
     public void GenerateRequest(Vector3[] poses)
@@ -28,9 +28,18 @@ public class PlanRequestGeneratorWithPoses : MonoBehaviour
         PoseMsg[] pose_list = new PoseMsg[poses.Length];
         for (int i = 0; i < poses.Length; i++)
         {
+            Vector3 direction = poses[i] - baseLink.transform.position;
+
+            // Create a rotation quaternion around the pivotPoint
+            Quaternion rotation = Quaternion.Euler(0, -baseLink.transform.eulerAngles.y, 0);
+
+            // Rotate the direction vector
+            Vector3 rotatedDirection = rotation * direction;
+
+            Vector3 rotatedPoint = baseLink.transform.position + rotatedDirection;
             pose_list[i] = new PoseMsg
             {
-                position = (poses[i] - baseLink.transform.position).To<FLU>(),
+                position = (rotatedPoint- baseLink.transform.position).To<FLU>(),
 
                 // The hardcoded x/z angles assure that the gripper is always positioned above the target cube before grasping.
                 orientation = Quaternion.Euler(90, m_Target.transform.eulerAngles.y, 0).To<FLU>()
@@ -38,11 +47,15 @@ public class PlanRequestGeneratorWithPoses : MonoBehaviour
         }
         
         request.pose_list = pose_list;
+        Debug.LogWarning("-----request:" );
+        Debug.LogWarning(request);
         TrajectoryPlanner.SendRquest(request);
     } 
     
     public void ProcessResponse(PlannerServiceResponse response)
     {
+        Debug.LogWarning("-----response:" );
+        Debug.LogWarning(response);
         drawService.UpdateDrawingState();
         StartCoroutine(ExecuteTrajectories(response));
     }
