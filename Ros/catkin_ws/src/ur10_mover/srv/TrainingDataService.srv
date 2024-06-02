@@ -1,0 +1,4 @@
+string input_msg
+geometry_msgs/Pose[] pose_list
+---
+string output_msg
