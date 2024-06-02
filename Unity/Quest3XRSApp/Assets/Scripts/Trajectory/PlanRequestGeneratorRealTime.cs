@@ -15,7 +15,12 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
     
     private Queue<Vector3> requestQueue = new Queue<Vector3>();
     private bool waitingForResponse = false;
+    public List< double[]> previousPoints = new List<double[]>();
     private double[] jointConfig;
+    public int currentIndexPointer = 0;
+    public Button backButton;
+    public Button nextButton;
+    public Button drawButton;
 
     public void Start()
     {
@@ -71,12 +76,19 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
 
         // For every trajectory plan returned
         for (var poseIndex = 0; poseIndex < response.trajectories.Length; poseIndex++)
-            
-        { 
+        {
+            var lastPoint = response.trajectories[poseIndex].joint_trajectory.points.Last();
             // For every robot pose in trajectory plan
             foreach (var t in response.trajectories[poseIndex].joint_trajectory.points)
             {
+                if (t == lastPoint)
+                {
+                    // t is the last element
+                    previousPoints.Add(HelperFunctions.SetJointAngles(t));
+                }
+
                 HelperFunctions.SetJointAngles(t);
+               
                 yield return new WaitForSeconds(k_JointAssignmentWait);
                 waitingForResponse = false;
             }
@@ -84,13 +96,54 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
         
         text.text = "Ready for another execution";
     }
+    
+    IEnumerator ExecuteTrajectory(double[] trajectory)
+    {
+        HelperFunctions.SetSliders(trajectory);
+        yield return new WaitForSeconds(k_JointAssignmentWait);
+    }
+    
+    
+    
 
     public void ResetGenerator()
     {
         jointConfig = HelperFunctions.CurrentJointConfig();
         waitingForResponse = false;
         requestQueue.Clear();
+        previousPoints.Clear();
+        currentIndexPointer = 0;
 
     }
+
+    public void GetOnePointBack()
+    {
+        
+        currentIndexPointer -= 1;
+        nextButton.interactable = true;
+        if (currentIndexPointer == 0)
+        {
+            backButton.interactable = false;
+        }
+            
+        StartCoroutine(ExecuteTrajectory(previousPoints[currentIndexPointer]));
+    }
     
+    public void GetOnePointNext()
+    {
+        currentIndexPointer += 1;
+        backButton.interactable = true;
+        if (currentIndexPointer == previousPoints.Count - 1)
+        {
+            nextButton.interactable = false;
+        }
+        StartCoroutine(ExecuteTrajectory(previousPoints[currentIndexPointer]));
+
+    }
+
+    public void SetCurrentIndexPointer()
+    {
+        currentIndexPointer = previousPoints.Count - 1;
+    }
+
 }

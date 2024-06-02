@@ -46,12 +46,14 @@ public class TrajectoryHelperFunctions : MonoBehaviour
         
     }
 
-    public void SetJointAngles(JointTrajectoryPointMsg t)
+    public double[] SetJointAngles(JointTrajectoryPointMsg t)
     {
         var jointPositions = t.positions;
         var result = jointPositions.Select(r => r * Mathf.Rad2Deg / 360).ToArray();
-        SetSliders(result);
         
+        SetSliders(result);
+        return result;
+
     }
     
     public void SetSliders(double[] jointAngles)

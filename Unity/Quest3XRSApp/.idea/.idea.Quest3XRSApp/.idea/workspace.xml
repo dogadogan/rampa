@@ -6,16 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="52630e7e-4dfe-48dd-ad03-1f23ac0209ec" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Quest3XRSApp/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Quest3XRSApp/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/ROSConnectionPrefab.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/ROSConnectionPrefab.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/DrawService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/DrawService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/DrawServiceRealTime.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/DrawServiceRealTime.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Reset.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Reset.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Trajectory/PlanRequestGeneratorRealTime.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Trajectory/PlanRequestGeneratorRealTime.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Trajectory/PlanRequestGeneratorWithPoses.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Trajectory/PlanRequestGeneratorWithPoses.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Trajectory/PlanRequestGeneratorWithTarget.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Trajectory/PlanRequestGeneratorWithTarget.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Trajectory/TrajectoryHelperFunctions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Trajectory/TrajectoryHelperFunctions.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Trajectory/TrajectoryPlanner.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Trajectory/TrajectoryPlanner.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,8 +20,6 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/Assets/AdjustTransform.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/LogControllerTransform.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/AdjustText.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Trajectory/PlanRequestGeneratorRealTime.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Trajectory/TrajectoryHelperFunctions.cs" root0="FORCE_HIGHLIGHTING" />
@@ -46,6 +38,7 @@
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.robotics.urdf-importer@90f353e435/Runtime/Controller/JointControl.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.robotics.urdf-importer@90f353e435/Runtime/UrdfComponents/UrdfCollisions.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/3109cae234514656b27d906a780b0b437c00/a4/8dcef89f/Input.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/3c9ac2df4d3b4342b1d68f6a776f43a3175400/81/ed7f6a5e/LineRenderer.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/3c9ac2df4d3b4342b1d68f6a776f43a3175400/e5/d396a032/Transform.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/3c9ac2df4d3b4342b1d68f6a776f43a3175400/e9/3ed4ab4d/Component.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5937ab1b24164b018bc8118aa5ad55371fe00/89/4c912375/Collision.cs" root0="SKIP_HIGHLIGHTING" />
@@ -64,7 +57,7 @@
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;real__time__execution&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -184,7 +177,8 @@
       <workItem from="1715075071684" duration="708000" />
       <workItem from="1715852720489" duration="134000" />
       <workItem from="1715887862236" duration="4460000" />
-      <workItem from="1716630300581" duration="16522000" />
+      <workItem from="1716630300581" duration="16551000" />
+      <workItem from="1717321114017" duration="11500000" />
     </task>
     <servers />
   </component>
