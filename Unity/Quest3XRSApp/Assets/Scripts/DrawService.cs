@@ -9,7 +9,7 @@ public class DrawService : MonoBehaviour
     public LineRenderer lineRenderer;
     public Text InfoText;
     private Color lineColor = Color.magenta;
-    private float lineWidth = 0.005f;
+    private float lineWidth = 0.015f;
     private List<Vector3> targetPoints = new List<Vector3>();
     private float threshold = 0.01f;
     private State state;

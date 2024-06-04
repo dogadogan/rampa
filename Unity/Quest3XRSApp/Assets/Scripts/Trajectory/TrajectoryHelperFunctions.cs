@@ -45,15 +45,30 @@ public class TrajectoryHelperFunctions : MonoBehaviour
         };
         
     }
+    
+    public PoseMsg GeneratePoseMsgForTraining(Vector3 pose)
+    {
+        return new PoseMsg
+        {
+            position = new PointMsg(pose.x,pose.y,pose.z) ,
+            // The hardcoded x/z angles assure that the gripper is always positioned above the target cube before grasping.
+            orientation = Quaternion.Euler(90, 0, 0).To<FLU>()
+        };
+        
+    }
 
-    public double[] SetJointAngles(JointTrajectoryPointMsg t)
+    public void SetJointAngles(JointTrajectoryPointMsg t)
     {
         var jointPositions = t.positions;
         var result = jointPositions.Select(r => r * Mathf.Rad2Deg / 360).ToArray();
-        
         SetSliders(result);
-        return result;
-
+    }
+    
+    
+    public double[] GetJointAngles(JointTrajectoryPointMsg t)
+    {
+        var jointPositions = t.positions;
+        return  jointPositions.Select(r => r * Mathf.Rad2Deg / 360).ToArray();
     }
     
     public void SetSliders(double[] jointAngles)

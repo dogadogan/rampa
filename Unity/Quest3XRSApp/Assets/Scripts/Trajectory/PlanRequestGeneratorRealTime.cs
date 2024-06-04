@@ -15,12 +15,14 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
     
     private Queue<Vector3> requestQueue = new Queue<Vector3>();
     private bool waitingForResponse = false;
-    public List< double[]> previousPoints = new List<double[]>();
+    public List<( Vector3 position, double[] jointAngles)> previousPoints = new List<( Vector3 position, double[] jointAngles)>();
     private double[] jointConfig;
     public int currentIndexPointer = 0;
     public Button backButton;
     public Button nextButton;
     public Button drawButton;
+    public Button trainButton;
+    public Button testButton;
 
     public void Start()
     {
@@ -83,8 +85,10 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
             {
                 if (t == lastPoint)
                 {
-                    // t is the last element
-                    previousPoints.Add(HelperFunctions.SetJointAngles(t));
+                    var lastPointInfo = response.pose_list.Last().position;
+                    var point = new Vector3((float)lastPointInfo.x, (float)lastPointInfo.y, (float)lastPointInfo.z);
+                    
+                    previousPoints.Add((point, HelperFunctions.GetJointAngles(t)));
                 }
 
                 HelperFunctions.SetJointAngles(t);
@@ -126,7 +130,7 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
             backButton.interactable = false;
         }
             
-        StartCoroutine(ExecuteTrajectory(previousPoints[currentIndexPointer]));
+        StartCoroutine(ExecuteTrajectory(previousPoints[currentIndexPointer].jointAngles));
     }
     
     public void GetOnePointNext()
@@ -137,7 +141,7 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
         {
             nextButton.interactable = false;
         }
-        StartCoroutine(ExecuteTrajectory(previousPoints[currentIndexPointer]));
+        StartCoroutine(ExecuteTrajectory(previousPoints[currentIndexPointer].jointAngles));
 
     }
 
@@ -145,5 +149,8 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
     {
         currentIndexPointer = previousPoints.Count - 1;
     }
+    
+    
+    
 
 }

@@ -10,10 +10,11 @@ public class DrawServiceRealTime: MonoBehaviour
     public Text InfoText; 
     public Button primalButton;
     public Text ButtonText;
+    
     public PlanRequestGeneratorRealTime planRequestGeneratorRealTime;
+    public TrainAndTest trainAndTest;
     
     private State state = State.Initial;
-    
     private float threshold = 0.01f;
 
     
@@ -22,11 +23,18 @@ public class DrawServiceRealTime: MonoBehaviour
         InfoText.text = "Drawing trajectory";
         int numberOfPoints = lineRenderer.positionCount;
         Vector3 prevPoint = Vector3.zero;
+        int totalIter = 0;
+        bool isFirstPart = true;
         while (true)
         {
+            totalIter += 1;
+            if (totalIter == 30)
+            {
+                isFirstPart = false;
+            }
             if (numberOfPoints % 5 == 0)
             {
-                if (numberOfPoints != 0 && Vector3.Distance(prevPoint, hand.PointerPose.position) < threshold)
+                if (numberOfPoints != 0 && Vector3.Distance(prevPoint, hand.PointerPose.position) < threshold && !isFirstPart)
                 {
                     UpdateDrawingState();
                     break;
@@ -64,7 +72,7 @@ public class DrawServiceRealTime: MonoBehaviour
 
     }
     
-    public void UpdateDrawingState()
+    public void UpdateDrawingState(bool finalized = false)
     {
         switch (state)
         {
@@ -77,33 +85,37 @@ public class DrawServiceRealTime: MonoBehaviour
             case State.DrawTrajectory:
                 state = State.InspectTrajectory;
                 primalButton.gameObject.SetActive(false);
-                planRequestGeneratorRealTime.backButton.gameObject.SetActive(true);
-                planRequestGeneratorRealTime.nextButton.gameObject.SetActive(true);
-                planRequestGeneratorRealTime.drawButton.gameObject.SetActive(true);
+                activateDisactivateButtons(true);
                 planRequestGeneratorRealTime.SetCurrentIndexPointer();
                 break;
             case State.InspectTrajectory:
-                state = State.DrawTrajectory;
-                primalButton.gameObject.SetActive(true);
-                planRequestGeneratorRealTime.backButton.gameObject.SetActive(false);
-                planRequestGeneratorRealTime.nextButton.gameObject.SetActive(false);
-                planRequestGeneratorRealTime.drawButton.gameObject.SetActive(false);
-                double remainingPointsRate = (double) planRequestGeneratorRealTime.currentIndexPointer  / planRequestGeneratorRealTime.previousPoints.Count;
-                Debug.LogWarning("asd all points "+ lineRenderer.positionCount);
-                Debug.LogWarning("asd currentIndexPointer "+ planRequestGeneratorRealTime.currentIndexPointer);
-                Debug.LogWarning("asd list length "+ planRequestGeneratorRealTime.previousPoints.Count);
-                int remainingPoints = (int)Math.Floor(lineRenderer.positionCount * remainingPointsRate);
-                Debug.LogWarning("asd remainingPoints "+ remainingPoints);
-                Vector3[] newPositions = new Vector3[remainingPoints];
-                for (int i = 0; i < remainingPoints; i++)
+                if (finalized)
                 {
-                    newPositions[i] = lineRenderer.GetPosition(i);
+                    state = State.Initial;
+                    ResetDrawingState();
+                }
+                else
+                {
+                    state = State.DrawTrajectory;
+                    primalButton.gameObject.SetActive(true);
+                    activateDisactivateButtons(false);
+                    double remainingPointsRate = (double) planRequestGeneratorRealTime.currentIndexPointer  / planRequestGeneratorRealTime.previousPoints.Count;
+                    int remainingPoints = (int)Math.Floor(lineRenderer.positionCount * remainingPointsRate);
+                    Vector3[] newPositions = new Vector3[remainingPoints];
+                    for (int i = 0; i < remainingPoints; i++)
+                    {
+                        newPositions[i] = lineRenderer.GetPosition(i);
+                    }
+
+                    lineRenderer.positionCount = remainingPoints;
+                    lineRenderer.SetPositions(newPositions);
+                    planRequestGeneratorRealTime.previousPoints =
+                        planRequestGeneratorRealTime.previousPoints.GetRange(0,
+                            planRequestGeneratorRealTime.currentIndexPointer);
+                
+                    StartCoroutine(CountdownCoroutine());
                 }
 
-                lineRenderer.positionCount = remainingPoints;
-                lineRenderer.SetPositions(newPositions);
-                
-                StartCoroutine(CountdownCoroutine());
                 break;
         }
         
@@ -112,22 +124,36 @@ public class DrawServiceRealTime: MonoBehaviour
     public void ResetDrawingState()
     {
         state = State.Initial;
-        ButtonText.text = "Real Time Execution";
+        ButtonText.text = "Record a trajectory with hand following";
         InfoText.text = "";
         primalButton.interactable = true;
         lineRenderer.positionCount = 0;
         primalButton.gameObject.SetActive(true);
         primalButton.interactable= true;
-        planRequestGeneratorRealTime.backButton.gameObject.SetActive(false);
-        planRequestGeneratorRealTime.nextButton.gameObject.SetActive(false);
-        planRequestGeneratorRealTime.drawButton.gameObject.SetActive(false);
+        activateDisactivateButtons(false);
         planRequestGeneratorRealTime.ResetGenerator();
         
+    }
+
+    public void SendTrainingData()
+    {
+        trainAndTest.SendTrainingData(planRequestGeneratorRealTime.previousPoints);
+        planRequestGeneratorRealTime.ResetGenerator();
+        UpdateDrawingState(true);
     }
     private enum State
     {
         Initial,
         DrawTrajectory,
         InspectTrajectory
+    }
+
+    private void activateDisactivateButtons(bool activate)
+    {
+        planRequestGeneratorRealTime.backButton.gameObject.SetActive(activate);
+        planRequestGeneratorRealTime.nextButton.gameObject.SetActive(activate);
+        planRequestGeneratorRealTime.drawButton.gameObject.SetActive(activate);
+        planRequestGeneratorRealTime.trainButton.gameObject.SetActive(activate);
+        planRequestGeneratorRealTime.testButton.gameObject.SetActive(activate);
     }
 }

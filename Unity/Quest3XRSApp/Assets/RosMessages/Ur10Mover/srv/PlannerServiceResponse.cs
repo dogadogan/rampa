@@ -15,19 +15,22 @@ namespace RosMessageTypes.Ur10Mover
 
         public string output_msg;
         public string request_type;
+        public Geometry.PoseMsg[] pose_list;
         public Moveit.RobotTrajectoryMsg[] trajectories;
 
         public PlannerServiceResponse()
         {
             this.output_msg = "";
             this.request_type = "";
+            this.pose_list = new Geometry.PoseMsg[0];
             this.trajectories = new Moveit.RobotTrajectoryMsg[0];
         }
 
-        public PlannerServiceResponse(string output_msg, string request_type, Moveit.RobotTrajectoryMsg[] trajectories)
+        public PlannerServiceResponse(string output_msg, string request_type, Geometry.PoseMsg[] pose_list, Moveit.RobotTrajectoryMsg[] trajectories)
         {
             this.output_msg = output_msg;
             this.request_type = request_type;
+            this.pose_list = pose_list;
             this.trajectories = trajectories;
         }
 
@@ -37,6 +40,7 @@ namespace RosMessageTypes.Ur10Mover
         {
             deserializer.Read(out this.output_msg);
             deserializer.Read(out this.request_type);
+            deserializer.Read(out this.pose_list, Geometry.PoseMsg.Deserialize, deserializer.ReadLength());
             deserializer.Read(out this.trajectories, Moveit.RobotTrajectoryMsg.Deserialize, deserializer.ReadLength());
         }
 
@@ -44,6 +48,8 @@ namespace RosMessageTypes.Ur10Mover
         {
             serializer.Write(this.output_msg);
             serializer.Write(this.request_type);
+            serializer.WriteLength(this.pose_list);
+            serializer.Write(this.pose_list);
             serializer.WriteLength(this.trajectories);
             serializer.Write(this.trajectories);
         }
@@ -53,6 +59,7 @@ namespace RosMessageTypes.Ur10Mover
             return "PlannerServiceResponse: " +
             "\noutput_msg: " + output_msg.ToString() +
             "\nrequest_type: " + request_type.ToString() +
+            "\npose_list: " + System.String.Join(", ", pose_list.ToList()) +
             "\ntrajectories: " + System.String.Join(", ", trajectories.ToList());
         }
 
