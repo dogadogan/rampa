@@ -5,4 +5,5 @@ geometry_msgs/Pose[] pose_list
 ---
 string output_msg
 string request_type
+geometry_msgs/Pose[] pose_list
 moveit_msgs/RobotTrajectory[] trajectories
