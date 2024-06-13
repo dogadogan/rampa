@@ -8,4 +8,6 @@
 	</node>
     <node name="mover" pkg="ur10_mover" type="mover.py" args="--wait" output="screen"/>
     <node name="ur10_interface" pkg="ur10_mover" type="ur10_interface.py" args="--wait" output="screen"/>
+    <node name="ur10_ProMP" pkg="ur10_mover" type="ur10_ProMP.py" args="--wait" output="screen"/>
+    <include file="$(find ur10_moveit_config)/launch/demo.launch" />
 </launch>
