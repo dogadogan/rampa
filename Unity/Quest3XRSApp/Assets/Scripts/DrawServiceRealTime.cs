@@ -56,6 +56,9 @@ public class DrawServiceRealTime: MonoBehaviour
     }
     
     
+    // No need for countdown, just start drawing the trajectory with pinching
+    
+    /*
     IEnumerator CountdownCoroutine()
     {
         int currentTime = 3;
@@ -68,9 +71,10 @@ public class DrawServiceRealTime: MonoBehaviour
         }
 
         StartCoroutine(DrawTrajectory(0.05f));
-        
 
     }
+    */
+
     
     public void UpdateDrawingState(bool finalized = false)
     {
@@ -80,12 +84,17 @@ public class DrawServiceRealTime: MonoBehaviour
                 state = State.DrawTrajectory;
                 primalButton.interactable = false;
                 lineRenderer.positionCount = 0;
-                StartCoroutine(CountdownCoroutine());
+                
+                // StartCoroutine(CountdownCoroutine());
+                StartCoroutine(DrawTrajectory(0.05f));
+
                 break;
             case State.DrawTrajectory:
                 state = State.InspectTrajectory;
-                primalButton.gameObject.SetActive(false);
-                activateDisactivateButtons(true);
+                
+                // primalButton.gameObject.SetActive(false);
+                // activateDisactivateButtons(true);
+
                 planRequestGeneratorRealTime.SetCurrentIndexPointer();
                 break;
             case State.InspectTrajectory:
@@ -96,6 +105,8 @@ public class DrawServiceRealTime: MonoBehaviour
                 }
                 else
                 {
+
+                    // enters here when the user clicks on "redraw from current waypoint" button
                     state = State.DrawTrajectory;
                     primalButton.gameObject.SetActive(true);
                     activateDisactivateButtons(false);
@@ -113,7 +124,8 @@ public class DrawServiceRealTime: MonoBehaviour
                         planRequestGeneratorRealTime.previousPoints.GetRange(0,
                             planRequestGeneratorRealTime.currentIndexPointer);
                 
-                    StartCoroutine(CountdownCoroutine());
+                    //StartCoroutine(CountdownCoroutine());
+                    StartCoroutine(DrawTrajectory(0.05f));
                 }
 
                 break;
