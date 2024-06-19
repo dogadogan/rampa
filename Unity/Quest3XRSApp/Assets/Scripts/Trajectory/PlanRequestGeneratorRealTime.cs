@@ -5,6 +5,7 @@ using RosMessageTypes.Ur10Mover;
 using UnityEngine;
 using RosMessageTypes.Geometry;
 using UnityEngine.UI;
+using TMPro;
 
 public class PlanRequestGeneratorRealTime : MonoBehaviour
 {
@@ -12,22 +13,32 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
     public Text text;
     public TrajectoryHelperFunctions HelperFunctions;
     public TrajectoryPlanner TrajectoryPlanner;
-    
+    public PrevRecordedTrajectories PrevRecordedTrajectories;
     private Queue<Vector3> requestQueue = new Queue<Vector3>();
     private bool waitingForResponse = false;
     public List<( Vector3 position, double[] jointAngles)> previousPoints = new List<( Vector3 position, double[] jointAngles)>();
+    
     private double[] jointConfig;
     public int currentIndexPointer = 0;
     public Button backButton;
     public Button nextButton;
+
+    // bar to show the current position while inspecting trajectory
+    public GameObject sliderPosition;
+    public GameObject bar;
+
+    // no references, commented out
+    /*
     public Button drawButton;
     public Button trainButton;
     public Button testButton;
+    */
 
     public void Start()
     {
         jointConfig = HelperFunctions.CurrentJointConfig();
         StartCoroutine(ProcessRequests());
+
     }
 
     public void AddRequestToQueue(Vector3 target)
@@ -112,13 +123,23 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
 
     public void ResetGenerator()
     {
+
+        // store the current trajectory
+        PrevRecordedTrajectories.AddTrajectory(previousPoints);
+
+        // handle show-traj buttons
+        PrevRecordedTrajectories.HandleButtons();
+
+        //why?
         jointConfig = HelperFunctions.CurrentJointConfig();
+
         waitingForResponse = false;
         requestQueue.Clear();
         previousPoints.Clear();
         currentIndexPointer = 0;
 
     }
+
 
     public void GetOnePointBack()
     {
@@ -129,6 +150,15 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
         {
             backButton.interactable = false;
         }
+
+
+        // set the slider position's rect transform to the position of the current point
+        Vector3 currRectTransform = sliderPosition.GetComponent<RectTransform>().anchoredPosition;
+        float offset = bar.GetComponent<RectTransform>().sizeDelta.x / (previousPoints.Count - 1);
+        currRectTransform.x -= offset;
+        sliderPosition.GetComponent<RectTransform>().anchoredPosition = currRectTransform;
+
+
             
         StartCoroutine(ExecuteTrajectory(previousPoints[currentIndexPointer].jointAngles));
     }
@@ -141,6 +171,14 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
         {
             nextButton.interactable = false;
         }
+
+        // set the slider position's rect transform to the position of the current point
+        Vector3 currRectTransform = sliderPosition.GetComponent<RectTransform>().anchoredPosition;
+        float offset = bar.GetComponent<RectTransform>().sizeDelta.x / (previousPoints.Count - 1);
+        currRectTransform.x += offset;
+        sliderPosition.GetComponent<RectTransform>().anchoredPosition = currRectTransform;
+
+
         StartCoroutine(ExecuteTrajectory(previousPoints[currentIndexPointer].jointAngles));
 
     }

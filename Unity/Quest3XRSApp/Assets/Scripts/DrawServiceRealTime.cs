@@ -10,14 +10,23 @@ public class DrawServiceRealTime: MonoBehaviour
     public Text InfoText; 
     public Button primalButton;
     public Text ButtonText;
+
+    public GameObject bar;
+    public GameObject sliderPosition;
+    public GameObject loadingText;
     
     public PlanRequestGeneratorRealTime planRequestGeneratorRealTime;
     public TrainAndTest trainAndTest;
     
     private State state = State.Initial;
-    private float threshold = 0.01f;
+    // private float threshold = 0.01f;
 
-    
+
+
+// TODO - record hand orientation as well
+
+
+
     IEnumerator DrawTrajectory(float interval)
     {
         InfoText.text = "Drawing trajectory";
@@ -28,20 +37,30 @@ public class DrawServiceRealTime: MonoBehaviour
         while (true)
         {
             totalIter += 1;
-            if (totalIter == 30)
+
+            //also make false isFirstPart if the user pinches the finger (i.e. starts drawing)
+            if (totalIter == 30 || hand.GetFingerIsPinching(OVRHand.HandFinger.Index))
             {
                 isFirstPart = false;
             }
-            if (numberOfPoints % 5 == 0)
+            if (numberOfPoints % 5 == 0 && numberOfPoints != 0)
             {
-                if (numberOfPoints != 0 && Vector3.Distance(prevPoint, hand.PointerPose.position) < threshold && !isFirstPart)
+                
+                // removed line:
+                // if (Vector3.Distance(prevPoint, hand.PointerPose.position) < threshold && !isFirstPart)
+
+                //if finger is not pinching and is not "first part", exit drawing state
+                if (!hand.GetFingerIsPinching(OVRHand.HandFinger.Index) && !isFirstPart)
                 {
                     UpdateDrawingState();
                     break;
                 }
                 prevPoint = hand.PointerPose.position;
             }
-            if (numberOfPoints % 10 == 0)
+
+
+            // do not add points to the line renderer if isFirstPart is true
+            if (numberOfPoints % 10 == 0 && !isFirstPart)
             {
                 planRequestGeneratorRealTime.AddRequestToQueue(hand.PointerPose.position);
             }
@@ -57,7 +76,7 @@ public class DrawServiceRealTime: MonoBehaviour
     
     
     // No need for countdown, just start drawing the trajectory with pinching
-    
+
     /*
     IEnumerator CountdownCoroutine()
     {
@@ -82,8 +101,11 @@ public class DrawServiceRealTime: MonoBehaviour
         {
             case State.Initial:
                 state = State.DrawTrajectory;
-                primalButton.interactable = false;
+                
+                // primalButton.interactable = false;
                 lineRenderer.positionCount = 0;
+
+                handleMenu(true);
                 
                 // StartCoroutine(CountdownCoroutine());
                 StartCoroutine(DrawTrajectory(0.05f));
@@ -92,8 +114,11 @@ public class DrawServiceRealTime: MonoBehaviour
             case State.DrawTrajectory:
                 state = State.InspectTrajectory;
                 
+                
                 // primalButton.gameObject.SetActive(false);
                 // activateDisactivateButtons(true);
+
+                handleMenu(false);
 
                 planRequestGeneratorRealTime.SetCurrentIndexPointer();
                 break;
@@ -108,8 +133,12 @@ public class DrawServiceRealTime: MonoBehaviour
 
                     // enters here when the user clicks on "redraw from current waypoint" button
                     state = State.DrawTrajectory;
-                    primalButton.gameObject.SetActive(true);
-                    activateDisactivateButtons(false);
+                    
+                    // primalButton.gameObject.SetActive(true);
+                    // activateDisactivateButtons(false);
+
+                    handleMenu(true);
+
                     double remainingPointsRate = (double) planRequestGeneratorRealTime.currentIndexPointer  / planRequestGeneratorRealTime.previousPoints.Count;
                     int remainingPoints = (int)Math.Floor(lineRenderer.positionCount * remainingPointsRate);
                     Vector3[] newPositions = new Vector3[remainingPoints];
@@ -133,18 +162,22 @@ public class DrawServiceRealTime: MonoBehaviour
         
     }
 
+
     public void ResetDrawingState()
     {
+
         state = State.Initial;
-        ButtonText.text = "Record a trajectory with hand following";
+        planRequestGeneratorRealTime.ResetGenerator();
+        lineRenderer.positionCount = 0;
+
+        /* ButtonText.text = "Record a trajectory with hand following";
         InfoText.text = "";
         primalButton.interactable = true;
-        lineRenderer.positionCount = 0;
         primalButton.gameObject.SetActive(true);
         primalButton.interactable= true;
         activateDisactivateButtons(false);
-        planRequestGeneratorRealTime.ResetGenerator();
-        
+        */
+
     }
 
     public void SendTrainingData()
@@ -160,12 +193,36 @@ public class DrawServiceRealTime: MonoBehaviour
         InspectTrajectory
     }
 
+
+    // no need for this function 
+    /*
     private void activateDisactivateButtons(bool activate)
     {
         planRequestGeneratorRealTime.backButton.gameObject.SetActive(activate);
         planRequestGeneratorRealTime.nextButton.gameObject.SetActive(activate);
+        
+        
         planRequestGeneratorRealTime.drawButton.gameObject.SetActive(activate);
         planRequestGeneratorRealTime.trainButton.gameObject.SetActive(activate);
         planRequestGeneratorRealTime.testButton.gameObject.SetActive(activate);
+        
+    }
+    */
+
+
+
+    // handle the bar and the loading text while drawing and inspecting the trajectory
+    private void handleMenu(bool loading)
+    {
+        bar.SetActive(!loading);
+        loadingText.SetActive(loading);
+        planRequestGeneratorRealTime.PrevRecordedTrajectories.showTrajectoriesinMainMenu.interactable = !loading;
+        if (!loading) {
+            // set slider position to end of bar
+            Vector3 currRectTransform = sliderPosition.GetComponent<RectTransform>().anchoredPosition;
+            currRectTransform.x = bar.GetComponent<RectTransform>().sizeDelta.x / 2;
+            sliderPosition.GetComponent<RectTransform>().anchoredPosition = currRectTransform;
+        }
+    
     }
 }
