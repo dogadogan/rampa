@@ -2,17 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Robotics.ROSTCPConnector;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ResetandReturn : MonoBehaviour
 {
+    public Toggle isRealTime;
     public GameObject MainMenu;
     public GameObject TrajCaptureMenu;
 
     public GameObject MLTrainingMenu;
 
-    public PlanRequestGeneratorRealTime planRequestGeneratorRealTime;
+    // public PlanRequestGeneratorRealTime planRequestGeneratorRealTime;
     public TrajectoryPlanner trajectoryPlanner;
     public DrawServiceRealTime drawServiceRealTime;
+
+    public DrawServiceWithInspect drawServiceWithInspect;
     ROSConnection m_Ros;
     public TrajectoryHelperFunctions HelperFunctions;
     private double[] _resetCondition = {0f, -0.25f, 0f, -0.25f, 0f, 0f};
@@ -29,7 +33,11 @@ public class ResetandReturn : MonoBehaviour
         switch (mode) {
             case Mode.TrajCapturetoMainMenu:
 
-                drawServiceRealTime.ResetDrawingState();
+                if (isRealTime.isOn) {
+                    drawServiceRealTime.ResetDrawingState();
+                } else {
+                    drawServiceWithInspect.ResetDrawingState();
+                }
                 goToMainMenuFunc();
                 setSliders();
 

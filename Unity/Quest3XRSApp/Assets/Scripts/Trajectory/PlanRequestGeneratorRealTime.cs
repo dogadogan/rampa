@@ -27,7 +27,11 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
     public GameObject sliderPosition;
     public GameObject bar;
 
-    // no references, commented out
+    // buttons for play/pause trajectory
+    public GameObject playButton;
+    public GameObject pauseButton;
+
+    // no need
     /*
     public Button drawButton;
     public Button trainButton;
@@ -125,7 +129,8 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
     {
 
         // store the current trajectory
-        PrevRecordedTrajectories.AddTrajectory(previousPoints);
+        if (previousPoints.Count > 0)
+            PrevRecordedTrajectories.AddTrajectory(previousPoints);
 
         // handle show-traj buttons
         PrevRecordedTrajectories.HandleButtons();
@@ -145,20 +150,16 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
     {
         
         currentIndexPointer -= 1;
+        
         nextButton.interactable = true;
+        playButton.GetComponent<Button>().interactable = true;
+
         if (currentIndexPointer == 0)
         {
             backButton.interactable = false;
         }
 
-
-        // set the slider position's rect transform to the position of the current point
-        Vector3 currRectTransform = sliderPosition.GetComponent<RectTransform>().anchoredPosition;
-        float offset = bar.GetComponent<RectTransform>().sizeDelta.x / (previousPoints.Count - 1);
-        currRectTransform.x -= offset;
-        sliderPosition.GetComponent<RectTransform>().anchoredPosition = currRectTransform;
-
-
+        UpdateSliderHandle(false);
             
         StartCoroutine(ExecuteTrajectory(previousPoints[currentIndexPointer].jointAngles));
     }
@@ -169,23 +170,68 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
         backButton.interactable = true;
         if (currentIndexPointer == previousPoints.Count - 1)
         {
+            playButton.GetComponent<Button>().interactable = false;
             nextButton.interactable = false;
         }
 
-        // set the slider position's rect transform to the position of the current point
-        Vector3 currRectTransform = sliderPosition.GetComponent<RectTransform>().anchoredPosition;
-        float offset = bar.GetComponent<RectTransform>().sizeDelta.x / (previousPoints.Count - 1);
-        currRectTransform.x += offset;
-        sliderPosition.GetComponent<RectTransform>().anchoredPosition = currRectTransform;
-
+        UpdateSliderHandle(true);
 
         StartCoroutine(ExecuteTrajectory(previousPoints[currentIndexPointer].jointAngles));
 
     }
 
+    // coroutine to play the rest of the trajectory
+    IEnumerator PlayRestOfTrajectoryCoroutine() {
+
+        playButton.SetActive(false);
+        pauseButton.SetActive(true);
+
+        backButton.interactable = false;
+        nextButton.interactable = false;
+
+        for (; currentIndexPointer < previousPoints.Count ; currentIndexPointer++){
+
+            StartCoroutine(ExecuteTrajectory(previousPoints[currentIndexPointer].jointAngles));
+            yield return new WaitForSeconds(k_JointAssignmentWait);
+        }
+
+        playButton.SetActive(true);
+        playButton.GetComponent<Button>().interactable = false;
+        pauseButton.SetActive(false);
+
+    }
+
+    public void PlayRestOfTrajectory() {
+        StartCoroutine(PlayRestOfTrajectoryCoroutine());
+    }
+
+    public void PauseTrajectory() {
+        StopCoroutine(PlayRestOfTrajectoryCoroutine());
+        playButton.SetActive(true);
+        pauseButton.SetActive(false);
+
+        if (currentIndexPointer < previousPoints.Count - 1) {
+            nextButton.interactable = true;
+        }
+        backButton.interactable = true;
+    }
+
+
+
+
     public void SetCurrentIndexPointer()
     {
         currentIndexPointer = previousPoints.Count - 1;
+    }
+
+    private void UpdateSliderHandle(bool forward) {
+        Vector3 currRectTransform = sliderPosition.GetComponent<RectTransform>().anchoredPosition;
+        float offset = bar.GetComponent<RectTransform>().sizeDelta.x / (previousPoints.Count - 1);
+        if (forward)
+            currRectTransform.x += offset;
+        else
+            currRectTransform.x -= offset;
+        sliderPosition.GetComponent<RectTransform>().anchoredPosition = currRectTransform;
     }
     
     

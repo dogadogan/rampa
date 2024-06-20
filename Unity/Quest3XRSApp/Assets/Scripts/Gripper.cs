@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class Gripper : MonoBehaviour
 {
+    /*
     public Text text;
 
     private bool flag = false;
@@ -37,5 +38,6 @@ public class Gripper : MonoBehaviour
         }
         
     }
+    */
     
 }
