@@ -31,6 +31,7 @@ public class TrajectoryHelperFunctions : MonoBehaviour
     {
 
         debugText.text += "baseLink:  " + baseLink.transform.position;
+
         Vector3 direction = pose - baseLink.transform.position;
 
         // Create a rotation quaternion around the pivotPoint
@@ -52,9 +53,18 @@ public class TrajectoryHelperFunctions : MonoBehaviour
     
     public PoseMsg GeneratePoseMsgForTraining(Vector3 pose)
     {
+        
+        Vector3 direction = pose - baseLink.transform.position;
+
+        // Create a rotation quaternion around the pivotPoint
+        Quaternion rotation = Quaternion.Euler(0, -baseLink.transform.eulerAngles.y, 0);
+
+        // Rotate the direction vector
+        Vector3 rotatedDirection = rotation * direction;
+
         return new PoseMsg
         {
-            position = new PointMsg(pose.x,pose.y,pose.z) ,
+            position = (rotatedDirection).To<FLU>(),
             // The hardcoded x/z angles assure that the gripper is always positioned above the target cube before grasping.
             orientation = Quaternion.Euler(90, 0, 0).To<FLU>()
         };

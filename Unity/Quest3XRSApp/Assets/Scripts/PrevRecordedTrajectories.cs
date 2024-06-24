@@ -26,7 +26,14 @@ public class PrevRecordedTrajectories : MonoBehaviour
     // public List<List< (Vector3 position, double[] jointAngles)>> previousTrajectories 
     //    = new List<List<(Vector3 position, double[] jointAngles)>>();
 
+    // private List<GameObject> lines = new List<GameObject>();
+
+    // stores the points of trajectories relative to the baseLink
+    private List<List<Vector3>> trajectories = new List<List<Vector3>>();
+    // stores the points of trajectories relative to absolute world coordinates
     private List<GameObject> lines = new List<GameObject>();
+
+    
 
     public void Start() {
         showTrajectoriesTextinMainMenu = showTrajectoriesinMainMenu.GetComponentInChildren<TMP_Text>();
@@ -47,6 +54,8 @@ public class PrevRecordedTrajectories : MonoBehaviour
             Destroy(line);
         }
         lines.Clear();
+
+        trajectories.Clear();
 
         showTrajectoriesinMainMenu.interactable = false;
         showTrajectoriesinTrajCaptureMenu.interactable = false;
@@ -69,64 +78,78 @@ public class PrevRecordedTrajectories : MonoBehaviour
 
         if (buttonState == 0) {
 
-            debugText.text += "lines.Count: " + lines.Count + "\n";
-            showTrajectoriesTextinMainMenu.text = "show training set (" + lines.Count + ")";
-            showTrajectoriesTextinTrajCaptureMenu.text = "show training set (" + lines.Count + ")";
+            debugText.text += "trajectories.Count: " + trajectories.Count + "\n";
+            showTrajectoriesTextinMainMenu.text = "show training set (" + trajectories.Count + ")";
+            showTrajectoriesTextinTrajCaptureMenu.text = "show training set (" + trajectories.Count + ")";
         }
         else {
-            showTrajectoriesTextinMainMenu.text = "hide training set (" + lines.Count + ")";
-            showTrajectoriesTextinTrajCaptureMenu.text = "hide training set (" + lines.Count + ")";
+            showTrajectoriesTextinMainMenu.text = "hide training set (" + trajectories.Count + ")";
+            showTrajectoriesTextinTrajCaptureMenu.text = "hide training set (" + trajectories.Count + ")";
     
         }
 
     }
 
-    public void AddTrajectory(List<Vector3> poses) {
+    // isPosesAbsolute = true implies that the poses are in absolute world coordinates, otherwise they are relative to the baseLink
+    public void AddTrajectory(List<Vector3> poses, bool isPosesAbsolute = true) {
         // previousTrajectories.Add(trajectory);
 
-        GameObject line = new GameObject();
-        line.AddComponent<LineRenderer>();
-
-        line.SetActive(false);
-
-        line.GetComponent<LineRenderer>().startWidth = 0.01f;
-        line.GetComponent<LineRenderer>().endWidth = 0.01f;
-        line.GetComponent<LineRenderer>().material = new Material(Shader.Find("Sprites/Default"));
-        line.GetComponent<LineRenderer>().startColor = Color.yellow;
-        line.GetComponent<LineRenderer>().endColor = Color.yellow;
-        line.GetComponent<LineRenderer>().positionCount = 0;
-
-        Quaternion rotation = Quaternion.Euler(0, -baseLink.transform.eulerAngles.y, 0);
-        rotation = Quaternion.Inverse(rotation);
+        List<Vector3> trajectory = new List<Vector3>();
 
         debugText.text += "\n adding trajectory";
 
         foreach (var point in poses) {
 
-            debugText.text += "\n adding point" + point;
+            // storing the point relative to the baseLink assuming the baseLink's y rotation is 0
             
-            line.GetComponent<LineRenderer>().positionCount++;
+            if (!isPosesAbsolute) {
+                trajectory.Add(point);
+                continue;
+            }
 
-            
-            
-            Vector3 newPoint = new Vector3((float) point.x - baseLink.transform.position.x, 
+            Vector3 direction = new Vector3((float) point.x - baseLink.transform.position.x, 
                                             (float) point.y - baseLink.transform.position.y, 
                                             (float) point.z - baseLink.transform.position.z);
 
-            debugText.text += "\n newPoint: " + newPoint;
+            
+            // rotating the point so that the baseLink's y rotation is 0
+            Quaternion rotation = Quaternion.Euler(0, -baseLink.transform.eulerAngles.y, 0); // Create a rotation quaternion around the pivotPoint
+            Vector3 rotatedDirection = rotation * direction; // Rotate the direction vector
 
-
-            line.GetComponent<LineRenderer>().SetPosition(line.GetComponent<LineRenderer>().positionCount - 1, newPoint);
+            trajectory.Add(rotatedDirection);
         }
-        lines.Add(line);
 
-        if (buttonState == 1) {
-            line.transform.position = line.transform.position + baseLink.transform.position;
-            line.SetActive(true);
-        }
+        trajectories.Add(trajectory);
+
+        if (buttonState == 1)
+            ShowLine(trajectory);
 
     }
 
+
+    public void ShowLine(List<Vector3> trajectory) {
+        GameObject line = new GameObject();
+        line.AddComponent<LineRenderer>();
+        LineRenderer lr = line.GetComponent<LineRenderer>();
+        lr.material = new Material(Shader.Find("Sprites/Default"));
+        lr.startColor = Color.yellow;
+        lr.endColor = Color.yellow;
+        lr.startWidth = 0.01f;
+        lr.endWidth = 0.01f;
+        
+        for (int i = 0; i < trajectory.Count; i++) {
+            
+            lr.positionCount = i + 1;
+
+            Quaternion rotation = Quaternion.Euler(0, baseLink.transform.eulerAngles.y, 0);
+            Vector3 rotatedPoint = baseLink.transform.position + rotation * trajectory[i];
+
+            lr.SetPosition(i, rotatedPoint);
+        }
+
+        line.SetActive(true);
+        lines.Add(line);
+    }
 
     public void HandleShowTrajButton() {
         if (buttonState == 0) {
@@ -137,32 +160,30 @@ public class PrevRecordedTrajectories : MonoBehaviour
     }
 
     public void ShowTrajectories() {
-        foreach (var line in lines) {
-            debugText.text += "baselink position: " + baseLink.transform.position;
-            line.transform.position += baseLink.transform.position;
-            line.gameObject.SetActive(true);
+        foreach (var trajectory in trajectories) {
+            ShowLine(trajectory);
         }
 
-        showTrajectoriesTextinTrajCaptureMenu.text = "hide training set (" + lines.Count + ")";
-        showTrajectoriesTextinMainMenu.text = "hide training set (" + lines.Count + ")";
+        showTrajectoriesTextinTrajCaptureMenu.text = "hide training set (" + trajectories.Count + ")";
+        showTrajectoriesTextinMainMenu.text = "hide training set (" + trajectories.Count + ")";
         buttonState = 1;
     }
 
     public void HideTrajectories() {
         foreach (var line in lines) {
-            debugText.text += "baselink position: " + baseLink.transform.position;
-            line.transform.position -= baseLink.transform.position;
-            line.gameObject.SetActive(false);
+            Destroy(line);
         }
+        lines.Clear();
+        
 
-        showTrajectoriesTextinTrajCaptureMenu.text = "show training set (" + lines.Count + ")";
-        showTrajectoriesTextinMainMenu.text = "show training set (" + lines.Count + ")";
+        showTrajectoriesTextinTrajCaptureMenu.text = "show training set (" + trajectories.Count + ")";
+        showTrajectoriesTextinMainMenu.text = "show training set (" + trajectories.Count + ")";
         buttonState = 0;
     }
 
     public void SetInteractable(bool interactable) {
         
-        if (lines.Count == 0) {
+        if (trajectories.Count == 0) {
             showTrajectoriesinMainMenu.interactable = false;
             showTrajectoriesinTrajCaptureMenu.interactable = false;
             return;

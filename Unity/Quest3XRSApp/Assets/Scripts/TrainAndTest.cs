@@ -112,7 +112,7 @@ public class TrainAndTest : MonoBehaviour
             foreach (var pose in trajectory.pose_list) {
                 poses.Add(new Vector3((float) pose.position.x, (float) pose.position.y, (float) pose.position.z));
             }
-            prevRecordedTrajectories.AddTrajectory(poses);
+            prevRecordedTrajectories.AddTrajectory(poses, false);
         }
 
         prevRecordedTrajectories.HandleButtons();

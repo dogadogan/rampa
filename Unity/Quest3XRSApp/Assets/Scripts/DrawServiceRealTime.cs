@@ -79,8 +79,6 @@ public class DrawServiceRealTime: MonoBehaviour
                 }
 
             }
-            
-        
             // do not add points to the line renderer if isFirstPart is true
             if (numberOfPoints % WAY_POINT_FREQ == 0 && !isFirstPart)
             {
