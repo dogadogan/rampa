@@ -57,15 +57,20 @@ public class PlanRequestGeneratorWithPoses : MonoBehaviour
         TrajectoryPlanner.SendRequest(request);
     } 
     
-    public void ProcessResponse(PlannerServiceResponse response)
+    public void ProcessResponse(PlannerServiceResponse response, bool fromTraining = false)
     {
 
         if (response.output_msg == "Timeout") {
             drawService.UpdateDrawingState(true);
         }
         else {
-            drawService.UpdateDrawingState();
+            
+            if (!fromTraining) {
+                drawService.UpdateDrawingState();
+            }
+            
             StartCoroutine(ExecuteTrajectories(response));
+            
         }
     }
     

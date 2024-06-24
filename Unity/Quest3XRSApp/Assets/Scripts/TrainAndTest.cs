@@ -5,6 +5,7 @@ using RosMessageTypes.Ur10Mover;
 using Unity.Robotics.ROSTCPConnector;
 using RosMessageTypes.Geometry;
 using System.Collections;
+using TMPro;
 
 public class TrainAndTest : MonoBehaviour
 {
@@ -22,10 +23,24 @@ public class TrainAndTest : MonoBehaviour
     public GameObject target;
     public TrajectoryPlanner trajectoryPlanner;
     public PrevRecordedTrajectories prevRecordedTrajectories;    
+
+    private enum State {
+        Untrained,
+        Training,
+        Trained
+    }
+
+    private State state;
+
+    public TMP_Text loadingText;
     
     // Start is called before the first frame update
     void Start()
     {
+        
+        state = State.Untrained;
+        
+
         m_Ros = ROSConnection.GetOrCreateInstance();
         m_Ros.RegisterRosService<TrainingDataServiceRequest, TrainingDataServiceResponse>(collectDataService);
         m_Ros.RegisterRosService<TrainingServiceRequest, TrainingServiceResponse>(trainTriggerService);
@@ -59,6 +74,8 @@ public class TrainAndTest : MonoBehaviour
 
     public void TriggerTraining()
     {
+        state = State.Training;
+        UpdateText();
         var request = new TrainingServiceRequest();
         m_Ros.SendServiceMessage<TrainingServiceResponse>(trainTriggerService, request, TriggerTrainingResponse);
     
@@ -66,6 +83,8 @@ public class TrainAndTest : MonoBehaviour
     
     public void TriggerTrainingResponse(TrainingServiceResponse response)
     {
+        state = State.Trained;
+        UpdateText();
     }
 
 
@@ -81,6 +100,7 @@ public class TrainAndTest : MonoBehaviour
     public void TestModelResponse(SampleServiceResponse response)
     {
         PlannerServiceRequest request = new PlannerServiceRequest();
+        
         request.pose_list = response.sampled_trajectory;
         request.joints_input =  HelperFunctions.CurrentJointConfig();
         request.request_type = "poses";
@@ -118,5 +138,27 @@ public class TrainAndTest : MonoBehaviour
         prevRecordedTrajectories.HandleButtons();
     } 
     
+    public void UpdateText()
+    {
+        switch (state)
+        {
+            case State.Untrained:
+                if (prevRecordedTrajectories.GetTrajectoriesCount() > 0)
+                {
+                    loadingText.text = "Ready to train";
+                }
+                else
+                {
+                    loadingText.text = "No training data";
+                }
+                break;
+            case State.Training:
+                loadingText.text = "Training...";
+                break;
+            case State.Trained:
+                loadingText.text = "Training completed. Ready to test.";
+                break;
+        }
+    }
     
 }

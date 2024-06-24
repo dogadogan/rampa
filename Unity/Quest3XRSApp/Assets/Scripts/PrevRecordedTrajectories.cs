@@ -43,6 +43,7 @@ public class PrevRecordedTrajectories : MonoBehaviour
 
         // TODO: implement ROS service to get training data
         trainAndTest.GetTrainingData();
+        trainAndTest.UpdateText();
     
     }
 
@@ -147,6 +148,7 @@ public class PrevRecordedTrajectories : MonoBehaviour
             lr.SetPosition(i, rotatedPoint);
         }
 
+
         line.SetActive(true);
         lines.Add(line);
     }
@@ -190,6 +192,10 @@ public class PrevRecordedTrajectories : MonoBehaviour
         }
         showTrajectoriesinMainMenu.interactable = interactable;
         showTrajectoriesinTrajCaptureMenu.interactable = interactable;
+    }
+
+    public int GetTrajectoriesCount() {
+        return trajectories.Count;
     }
 
 
