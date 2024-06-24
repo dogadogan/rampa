@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Robotics.ROSTCPConnector;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class ResetandReturn : MonoBehaviour
 {
@@ -20,6 +21,8 @@ public class ResetandReturn : MonoBehaviour
     ROSConnection m_Ros;
     public TrajectoryHelperFunctions HelperFunctions;
     private double[] _resetCondition = {0f, -0.25f, 0f, -0.25f, 0f, 0f};
+
+    public TMP_Text debugText;
     
     public enum Mode {
         TrajCapturetoMainMenu,
@@ -27,7 +30,6 @@ public class ResetandReturn : MonoBehaviour
         JointReset
     }
     public Mode mode;
-
 
     public void handleReset() {
         switch (mode) {
@@ -43,7 +45,11 @@ public class ResetandReturn : MonoBehaviour
 
                 break;
             case Mode.MLTrainingtoMainMenu:
-                // TODO
+                
+                goToMainMenuFunc();
+
+                // what happens if a training model is running?
+
                 break;
 
             case Mode.JointReset:

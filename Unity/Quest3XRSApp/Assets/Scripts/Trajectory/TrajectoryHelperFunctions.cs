@@ -5,14 +5,16 @@ using UnityEngine.UI;
 using Unity.Robotics.ROSTCPConnector.ROSGeometry;
 using System.Linq;
 using RosMessageTypes.Trajectory;
+using TMPro;
 
 public class TrajectoryHelperFunctions : MonoBehaviour
 {
     public Slider[] Sliders;
-    public GameObject mainPanel;
-    public GameObject popUpPanel;
+
     public ArticulationBody baseLink;
     private const float k_JointAssignmentWait = 0.1f;
+
+    public TMP_Text debugText;
     public double[] CurrentJointConfig()
     {
         double[] joints = new double[Sliders.Length] ;
@@ -27,6 +29,8 @@ public class TrajectoryHelperFunctions : MonoBehaviour
 
     public PoseMsg GeneratePoseMsg(Vector3 pose)
     {
+
+        debugText.text += "baseLink:  " + baseLink.transform.position;
         Vector3 direction = pose - baseLink.transform.position;
 
         // Create a rotation quaternion around the pivotPoint
@@ -79,12 +83,5 @@ public class TrajectoryHelperFunctions : MonoBehaviour
             
         }
     }
-
-    public void openPopUp()
-    {
-        mainPanel.SetActive(false);
-        popUpPanel.SetActive(true);
-    }
-
     
 }

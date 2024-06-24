@@ -2,6 +2,7 @@ using RosMessageTypes.Ur10Mover;
 using Unity.Robotics.ROSTCPConnector;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class TrajectoryPlanner : MonoBehaviour
 {
@@ -9,8 +10,9 @@ public class TrajectoryPlanner : MonoBehaviour
     
     private string m_RosServiceName = "planner";
     ROSConnection m_Ros;
+
+    public TMP_Text debugText;
     
-    public Text text;
     public PlanRequestGeneratorWithTarget PlanRequestGeneratorWithTarget;
     public PlanRequestGeneratorWithPoses PlanRequestGeneratorWithPoses;
     public PlanRequestGeneratorRealTime PlanRequestGeneratorRealTime;
@@ -23,13 +25,11 @@ public class TrajectoryPlanner : MonoBehaviour
     
     public void SendRequest(PlannerServiceRequest request)
     {
-        text.text = "Waiting for the response...";
         m_Ros.SendServiceMessage<PlannerServiceResponse>(m_RosServiceName, request, TrajectoryResponse);
     }
     
     void TrajectoryResponse(PlannerServiceResponse response)
     {
-        text.text = "Trajectory calculated";
         switch (response.request_type)
         {
             case "target":
@@ -43,10 +43,9 @@ public class TrajectoryPlanner : MonoBehaviour
                 break;
         }
         
-        if (response.trajectories.Length == 0)
+        if (response.output_msg == "Timeout")
         {
-            Debug.LogError("No trajectory returned from MoverService.");
-            text.text = "No trajectory returned";
+            debugText.text += "Timeout\n";
         }
 
     }

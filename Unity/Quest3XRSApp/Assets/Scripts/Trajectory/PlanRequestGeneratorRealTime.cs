@@ -10,13 +10,15 @@ using TMPro;
 public class PlanRequestGeneratorRealTime : MonoBehaviour
 {
     const float k_JointAssignmentWait = 0.05f;
-    public Text text;
+
+    public DrawServiceRealTime DrawServiceRealTime;
     public TrajectoryHelperFunctions HelperFunctions;
     public TrajectoryPlanner TrajectoryPlanner;
     public PrevRecordedTrajectories PrevRecordedTrajectories;
     private Queue<Vector3> requestQueue = new Queue<Vector3>();
     private bool waitingForResponse = false;
-    public List<( Vector3 position, double[] jointAngles)> previousPoints = new List<( Vector3 position, double[] jointAngles)>();
+    public List<double[]> previousPoints = new List<double[]>();
+    public List<Vector3> previousPoses = new List<Vector3>();
     
     private double[] jointConfig;
     public int currentIndexPointer = 0;
@@ -30,6 +32,7 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
     // buttons for play/pause trajectory
     public GameObject playButton;
     public GameObject pauseButton;
+
 
     // no need
     /*
@@ -71,6 +74,8 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
         var request = new PlannerServiceRequest();
         request.request_type = "realTime";
         request.joints_input = jointConfig;
+
+        previousPoses.Add(pose);
         
         PoseMsg[] pose_list = new PoseMsg[1];
         pose_list[0] = HelperFunctions.GeneratePoseMsg(pose);
@@ -82,8 +87,16 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
     
     public void ProcessResponse(PlannerServiceResponse response)
     {
-        jointConfig = response.trajectories[0].joint_trajectory.points.Last().positions;
-        StartCoroutine(ExecuteTrajectories(response));
+
+        if (response.output_msg == "Timeout")
+        {
+            if (DrawServiceRealTime.isStateDrawTrajectory())
+                DrawServiceRealTime.UpdateDrawingState(true);
+        }
+        else {
+            jointConfig = response.trajectories[0].joint_trajectory.points.Last().positions;
+            StartCoroutine(ExecuteTrajectories(response));
+        }
 
     }
     
@@ -100,10 +113,8 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
             {
                 if (t == lastPoint)
                 {
-                    var lastPointInfo = response.pose_list.Last().position;
-                    var point = new Vector3((float)lastPointInfo.x, (float)lastPointInfo.y, (float)lastPointInfo.z);
                     
-                    previousPoints.Add((point, HelperFunctions.GetJointAngles(t)));
+                    previousPoints.Add(HelperFunctions.GetJointAngles(t));
                 }
 
                 HelperFunctions.SetJointAngles(t);
@@ -113,7 +124,6 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
             }
         }
         
-        text.text = "Ready for another execution";
     }
     
     IEnumerator ExecuteTrajectory(double[] trajectory)
@@ -125,22 +135,28 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
     
     
 
-    public void ResetGenerator()
+    public void ResetGenerator(bool addToTrainingSet = false)
     {
 
-        // store the current trajectory
-        if (previousPoints.Count > 0)
-            PrevRecordedTrajectories.AddTrajectory(previousPoints);
+        if (addToTrainingSet) {
+            // store the current trajectory
+            if (previousPoints.Count > 0)
+                PrevRecordedTrajectories.AddTrajectory(previousPoses);
 
-        // handle show-traj buttons
-        PrevRecordedTrajectories.HandleButtons();
+            // handle show-traj buttons
+            PrevRecordedTrajectories.HandleButtons();
+        }
+
 
         //why?
         jointConfig = HelperFunctions.CurrentJointConfig();
 
         waitingForResponse = false;
         requestQueue.Clear();
+
         previousPoints.Clear();
+        previousPoses.Clear();
+
         currentIndexPointer = 0;
 
     }
@@ -159,9 +175,9 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
             backButton.interactable = false;
         }
 
-        UpdateSliderHandle(false);
+        UpdateSliderHandle();
             
-        StartCoroutine(ExecuteTrajectory(previousPoints[currentIndexPointer].jointAngles));
+        StartCoroutine(ExecuteTrajectory(previousPoints[currentIndexPointer]));
     }
     
     public void GetOnePointNext()
@@ -174,9 +190,9 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
             nextButton.interactable = false;
         }
 
-        UpdateSliderHandle(true);
+        UpdateSliderHandle();
 
-        StartCoroutine(ExecuteTrajectory(previousPoints[currentIndexPointer].jointAngles));
+        StartCoroutine(ExecuteTrajectory(previousPoints[currentIndexPointer]));
 
     }
 
@@ -189,15 +205,22 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
         backButton.interactable = false;
         nextButton.interactable = false;
 
-        for (; currentIndexPointer < previousPoints.Count ; currentIndexPointer++){
+        for (; currentIndexPointer < previousPoints.Count - 1; currentIndexPointer++){
 
-            StartCoroutine(ExecuteTrajectory(previousPoints[currentIndexPointer].jointAngles));
+            StartCoroutine(ExecuteTrajectory(previousPoints[currentIndexPointer+1]));
+
+            UpdateSliderHandle();
+
             yield return new WaitForSeconds(k_JointAssignmentWait);
         }
+
+        UpdateSliderHandle();
 
         playButton.SetActive(true);
         playButton.GetComponent<Button>().interactable = false;
         pauseButton.SetActive(false);
+        backButton.interactable = true;
+        nextButton.interactable = false;
 
     }
 
@@ -206,12 +229,17 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
     }
 
     public void PauseTrajectory() {
-        StopCoroutine(PlayRestOfTrajectoryCoroutine());
+        StopAllCoroutines();
+        UpdateSliderHandle();
         playButton.SetActive(true);
         pauseButton.SetActive(false);
 
         if (currentIndexPointer < previousPoints.Count - 1) {
+            playButton.GetComponent<Button>().interactable = true;
             nextButton.interactable = true;
+        }
+        else {
+            playButton.GetComponent<Button>().interactable = false;
         }
         backButton.interactable = true;
     }
@@ -224,13 +252,20 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
         currentIndexPointer = previousPoints.Count - 1;
     }
 
-    private void UpdateSliderHandle(bool forward) {
+    public void EmptyQueue()
+    {
+        requestQueue.Clear();
+    }
+
+    public bool isWaitingForResponse()
+    {
+        return waitingForResponse;
+    }
+
+    private void UpdateSliderHandle() {
         Vector3 currRectTransform = sliderPosition.GetComponent<RectTransform>().anchoredPosition;
-        float offset = bar.GetComponent<RectTransform>().sizeDelta.x / (previousPoints.Count - 1);
-        if (forward)
-            currRectTransform.x += offset;
-        else
-            currRectTransform.x -= offset;
+        currRectTransform.x = 
+            (bar.GetComponent<RectTransform>().sizeDelta.x) * (currentIndexPointer / ((float)previousPoints.Count - 1)) - bar.GetComponent<RectTransform>().sizeDelta.x / 2;
         sliderPosition.GetComponent<RectTransform>().anchoredPosition = currRectTransform;
     }
     

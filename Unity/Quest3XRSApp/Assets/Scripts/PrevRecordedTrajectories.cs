@@ -8,11 +8,17 @@ public class PrevRecordedTrajectories : MonoBehaviour
 {
     public PlanRequestGeneratorRealTime planRequestGeneratorRealTime;
 
+    public TrainAndTest trainAndTest;
+
     public Button showTrajectoriesinMainMenu;
     public Button showTrajectoriesinTrajCaptureMenu;
 
-    private TextMeshProUGUI showTrajectoriesTextinMainMenu;
-    private TextMeshProUGUI showTrajectoriesTextinTrajCaptureMenu;
+    private TMP_Text showTrajectoriesTextinMainMenu;
+    private TMP_Text showTrajectoriesTextinTrajCaptureMenu;
+
+    public ArticulationBody baseLink;
+
+    public TMP_Text debugText;
 
     private int buttonState;
 
@@ -22,59 +28,102 @@ public class PrevRecordedTrajectories : MonoBehaviour
 
     private List<GameObject> lines = new List<GameObject>();
 
-
     public void Start() {
-        showTrajectoriesinMainMenu.interactable = false;
-        showTrajectoriesinTrajCaptureMenu.interactable = false;
-        showTrajectoriesTextinMainMenu = showTrajectoriesinMainMenu.GetComponentInChildren<TextMeshProUGUI>();
-        showTrajectoriesTextinTrajCaptureMenu = showTrajectoriesinTrajCaptureMenu.GetComponentInChildren<TextMeshProUGUI>();
+        showTrajectoriesTextinMainMenu = showTrajectoriesinMainMenu.GetComponentInChildren<TMP_Text>();
+        showTrajectoriesTextinTrajCaptureMenu = showTrajectoriesinTrajCaptureMenu.GetComponentInChildren<TMP_Text>();
+        
         buttonState = 0;
+
+        // TODO: implement ROS service to get training data
+        trainAndTest.GetTrainingData();
+    
     }
 
 
     public void DeletePrevTrajectories() {
         
         // previousTrajectories.Clear();
+        foreach (GameObject line in lines) {
+            Destroy(line);
+        }
         lines.Clear();
 
         showTrajectoriesinMainMenu.interactable = false;
         showTrajectoriesinTrajCaptureMenu.interactable = false;
 
-        showTrajectoriesTextinMainMenu.text = "Show previously recorded trajectories (0)";
-        showTrajectoriesTextinTrajCaptureMenu.text = "Show previously recorded trajectories (0)";
+        
+        showTrajectoriesTextinMainMenu.text = "show training set (0)";
+        showTrajectoriesTextinTrajCaptureMenu.text = "show training set (0)";
+
+        buttonState = 0;
+
+        // also trigger deletion in ROS
+        trainAndTest.TriggerDelete();
+
     }
 
     // handle show-traj buttons
     public void HandleButtons() {
 
-        showTrajectoriesinMainMenu.interactable = true;
-        showTrajectoriesinTrajCaptureMenu.interactable = true;
+        SetInteractable(true);
 
-        showTrajectoriesTextinMainMenu.text = "Show previously recorded trajectories (" + lines.Count + ")";
-        showTrajectoriesTextinTrajCaptureMenu.text = "Show previously recorded trajectories (" + lines.Count + ")";
+        if (buttonState == 0) {
+
+            debugText.text += "lines.Count: " + lines.Count + "\n";
+            showTrajectoriesTextinMainMenu.text = "show training set (" + lines.Count + ")";
+            showTrajectoriesTextinTrajCaptureMenu.text = "show training set (" + lines.Count + ")";
+        }
+        else {
+            showTrajectoriesTextinMainMenu.text = "hide training set (" + lines.Count + ")";
+            showTrajectoriesTextinTrajCaptureMenu.text = "hide training set (" + lines.Count + ")";
+    
+        }
 
     }
 
-    public void AddTrajectory(List<(Vector3 position, double[] jointAngles)> trajectory) {
+    public void AddTrajectory(List<Vector3> poses) {
         // previousTrajectories.Add(trajectory);
 
         GameObject line = new GameObject();
         line.AddComponent<LineRenderer>();
+
         line.SetActive(false);
 
         line.GetComponent<LineRenderer>().startWidth = 0.01f;
         line.GetComponent<LineRenderer>().endWidth = 0.01f;
         line.GetComponent<LineRenderer>().material = new Material(Shader.Find("Sprites/Default"));
-        line.GetComponent<LineRenderer>().startColor = Color.red;
-        line.GetComponent<LineRenderer>().endColor = Color.red;
+        line.GetComponent<LineRenderer>().startColor = Color.yellow;
+        line.GetComponent<LineRenderer>().endColor = Color.yellow;
+        line.GetComponent<LineRenderer>().positionCount = 0;
 
+        Quaternion rotation = Quaternion.Euler(0, -baseLink.transform.eulerAngles.y, 0);
+        rotation = Quaternion.Inverse(rotation);
 
-        foreach (var point in trajectory) {
+        debugText.text += "\n adding trajectory";
+
+        foreach (var point in poses) {
+
+            debugText.text += "\n adding point" + point;
+            
             line.GetComponent<LineRenderer>().positionCount++;
-            line.GetComponent<LineRenderer>().SetPosition(line.GetComponent<LineRenderer>().positionCount - 1, point.position);
-        }
 
+            
+            
+            Vector3 newPoint = new Vector3((float) point.x - baseLink.transform.position.x, 
+                                            (float) point.y - baseLink.transform.position.y, 
+                                            (float) point.z - baseLink.transform.position.z);
+
+            debugText.text += "\n newPoint: " + newPoint;
+
+
+            line.GetComponent<LineRenderer>().SetPosition(line.GetComponent<LineRenderer>().positionCount - 1, newPoint);
+        }
         lines.Add(line);
+
+        if (buttonState == 1) {
+            line.transform.position = line.transform.position + baseLink.transform.position;
+            line.SetActive(true);
+        }
 
     }
 
@@ -89,22 +138,38 @@ public class PrevRecordedTrajectories : MonoBehaviour
 
     public void ShowTrajectories() {
         foreach (var line in lines) {
+            debugText.text += "baselink position: " + baseLink.transform.position;
+            line.transform.position += baseLink.transform.position;
             line.gameObject.SetActive(true);
         }
 
-        showTrajectoriesTextinTrajCaptureMenu.text = "Hide previously recorded trajectories (" + lines.Count + ")";
+        showTrajectoriesTextinTrajCaptureMenu.text = "hide training set (" + lines.Count + ")";
+        showTrajectoriesTextinMainMenu.text = "hide training set (" + lines.Count + ")";
         buttonState = 1;
     }
 
     public void HideTrajectories() {
         foreach (var line in lines) {
+            debugText.text += "baselink position: " + baseLink.transform.position;
+            line.transform.position -= baseLink.transform.position;
             line.gameObject.SetActive(false);
         }
 
-        showTrajectoriesTextinTrajCaptureMenu.text = "Show previously recorded trajectories (" + lines.Count + ")";
+        showTrajectoriesTextinTrajCaptureMenu.text = "show training set (" + lines.Count + ")";
+        showTrajectoriesTextinMainMenu.text = "show training set (" + lines.Count + ")";
         buttonState = 0;
     }
 
+    public void SetInteractable(bool interactable) {
+        
+        if (lines.Count == 0) {
+            showTrajectoriesinMainMenu.interactable = false;
+            showTrajectoriesinTrajCaptureMenu.interactable = false;
+            return;
+        }
+        showTrajectoriesinMainMenu.interactable = interactable;
+        showTrajectoriesinTrajCaptureMenu.interactable = interactable;
+    }
 
 
 

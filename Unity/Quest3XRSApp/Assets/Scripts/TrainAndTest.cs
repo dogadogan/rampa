@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using RosMessageTypes.Ur10Mover;
 using Unity.Robotics.ROSTCPConnector;
@@ -11,12 +12,16 @@ public class TrainAndTest : MonoBehaviour
     private string collectDataService = "save_training_data";
     private string trainTriggerService = "start_training";
     private string testService = "sample";
+    private string deleteService = "delete_training_data";
+
+    private string getTrainingDataService = "get_training_data";
+
     ROSConnection m_Ros;
     public TrajectoryHelperFunctions HelperFunctions;
     public GameObject source;
     public GameObject target;
     public TrajectoryPlanner trajectoryPlanner;
-    
+    public PrevRecordedTrajectories prevRecordedTrajectories;    
     
     // Start is called before the first frame update
     void Start()
@@ -25,9 +30,13 @@ public class TrainAndTest : MonoBehaviour
         m_Ros.RegisterRosService<TrainingDataServiceRequest, TrainingDataServiceResponse>(collectDataService);
         m_Ros.RegisterRosService<TrainingServiceRequest, TrainingServiceResponse>(trainTriggerService);
         m_Ros.RegisterRosService<SampleServiceRequest, SampleServiceResponse>(testService);
+        m_Ros.RegisterRosService<TrainingServiceRequest, TrainingServiceResponse>(deleteService);
+
+        m_Ros.RegisterRosService<GetTrainingDataServiceRequest, GetTrainingDataServiceResponse>(getTrainingDataService);
+
     }
     
-    public void SendTrainingData( List<(Vector3 pos,double[] joints)> poses)
+    public void SendTrainingData( List<Vector3> poses)
     {
         var request = new TrainingDataServiceRequest();
         Debug.LogWarning("asd in function");
@@ -36,7 +45,7 @@ public class TrainAndTest : MonoBehaviour
         PoseMsg[] pose_list = new PoseMsg[poses.Count];
         for (int i = 0; i < poses.Count; i++)
         {
-            pose_list[i] = HelperFunctions.GeneratePoseMsgForTraining(poses[i].pos);
+            pose_list[i] = HelperFunctions.GeneratePoseMsgForTraining(poses[i]);
             Debug.LogWarning("asd pose:" + pose_list[i].position);
         }
         request.pose_list = pose_list;
@@ -77,11 +86,37 @@ public class TrainAndTest : MonoBehaviour
         request.request_type = "poses";
         trajectoryPlanner.SendRequest(request);
     }
-    
 
-    // Update is called once per frame
-    void Update()
-    {
+
+    public void TriggerDelete() {
+
+        var request = new TrainingServiceRequest();
+        m_Ros.SendServiceMessage<TrainingServiceResponse>(deleteService, request, TriggerDeleteResponse);
         
     }
+
+    public void TriggerDeleteResponse(TrainingServiceResponse response) {}
+
+
+    
+    public void GetTrainingData() {
+        var request = new GetTrainingDataServiceRequest();
+        m_Ros.SendServiceMessage<GetTrainingDataServiceResponse>(getTrainingDataService, request, GetTrainingDataResponse);
+    }
+
+    public void GetTrainingDataResponse(GetTrainingDataServiceResponse response) {
+        //trajectory_list should be a list of lists of poses
+        foreach (var trajectory in response.trajectoryList) {
+            List<Vector3> poses = new List<Vector3>();
+            
+            foreach (var pose in trajectory.pose_list) {
+                poses.Add(new Vector3((float) pose.position.x, (float) pose.position.y, (float) pose.position.z));
+            }
+            prevRecordedTrajectories.AddTrajectory(poses);
+        }
+
+        prevRecordedTrajectories.HandleButtons();
+    } 
+    
+    
 }

@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HandleRedrawButton : MonoBehaviour
+public class HandleRecordAnother : MonoBehaviour
 {
     
     public Toggle isRealTime;
-
     public DrawServiceWithInspect drawServiceWithInspect;
+
     public DrawServiceRealTime drawServiceRealTime;
 
     public void handleClick() {

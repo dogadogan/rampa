@@ -8,7 +8,6 @@ public class PlanRequestGeneratorWithTarget : MonoBehaviour
 {
     const float k_JointAssignmentWait = 0.1f;
     public GameObject m_Target;
-    public Text text;
     public TrajectoryHelperFunctions HelperFunctions;
     public TrajectoryPlanner TrajectoryPlanner;
     public void GenerateRequest()
@@ -47,7 +46,5 @@ public class PlanRequestGeneratorWithTarget : MonoBehaviour
             }
         }
 
-        HelperFunctions.openPopUp();
-        text.text = "Ready for another execution";
     }
 }

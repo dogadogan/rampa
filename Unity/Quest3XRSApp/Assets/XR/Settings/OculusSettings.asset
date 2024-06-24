@@ -29,5 +29,5 @@ MonoBehaviour:
   SpaceWarp: 0
   TargetQuest2: 1
   TargetQuestPro: 0
-  TargetQuest3: 0
+  TargetQuest3: 1
   SystemSplashScreen: {fileID: 0}

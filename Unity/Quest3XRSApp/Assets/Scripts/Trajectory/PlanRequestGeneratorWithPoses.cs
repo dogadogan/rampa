@@ -17,7 +17,9 @@ public class PlanRequestGeneratorWithPoses : MonoBehaviour
     // new instance variables for inspecting trajectory
     public PrevRecordedTrajectories PrevRecordedTrajectories;
 
-    public List<( Vector3 position, double[] jointAngles)> previousPoints = new List<( Vector3 position, double[] jointAngles)>();
+    public List<double[]> previousPoints = new List<double[]>();
+
+    public List<Vector3> previousPoses = new List<Vector3>();
 
     public int currentIndexPointer = 0;
     public Button backButton;
@@ -32,9 +34,17 @@ public class PlanRequestGeneratorWithPoses : MonoBehaviour
     public GameObject pauseButton;
     
     
-    public void GenerateRequest(Vector3[] poses)
+    public void GenerateRequest(List<Vector3> poseList)
     {
         var request = new PlannerServiceRequest();
+
+        for (int i = 0; i < poseList.Count; i++)
+        {
+            previousPoses.Add(poseList[i]);
+        }
+
+        Vector3[] poses = poseList.ToArray();
+
         request.request_type = "poses";
         request.joints_input =  HelperFunctions.CurrentJointConfig();
 
@@ -49,13 +59,20 @@ public class PlanRequestGeneratorWithPoses : MonoBehaviour
     
     public void ProcessResponse(PlannerServiceResponse response)
     {
-        drawService.UpdateDrawingState();
-        StartCoroutine(ExecuteTrajectories(response));
+
+        if (response.output_msg == "Timeout") {
+            drawService.UpdateDrawingState(true);
+        }
+        else {
+            drawService.UpdateDrawingState();
+            StartCoroutine(ExecuteTrajectories(response));
+        }
     }
     
     
     IEnumerator ExecuteTrajectories(PlannerServiceResponse response)
     {
+
         if (response.trajectories != null)
         {
             // For every trajectory plan returned
@@ -69,11 +86,8 @@ public class PlanRequestGeneratorWithPoses : MonoBehaviour
                 {
 
                     if (t == lastPoint)
-                {
-                    var lastPointInfo = response.pose_list.Last().position;
-                    var point = new Vector3((float)lastPointInfo.x, (float)lastPointInfo.y, (float)lastPointInfo.z);
-                    
-                    previousPoints.Add((point, HelperFunctions.GetJointAngles(t)));
+                {   
+                    previousPoints.Add( HelperFunctions.GetJointAngles(t));
                 }
 
                     HelperFunctions.SetJointAngles(t);
@@ -84,8 +98,6 @@ public class PlanRequestGeneratorWithPoses : MonoBehaviour
             
         }
         drawService.UpdateDrawingState();
-        HelperFunctions.openPopUp();
-        
     }
 
 
@@ -108,9 +120,9 @@ public class PlanRequestGeneratorWithPoses : MonoBehaviour
             backButton.interactable = false;
         }
 
-        UpdateSliderHandle(false);
+        UpdateSliderHandle();
             
-        StartCoroutine(ExecuteTrajectory(previousPoints[currentIndexPointer].jointAngles));
+        StartCoroutine(ExecuteTrajectory(previousPoints[currentIndexPointer]));
     }
     
     public void GetOnePointNext()
@@ -123,9 +135,9 @@ public class PlanRequestGeneratorWithPoses : MonoBehaviour
             nextButton.interactable = false;
         }
 
-        UpdateSliderHandle(true);
+        UpdateSliderHandle();
 
-        StartCoroutine(ExecuteTrajectory(previousPoints[currentIndexPointer].jointAngles));
+        StartCoroutine(ExecuteTrajectory(previousPoints[currentIndexPointer]));
 
     }
 
@@ -138,15 +150,23 @@ public class PlanRequestGeneratorWithPoses : MonoBehaviour
         backButton.interactable = false;
         nextButton.interactable = false;
 
-        for (; currentIndexPointer < previousPoints.Count ; currentIndexPointer++){
+        for (; currentIndexPointer < previousPoints.Count - 1 ; currentIndexPointer++){
 
-            StartCoroutine(ExecuteTrajectory(previousPoints[currentIndexPointer].jointAngles));
+            StartCoroutine(ExecuteTrajectory(previousPoints[currentIndexPointer+1]));
+
+            UpdateSliderHandle();
+
             yield return new WaitForSeconds(k_JointAssignmentWait);
         }
+
+        UpdateSliderHandle();
+
 
         playButton.SetActive(true);
         playButton.GetComponent<Button>().interactable = false;
         pauseButton.SetActive(false);
+        backButton.interactable = true;
+        nextButton.interactable = false;
 
     }
 
@@ -155,29 +175,44 @@ public class PlanRequestGeneratorWithPoses : MonoBehaviour
     }
 
     public void PauseTrajectory() {
-        StopCoroutine(PlayRestOfTrajectoryCoroutine());
+       
+        // if stopCoroutine(PlayRestOfTrajectoryCoroutine() is called, continues to play the rest of the trajectory, why?
+        StopAllCoroutines();
+        UpdateSliderHandle();
+
         playButton.SetActive(true);
         pauseButton.SetActive(false);
 
         if (currentIndexPointer < previousPoints.Count - 1) {
+            playButton.GetComponent<Button>().interactable = true;
             nextButton.interactable = true;
+        }
+        else {
+            playButton.GetComponent<Button>().interactable = false;
         }
         backButton.interactable = true;
     }
 
 
 
-        public void ResetGenerator()
+        public void ResetGenerator(bool addToTrainingSet = false)
     {
-        // store the current trajectory
-        if (previousPoints.Count > 0)
-            PrevRecordedTrajectories.AddTrajectory(previousPoints);
 
-        // handle show-traj buttons
-        PrevRecordedTrajectories.HandleButtons();
+        if (addToTrainingSet) {
+            // store the current trajectory
+            if (previousPoints.Count > 0)
+                PrevRecordedTrajectories.AddTrajectory(previousPoses);
+
+            // handle show-traj buttons
+            PrevRecordedTrajectories.HandleButtons();
+        }
 
         //why?
         // jointConfig = HelperFunctions.CurrentJointConfig();
+
+        // newly added, isn't it needed?
+        previousPoints.Clear();
+        previousPoses.Clear();
 
         currentIndexPointer = 0;
 
@@ -188,13 +223,10 @@ public class PlanRequestGeneratorWithPoses : MonoBehaviour
         currentIndexPointer = previousPoints.Count - 1;
     }
     
-    private void UpdateSliderHandle(bool forward) {
+    private void UpdateSliderHandle() {
         Vector3 currRectTransform = sliderPosition.GetComponent<RectTransform>().anchoredPosition;
-        float offset = bar.GetComponent<RectTransform>().sizeDelta.x / (previousPoints.Count - 1);
-        if (forward)
-            currRectTransform.x += offset;
-        else
-            currRectTransform.x -= offset;
+        currRectTransform.x = 
+            (bar.GetComponent<RectTransform>().sizeDelta.x) * (currentIndexPointer / ((float)previousPoints.Count - 1)) - bar.GetComponent<RectTransform>().sizeDelta.x / 2;
         sliderPosition.GetComponent<RectTransform>().anchoredPosition = currRectTransform;
     }
 

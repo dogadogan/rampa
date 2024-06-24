@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class HandleTrajCapture : MonoBehaviour
 {
@@ -16,15 +17,20 @@ public class HandleTrajCapture : MonoBehaviour
 
     public GameObject executeTrajectoryButton;
 
+    public TMP_Text debugText;
+
     public void HandleClick() {
         if (isRealTime.isOn) {
             GoToTrajCapture();
             drawServiceRealTime.UpdateDrawingState();
             executeTrajectoryButton.SetActive(false);
         } else {
+            
             GoToTrajCapture();
+    
             drawServiceWithInspect.UpdateDrawingState();
             executeTrajectoryButton.SetActive(true);
+            
         }
     }
 
