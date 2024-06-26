@@ -43,7 +43,6 @@ public class PrevRecordedTrajectories : MonoBehaviour
 
         // TODO: implement ROS service to get training data
         trainAndTest.GetTrainingData();
-        trainAndTest.UpdateText();
     
     }
 
@@ -122,8 +121,14 @@ public class PrevRecordedTrajectories : MonoBehaviour
 
         trajectories.Add(trajectory);
 
+        if (trajectories.Count == 1) {
+            trainAndTest.UpdateText();
+        }
+
         if (buttonState == 1)
             ShowLine(trajectory);
+
+        
 
     }
 

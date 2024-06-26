@@ -6,6 +6,7 @@ using Unity.Robotics.ROSTCPConnector;
 using RosMessageTypes.Geometry;
 using System.Collections;
 using TMPro;
+using UnityEngine.UI;
 
 public class TrainAndTest : MonoBehaviour
 {
@@ -33,12 +34,18 @@ public class TrainAndTest : MonoBehaviour
     private State state;
 
     public TMP_Text loadingText;
+
+    public List<Button> buttonsInMainMenu;
     
     // Start is called before the first frame update
     void Start()
     {
         
         state = State.Untrained;
+
+        loadingText.text = "no training data";
+        
+
         
 
         m_Ros = ROSConnection.GetOrCreateInstance();
@@ -65,12 +72,10 @@ public class TrainAndTest : MonoBehaviour
         }
         request.pose_list = pose_list;
         m_Ros.SendServiceMessage<TrainingDataServiceResponse>(collectDataService, request, SendTrainingDataResponse);
-    }
-
-    void SendTrainingDataResponse(TrainingDataServiceResponse response)
-    {
         
     }
+
+    void SendTrainingDataResponse(TrainingDataServiceResponse response){}
 
     public void TriggerTraining()
     {
@@ -90,6 +95,9 @@ public class TrainAndTest : MonoBehaviour
 
     public void TestModel()
     {
+        // make buttons in main menu uninteractable
+        SetInteractable(false);
+
         var request = new SampleServiceRequest();
         request.start_point = HelperFunctions.GeneratePoseMsg(source.transform.position);
         request.end_point = HelperFunctions.GeneratePoseMsg(target.transform.position);
@@ -103,7 +111,7 @@ public class TrainAndTest : MonoBehaviour
         
         request.pose_list = response.sampled_trajectory;
         request.joints_input =  HelperFunctions.CurrentJointConfig();
-        request.request_type = "poses";
+        request.request_type = "poses_training";
         trajectoryPlanner.SendRequest(request);
     }
 
@@ -115,7 +123,10 @@ public class TrainAndTest : MonoBehaviour
         
     }
 
-    public void TriggerDeleteResponse(TrainingServiceResponse response) {}
+    public void TriggerDeleteResponse(TrainingServiceResponse response) {
+        state = State.Untrained;
+        UpdateText();
+    }
 
 
     
@@ -124,6 +135,7 @@ public class TrainAndTest : MonoBehaviour
         m_Ros.SendServiceMessage<GetTrainingDataServiceResponse>(getTrainingDataService, request, GetTrainingDataResponse);
     }
 
+    // only called once, at the start
     public void GetTrainingDataResponse(GetTrainingDataServiceResponse response) {
         //trajectory_list should be a list of lists of poses
         foreach (var trajectory in response.trajectoryList) {
@@ -145,19 +157,27 @@ public class TrainAndTest : MonoBehaviour
             case State.Untrained:
                 if (prevRecordedTrajectories.GetTrajectoriesCount() > 0)
                 {
-                    loadingText.text = "Ready to train";
+                    loadingText.text = "ready to train.";
                 }
                 else
                 {
-                    loadingText.text = "No training data";
+                    loadingText.text = "no training data";
                 }
                 break;
             case State.Training:
-                loadingText.text = "Training...";
+                loadingText.text = "training...";
                 break;
             case State.Trained:
-                loadingText.text = "Training completed. Ready to test.";
+                loadingText.text = "ready to test. press \"start training\" to retrain with current training set";
                 break;
+        }
+    }
+
+    public void SetInteractable(bool interactable)
+    {
+        foreach (var button in buttonsInMainMenu)
+        {
+            button.interactable = interactable;
         }
     }
     

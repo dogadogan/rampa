@@ -22,9 +22,10 @@ public class DrawServiceWithInspect : MonoBehaviour
     public Button backButton;
     public Button nextButton;
     public Button redrawButton;
-    public Button executeButton;
+    public GameObject executeButton;
     public Button addToTrainingButton;
     public GameObject anotherTrajectoryButton;
+    public GameObject executeOnRealRobotButton;
 
 
     public TMP_Text debugText;
@@ -46,6 +47,8 @@ public class DrawServiceWithInspect : MonoBehaviour
         lineRenderer.endColor = lineColor;
         
         anotherTrajectoryButton.SetActive(false);
+        executeOnRealRobotButton.SetActive(false);
+
         ResetDrawingState();
     }
     IEnumerator DrawTrajectory(float interval)
@@ -94,13 +97,17 @@ public class DrawServiceWithInspect : MonoBehaviour
                 state = State.DrawTrajectory;
                 lineRenderer.positionCount = 0;
                 handleMenu(true);
+
                 anotherTrajectoryButton.SetActive(false);
+                executeOnRealRobotButton.SetActive(false);
+                executeButton.SetActive(true);
+
                 StartCoroutine(DrawTrajectory(0.05f));
                 break;
 
             case State.DrawTrajectory:
                 state = State.WaitingForExecution;
-                executeButton.interactable = true;
+                executeButton.GetComponent<Button>().interactable = true;
                 PlanRequestGeneratorWithPoses.PrevRecordedTrajectories.SetInteractable(true);
                 loadingText.GetComponent<TMP_Text>().text = "trajectory recorded";
                 break;
@@ -108,13 +115,14 @@ public class DrawServiceWithInspect : MonoBehaviour
             case State.WaitingForExecution:
                 // enters here when execute trajectory is pressed
                 state = State.WaitingForResponse;
-                executeButton.interactable = false;
+                executeButton.GetComponent<Button>().interactable = false;
                 loadingText.GetComponent<TMP_Text>().text = "waiting for response";
                 TriggerPublishMethod();
                 break;
 
             case State.WaitingForResponse:
                 if (finalized) {
+                    // no solution found
                     loadingText.GetComponent<TMP_Text>().text = "no solution found";
                     ResetDrawingState(true);
                 }
@@ -186,11 +194,20 @@ public class DrawServiceWithInspect : MonoBehaviour
         backButton.interactable = false;
         nextButton.interactable = false;
         redrawButton.interactable = false;
-        executeButton.interactable = false;
+        executeButton.GetComponent<Button>().interactable = false;
         addToTrainingButton.interactable = false;
         PlanRequestGeneratorWithPoses.PrevRecordedTrajectories.SetInteractable(true);
 
         anotherTrajectoryButton.SetActive(anotherTrajectory);
+
+        // do not set active if no solution found 
+        if (PlanRequestGeneratorWithPoses.previousPoints.Count > 0)
+            executeOnRealRobotButton.SetActive(anotherTrajectory);
+        else
+            executeOnRealRobotButton.SetActive(false);
+
+        executeButton.SetActive(!anotherTrajectory);
+
         
 
         // also reset the slider handle position to middle

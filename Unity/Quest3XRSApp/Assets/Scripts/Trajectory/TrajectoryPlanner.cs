@@ -41,6 +41,9 @@ public class TrajectoryPlanner : MonoBehaviour
             case "realTime":
                 PlanRequestGeneratorRealTime.ProcessResponse(response);    
                 break;
+            case "poses_training":
+                PlanRequestGeneratorWithPoses.ProcessResponse(response, true);
+                break;
         }
         
         if (response.output_msg == "Timeout")

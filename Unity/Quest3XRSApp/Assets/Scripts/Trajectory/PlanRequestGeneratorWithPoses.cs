@@ -13,7 +13,6 @@ public class PlanRequestGeneratorWithPoses : MonoBehaviour
     public TrajectoryHelperFunctions HelperFunctions;
     public TrajectoryPlanner TrajectoryPlanner;
 
-
     // new instance variables for inspecting trajectory
     public PrevRecordedTrajectories PrevRecordedTrajectories;
 
@@ -65,17 +64,21 @@ public class PlanRequestGeneratorWithPoses : MonoBehaviour
         }
         else {
             
-            if (!fromTraining) {
-                drawService.UpdateDrawingState();
+            if (fromTraining) {
+                StartCoroutine(ExecuteTrajectories(response, true));
             }
+            else {
+                drawService.UpdateDrawingState();
+                StartCoroutine(ExecuteTrajectories(response));
+            }
+
             
-            StartCoroutine(ExecuteTrajectories(response));
             
         }
     }
     
     
-    IEnumerator ExecuteTrajectories(PlannerServiceResponse response)
+    IEnumerator ExecuteTrajectories(PlannerServiceResponse response, bool fromTraining = false)
     {
 
         if (response.trajectories != null)
@@ -102,7 +105,12 @@ public class PlanRequestGeneratorWithPoses : MonoBehaviour
             
             
         }
-        drawService.UpdateDrawingState();
+        if (fromTraining) {
+            drawService.trainAndTest.SetInteractable(true);
+        }
+        else {
+            drawService.UpdateDrawingState();
+        }
     }
 
 
