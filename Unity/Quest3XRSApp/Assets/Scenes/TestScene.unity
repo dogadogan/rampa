@@ -13171,6 +13171,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   drawService: {fileID: 2138264129}
+  realRobotCommunication: {fileID: 886951540}
   HelperFunctions: {fileID: 886951539}
   TrajectoryPlanner: {fileID: 886951535}
   PrevRecordedTrajectories: {fileID: 886951542}
@@ -13182,6 +13183,7 @@ MonoBehaviour:
   bar: {fileID: 679214490}
   playButton: {fileID: 76253570}
   pauseButton: {fileID: 1877216580}
+  executeOnRealRobotButton: {fileID: 1971490970}
 --- !u!114 &886951538
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13195,6 +13197,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DrawServiceRealTime: {fileID: 2138264128}
+  RealRobotCommunication: {fileID: 886951540}
   HelperFunctions: {fileID: 886951539}
   TrajectoryPlanner: {fileID: 886951535}
   PrevRecordedTrajectories: {fileID: 886951542}
@@ -13206,6 +13209,7 @@ MonoBehaviour:
   bar: {fileID: 679214490}
   playButton: {fileID: 76253570}
   pauseButton: {fileID: 1877216580}
+  executeOnRealRobotButton: {fileID: 1971490970}
 --- !u!114 &886951539
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13239,8 +13243,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f003c8a4c392a4e489d224541a606047, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainPanel: {fileID: 1216560649}
-  popUpPanel: {fileID: 0}
 --- !u!114 &886951541
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13258,6 +13260,7 @@ MonoBehaviour:
   target: {fileID: 734180061}
   trajectoryPlanner: {fileID: 886951535}
   prevRecordedTrajectories: {fileID: 886951542}
+  testButton: {fileID: 0}
   loadingText: {fileID: 212199451}
   buttonsInMainMenu:
   - {fileID: 1261046557}
@@ -19090,7 +19093,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 175, y: -407.216}
+  m_AnchoredPosition: {x: -121, y: -407.216}
   m_SizeDelta: {x: 60.920013, y: 28.940002}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1274644582
@@ -29001,7 +29004,7 @@ GameObject:
   - component: {fileID: 1971490972}
   - component: {fileID: 1971490971}
   m_Layer: 5
-  m_Name: ExecuteTrajButton (1)
+  m_Name: ExecuteOnRealRobotButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29051,10 +29054,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2138264129}
-        m_TargetAssemblyTypeName: DrawServiceWithInspect, Assembly-CSharp
-        m_MethodName: UpdateDrawingState
-        m_Mode: 6
+      - m_Target: {fileID: 886951540}
+        m_TargetAssemblyTypeName: RealRobotCommunication, Assembly-CSharp
+        m_MethodName: ExecuteTrajectory
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -31334,6 +31337,7 @@ MonoBehaviour:
   redrawButton: {fileID: 819009260}
   addToTrainingButton: {fileID: 802794917}
   anotherTrajectoryButton: {fileID: 2042468611}
+  executeOnRealRobotButton: {fileID: 1971490970}
   debugText: {fileID: 1336661518}
 --- !u!114 &2138264129
 MonoBehaviour:

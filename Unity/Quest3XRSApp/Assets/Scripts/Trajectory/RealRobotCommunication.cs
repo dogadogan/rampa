@@ -5,12 +5,9 @@ using UnityEngine;
 public class RealRobotCommunication : MonoBehaviour
 {
     
-        
     private string m_RosServiceName_Execute = "execute";
     private string m_RosServiceName_Discard = "discard";
     ROSConnection m_Ros;
-    public GameObject mainPanel;
-    public GameObject popUpPanel;
     
     void Start()
     {
@@ -33,16 +30,21 @@ public class RealRobotCommunication : MonoBehaviour
 
     private void handleExecuteResponse(ExecutionServiceResponse response)
     {
+        /*
         popUpPanel.SetActive(false);
         mainPanel.SetActive(true);
+        */
     }
     
     private void handleDiscardResponse(DiscardServiceResponse response)
     {
+        /*
         popUpPanel.SetActive(false);
         mainPanel.SetActive(true);
+        */
         
     }
+    
     
     
     

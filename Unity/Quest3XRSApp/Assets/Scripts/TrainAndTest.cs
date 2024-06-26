@@ -23,7 +23,9 @@ public class TrainAndTest : MonoBehaviour
     public GameObject source;
     public GameObject target;
     public TrajectoryPlanner trajectoryPlanner;
-    public PrevRecordedTrajectories prevRecordedTrajectories;    
+    public PrevRecordedTrajectories prevRecordedTrajectories;
+
+    public Button testButton;   
 
     private enum State {
         Untrained,
@@ -42,6 +44,8 @@ public class TrainAndTest : MonoBehaviour
     {
         
         state = State.Untrained;
+
+        testButton.interactable = false;
 
         loadingText.text = "no training data";
         
@@ -89,6 +93,7 @@ public class TrainAndTest : MonoBehaviour
     public void TriggerTrainingResponse(TrainingServiceResponse response)
     {
         state = State.Trained;
+        testButton.interactable = true;
         UpdateText();
     }
 
@@ -125,6 +130,7 @@ public class TrainAndTest : MonoBehaviour
 
     public void TriggerDeleteResponse(TrainingServiceResponse response) {
         state = State.Untrained;
+        testButton.interactable = false;
         UpdateText();
     }
 
@@ -168,7 +174,7 @@ public class TrainAndTest : MonoBehaviour
                 loadingText.text = "training...";
                 break;
             case State.Trained:
-                loadingText.text = "ready to test. press \"start training\" to retrain with current training set";
+                loadingText.text = "ready to test. press \"start training\" to retrain";
                 break;
         }
     }

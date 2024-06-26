@@ -22,6 +22,7 @@ public class DrawServiceRealTime: MonoBehaviour
     public Button redrawButton;
     public Button addToTrainingButton;
     public GameObject anotherTrajectoryButton;
+    public GameObject executeOnRealRobotButton;
 
     public TMP_Text debugText;
 
@@ -47,6 +48,8 @@ public class DrawServiceRealTime: MonoBehaviour
         loadingText.GetComponent<TMP_Text>().text = "pinch to start drawing";
 
         anotherTrajectoryButton.SetActive(false);
+        executeOnRealRobotButton.SetActive(false);
+
         ResetDrawingState();
     }
 
@@ -105,6 +108,8 @@ public class DrawServiceRealTime: MonoBehaviour
                 
                 handleMenu(true);
                 anotherTrajectoryButton.SetActive(false);
+                executeOnRealRobotButton.SetActive(false);
+            
                 StartCoroutine(DrawTrajectory(0.05f));
                 break;
 
@@ -187,7 +192,10 @@ public class DrawServiceRealTime: MonoBehaviour
         redrawButton.interactable = false;
         addToTrainingButton.interactable = false;
         planRequestGeneratorRealTime.PrevRecordedTrajectories.SetInteractable(true);
+        
         anotherTrajectoryButton.SetActive(anotherTrajectory);
+        
+
 
         // also reset the slider handle position to middle
         Vector3 currRectTransform = sliderPosition.GetComponent<RectTransform>().anchoredPosition;

@@ -10,6 +10,7 @@ public class PlanRequestGeneratorWithPoses : MonoBehaviour
 {
     const float k_JointAssignmentWait = 0.1f;
     public DrawServiceWithInspect drawService;
+    public RealRobotCommunication realRobotCommunication;
     public TrajectoryHelperFunctions HelperFunctions;
     public TrajectoryPlanner TrajectoryPlanner;
 
@@ -31,6 +32,8 @@ public class PlanRequestGeneratorWithPoses : MonoBehaviour
     // buttons for play/pause trajectory
     public GameObject playButton;
     public GameObject pauseButton;
+
+    public GameObject executeOnRealRobotButton;
     
     
     public void GenerateRequest(List<Vector3> poseList)
@@ -213,8 +216,10 @@ public class PlanRequestGeneratorWithPoses : MonoBehaviour
 
         if (addToTrainingSet) {
             // store the current trajectory
-            if (previousPoints.Count > 0)
+            if (previousPoints.Count > 0) {
                 PrevRecordedTrajectories.AddTrajectory(previousPoses);
+                executeOnRealRobotButton.SetActive(true);
+            }
 
             // handle show-traj buttons
             PrevRecordedTrajectories.HandleButtons();

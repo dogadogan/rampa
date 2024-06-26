@@ -181,6 +181,7 @@ public class DrawServiceWithInspect : MonoBehaviour
     public void ResetDrawingState(bool anotherTrajectory = false)
     {
         state = State.Initial;
+        
         PlanRequestGeneratorWithPoses.ResetGenerator();
 
         lineRenderer.positionCount = 0;
@@ -201,10 +202,7 @@ public class DrawServiceWithInspect : MonoBehaviour
         anotherTrajectoryButton.SetActive(anotherTrajectory);
 
         // do not set active if no solution found 
-        if (PlanRequestGeneratorWithPoses.previousPoints.Count > 0)
-            executeOnRealRobotButton.SetActive(anotherTrajectory);
-        else
-            executeOnRealRobotButton.SetActive(false);
+        
 
         executeButton.SetActive(!anotherTrajectory);
 
