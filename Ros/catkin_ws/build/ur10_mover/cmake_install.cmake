@@ -42,9 +42,14 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/ur10_mover/msg" TYPE FILE FILES "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/msg/ListOfPoses.msg")
+endif()
+
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/ur10_mover/srv" TYPE FILE FILES
     "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/DiscardService.srv"
     "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/ExecutionService.srv"
+    "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/GetTrainingDataService.srv"
     "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/GripperService.srv"
     "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/PlannerService.srv"
     "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/SampleService.srv"

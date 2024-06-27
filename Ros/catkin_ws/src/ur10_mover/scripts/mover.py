@@ -106,6 +106,7 @@ def plan_pick_and_place(req):
             return response
         previous_ending_joint_angles = trajectory.joint_trajectory.points[-1].positions
         response.trajectories.append(trajectory)
+
     move_group.clear_pose_targets()
     save_trajectory(response.trajectories)
     #rospy.loginfo(response.trajectories)
@@ -125,6 +126,7 @@ def convert_data_file_to_list(input_file):
     return traj
 
 def plan_pick_and_place2(req):
+
     rospy.loginfo(rospy.get_caller_id() + "Plan Requested:\n")
 
     response = PlannerServiceResponse()
@@ -165,6 +167,7 @@ def plan_pick_and_place2(req):
             return response
         previous_ending_joint_angles = trajectory.joint_trajectory.points[-1].positions
         response.trajectories.append(trajectory)
+
     move_group.clear_pose_targets()
     save_trajectory(response.trajectories)
     #rospy.loginfo(response.trajectories)
@@ -215,7 +218,7 @@ def execute_on_real_robot(req):
     input_file.close()
     
     # TODO move_group needs another format input to run on simulation
-    move_group.execute(traj)
+    
     #rospy.loginfo("Trajectory execution request is sent to driver.")
     #robot.set_joint_positions(traj)
     return response
@@ -236,6 +239,7 @@ rospy.init_node('ur10_mover_server')
 robot = UR10()
 group_name = "manipulator"
 move_group = moveit_commander.MoveGroupCommander(group_name)
+
 rospy.sleep(2)
 
 

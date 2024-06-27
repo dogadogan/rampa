@@ -1,6 +1,9 @@
 file(REMOVE_RECURSE
+  "/home/user/ARobot/Ros/catkin_ws/devel/lib/python3/dist-packages/ur10_mover/msg/_ListOfPoses.py"
+  "/home/user/ARobot/Ros/catkin_ws/devel/lib/python3/dist-packages/ur10_mover/msg/__init__.py"
   "/home/user/ARobot/Ros/catkin_ws/devel/lib/python3/dist-packages/ur10_mover/srv/_DiscardService.py"
   "/home/user/ARobot/Ros/catkin_ws/devel/lib/python3/dist-packages/ur10_mover/srv/_ExecutionService.py"
+  "/home/user/ARobot/Ros/catkin_ws/devel/lib/python3/dist-packages/ur10_mover/srv/_GetTrainingDataService.py"
   "/home/user/ARobot/Ros/catkin_ws/devel/lib/python3/dist-packages/ur10_mover/srv/_GripperService.py"
   "/home/user/ARobot/Ros/catkin_ws/devel/lib/python3/dist-packages/ur10_mover/srv/_PlannerService.py"
   "/home/user/ARobot/Ros/catkin_ws/devel/lib/python3/dist-packages/ur10_mover/srv/_SampleService.py"

@@ -183,21 +183,6 @@ ur10_mover_genpy/fast:
 .PHONY : ur10_mover_genpy/fast
 
 # Convenience name for target.
-ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/rule:
-	cd /home/user/ARobot/Ros/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/rule
-.PHONY : ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/rule
-
-# Convenience name for target.
-ur10_mover_generate_messages_py: ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/rule
-
-.PHONY : ur10_mover_generate_messages_py
-
-# fast build rule for target.
-ur10_mover_generate_messages_py/fast:
-	cd /home/user/ARobot/Ros/catkin_ws/build && $(MAKE) -f ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/build.make ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/build
-.PHONY : ur10_mover_generate_messages_py/fast
-
-# Convenience name for target.
 ur10_mover/CMakeFiles/ur10_mover_gennodejs.dir/rule:
 	cd /home/user/ARobot/Ros/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 ur10_mover/CMakeFiles/ur10_mover_gennodejs.dir/rule
 .PHONY : ur10_mover/CMakeFiles/ur10_mover_gennodejs.dir/rule
@@ -331,6 +316,21 @@ _ur10_mover_generate_messages_check_deps_TrainingDataService: ur10_mover/CMakeFi
 _ur10_mover_generate_messages_check_deps_TrainingDataService/fast:
 	cd /home/user/ARobot/Ros/catkin_ws/build && $(MAKE) -f ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_TrainingDataService.dir/build.make ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_TrainingDataService.dir/build
 .PHONY : _ur10_mover_generate_messages_check_deps_TrainingDataService/fast
+
+# Convenience name for target.
+ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/rule:
+	cd /home/user/ARobot/Ros/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/rule
+.PHONY : ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/rule
+
+# Convenience name for target.
+_ur10_mover_generate_messages_check_deps_StateService: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/rule
+
+.PHONY : _ur10_mover_generate_messages_check_deps_StateService
+
+# fast build rule for target.
+_ur10_mover_generate_messages_check_deps_StateService/fast:
+	cd /home/user/ARobot/Ros/catkin_ws/build && $(MAKE) -f ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/build.make ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/build
+.PHONY : _ur10_mover_generate_messages_check_deps_StateService/fast
 
 # Convenience name for target.
 ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule:
@@ -481,6 +481,36 @@ controller_manager_msgs_generate_messages_lisp: ur10_mover/CMakeFiles/controller
 controller_manager_msgs_generate_messages_lisp/fast:
 	cd /home/user/ARobot/Ros/catkin_ws/build && $(MAKE) -f ur10_mover/CMakeFiles/controller_manager_msgs_generate_messages_lisp.dir/build.make ur10_mover/CMakeFiles/controller_manager_msgs_generate_messages_lisp.dir/build
 .PHONY : controller_manager_msgs_generate_messages_lisp/fast
+
+# Convenience name for target.
+ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/rule:
+	cd /home/user/ARobot/Ros/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/rule
+.PHONY : ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/rule
+
+# Convenience name for target.
+_ur10_mover_generate_messages_check_deps_SampleService: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/rule
+
+.PHONY : _ur10_mover_generate_messages_check_deps_SampleService
+
+# fast build rule for target.
+_ur10_mover_generate_messages_check_deps_SampleService/fast:
+	cd /home/user/ARobot/Ros/catkin_ws/build && $(MAKE) -f ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/build.make ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/build
+.PHONY : _ur10_mover_generate_messages_check_deps_SampleService/fast
+
+# Convenience name for target.
+ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule:
+	cd /home/user/ARobot/Ros/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule
+.PHONY : ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule
+
+# Convenience name for target.
+rosgraph_msgs_generate_messages_nodejs: ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule
+
+.PHONY : rosgraph_msgs_generate_messages_nodejs
+
+# fast build rule for target.
+rosgraph_msgs_generate_messages_nodejs/fast:
+	cd /home/user/ARobot/Ros/catkin_ws/build && $(MAKE) -f ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/build.make ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/build
+.PHONY : rosgraph_msgs_generate_messages_nodejs/fast
 
 # Convenience name for target.
 ur10_mover/CMakeFiles/roscpp_generate_messages_eus.dir/rule:
@@ -663,36 +693,6 @@ run_tests_ur10_mover_roslaunch-check_launch/fast:
 .PHONY : run_tests_ur10_mover_roslaunch-check_launch/fast
 
 # Convenience name for target.
-ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule:
-	cd /home/user/ARobot/Ros/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule
-.PHONY : ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule
-
-# Convenience name for target.
-rosgraph_msgs_generate_messages_nodejs: ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule
-
-.PHONY : rosgraph_msgs_generate_messages_nodejs
-
-# fast build rule for target.
-rosgraph_msgs_generate_messages_nodejs/fast:
-	cd /home/user/ARobot/Ros/catkin_ws/build && $(MAKE) -f ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/build.make ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/build
-.PHONY : rosgraph_msgs_generate_messages_nodejs/fast
-
-# Convenience name for target.
-ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/rule:
-	cd /home/user/ARobot/Ros/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/rule
-.PHONY : ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/rule
-
-# Convenience name for target.
-_ur10_mover_generate_messages_check_deps_SampleService: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/rule
-
-.PHONY : _ur10_mover_generate_messages_check_deps_SampleService
-
-# fast build rule for target.
-_ur10_mover_generate_messages_check_deps_SampleService/fast:
-	cd /home/user/ARobot/Ros/catkin_ws/build && $(MAKE) -f ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/build.make ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/build
-.PHONY : _ur10_mover_generate_messages_check_deps_SampleService/fast
-
-# Convenience name for target.
 ur10_mover/CMakeFiles/run_tests_ur10_mover_roslaunch-check.dir/rule:
 	cd /home/user/ARobot/Ros/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 ur10_mover/CMakeFiles/run_tests_ur10_mover_roslaunch-check.dir/rule
 .PHONY : ur10_mover/CMakeFiles/run_tests_ur10_mover_roslaunch-check.dir/rule
@@ -738,6 +738,21 @@ ur10_mover_generate_messages_cpp/fast:
 .PHONY : ur10_mover_generate_messages_cpp/fast
 
 # Convenience name for target.
+ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_ListOfPoses.dir/rule:
+	cd /home/user/ARobot/Ros/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_ListOfPoses.dir/rule
+.PHONY : ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_ListOfPoses.dir/rule
+
+# Convenience name for target.
+_ur10_mover_generate_messages_check_deps_ListOfPoses: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_ListOfPoses.dir/rule
+
+.PHONY : _ur10_mover_generate_messages_check_deps_ListOfPoses
+
+# fast build rule for target.
+_ur10_mover_generate_messages_check_deps_ListOfPoses/fast:
+	cd /home/user/ARobot/Ros/catkin_ws/build && $(MAKE) -f ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_ListOfPoses.dir/build.make ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_ListOfPoses.dir/build
+.PHONY : _ur10_mover_generate_messages_check_deps_ListOfPoses/fast
+
+# Convenience name for target.
 ur10_mover/CMakeFiles/ur10_mover_generate_messages.dir/rule:
 	cd /home/user/ARobot/Ros/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 ur10_mover/CMakeFiles/ur10_mover_generate_messages.dir/rule
 .PHONY : ur10_mover/CMakeFiles/ur10_mover_generate_messages.dir/rule
@@ -768,19 +783,34 @@ _ur10_mover_generate_messages_check_deps_DiscardService/fast:
 .PHONY : _ur10_mover_generate_messages_check_deps_DiscardService/fast
 
 # Convenience name for target.
-ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/rule:
-	cd /home/user/ARobot/Ros/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/rule
-.PHONY : ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/rule
+ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/rule:
+	cd /home/user/ARobot/Ros/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/rule
+.PHONY : ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/rule
 
 # Convenience name for target.
-_ur10_mover_generate_messages_check_deps_StateService: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/rule
+ur10_mover_generate_messages_py: ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/rule
 
-.PHONY : _ur10_mover_generate_messages_check_deps_StateService
+.PHONY : ur10_mover_generate_messages_py
 
 # fast build rule for target.
-_ur10_mover_generate_messages_check_deps_StateService/fast:
-	cd /home/user/ARobot/Ros/catkin_ws/build && $(MAKE) -f ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/build.make ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/build
-.PHONY : _ur10_mover_generate_messages_check_deps_StateService/fast
+ur10_mover_generate_messages_py/fast:
+	cd /home/user/ARobot/Ros/catkin_ws/build && $(MAKE) -f ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/build.make ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/build
+.PHONY : ur10_mover_generate_messages_py/fast
+
+# Convenience name for target.
+ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_GetTrainingDataService.dir/rule:
+	cd /home/user/ARobot/Ros/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_GetTrainingDataService.dir/rule
+.PHONY : ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_GetTrainingDataService.dir/rule
+
+# Convenience name for target.
+_ur10_mover_generate_messages_check_deps_GetTrainingDataService: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_GetTrainingDataService.dir/rule
+
+.PHONY : _ur10_mover_generate_messages_check_deps_GetTrainingDataService
+
+# fast build rule for target.
+_ur10_mover_generate_messages_check_deps_GetTrainingDataService/fast:
+	cd /home/user/ARobot/Ros/catkin_ws/build && $(MAKE) -f ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_GetTrainingDataService.dir/build.make ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_GetTrainingDataService.dir/build
+.PHONY : _ur10_mover_generate_messages_check_deps_GetTrainingDataService/fast
 
 # Help Target
 help:
@@ -790,7 +820,6 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... ur10_mover_genpy"
-	@echo "... ur10_mover_generate_messages_py"
 	@echo "... ur10_mover_gennodejs"
 	@echo "... ur10_mover_generate_messages_nodejs"
 	@echo "... install/strip"
@@ -802,6 +831,7 @@ help:
 	@echo "... _ur10_mover_generate_messages_check_deps_TrainingService"
 	@echo "... list_install_components"
 	@echo "... _ur10_mover_generate_messages_check_deps_TrainingDataService"
+	@echo "... _ur10_mover_generate_messages_check_deps_StateService"
 	@echo "... rosgraph_msgs_generate_messages_py"
 	@echo "... rosgraph_msgs_generate_messages_lisp"
 	@echo "... install/local"
@@ -814,6 +844,8 @@ help:
 	@echo "... controller_manager_msgs_generate_messages_cpp"
 	@echo "... roscpp_generate_messages_py"
 	@echo "... controller_manager_msgs_generate_messages_lisp"
+	@echo "... _ur10_mover_generate_messages_check_deps_SampleService"
+	@echo "... rosgraph_msgs_generate_messages_nodejs"
 	@echo "... rebuild_cache"
 	@echo "... roscpp_generate_messages_eus"
 	@echo "... _ur10_mover_generate_messages_check_deps_PlannerService"
@@ -828,14 +860,14 @@ help:
 	@echo "... _run_tests_ur10_mover_roslaunch-check"
 	@echo "... roscpp_generate_messages_nodejs"
 	@echo "... run_tests_ur10_mover_roslaunch-check_launch"
-	@echo "... rosgraph_msgs_generate_messages_nodejs"
-	@echo "... _ur10_mover_generate_messages_check_deps_SampleService"
 	@echo "... run_tests_ur10_mover_roslaunch-check"
 	@echo "... _run_tests_ur10_mover_roslaunch-check_launch"
 	@echo "... ur10_mover_generate_messages_cpp"
+	@echo "... _ur10_mover_generate_messages_check_deps_ListOfPoses"
 	@echo "... ur10_mover_generate_messages"
 	@echo "... _ur10_mover_generate_messages_check_deps_DiscardService"
-	@echo "... _ur10_mover_generate_messages_check_deps_StateService"
+	@echo "... ur10_mover_generate_messages_py"
+	@echo "... _ur10_mover_generate_messages_check_deps_GetTrainingDataService"
 .PHONY : help
 
 

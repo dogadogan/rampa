@@ -4,12 +4,15 @@
 (defsystem "ur10_mover-srv"
   :depends-on (:roslisp-msg-protocol :roslisp-utils :geometry_msgs-msg
                :moveit_msgs-msg
+               :ur10_mover-msg
 )
   :components ((:file "_package")
     (:file "DiscardService" :depends-on ("_package_DiscardService"))
     (:file "_package_DiscardService" :depends-on ("_package"))
     (:file "ExecutionService" :depends-on ("_package_ExecutionService"))
     (:file "_package_ExecutionService" :depends-on ("_package"))
+    (:file "GetTrainingDataService" :depends-on ("_package_GetTrainingDataService"))
+    (:file "_package_GetTrainingDataService" :depends-on ("_package"))
     (:file "GripperService" :depends-on ("_package_GripperService"))
     (:file "_package_GripperService" :depends-on ("_package"))
     (:file "PlannerService" :depends-on ("_package_PlannerService"))

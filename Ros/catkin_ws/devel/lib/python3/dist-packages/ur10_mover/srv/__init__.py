@@ -1,5 +1,6 @@
 from ._DiscardService import *
 from ._ExecutionService import *
+from ._GetTrainingDataService import *
 from ._GripperService import *
 from ._PlannerService import *
 from ._SampleService import *

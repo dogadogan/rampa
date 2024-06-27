@@ -222,7 +222,6 @@
 /home/user/ARobot/Ros/catkin_ws/build/ur10_moveit_config/CMakeFiles/clean_test_results_ur10_moveit_config.dir
 /home/user/ARobot/Ros/catkin_ws/build/ur10_mover/CMakeFiles/edit_cache.dir
 /home/user/ARobot/Ros/catkin_ws/build/ur10_mover/CMakeFiles/ur10_mover_genpy.dir
-/home/user/ARobot/Ros/catkin_ws/build/ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir
 /home/user/ARobot/Ros/catkin_ws/build/ur10_mover/CMakeFiles/ur10_mover_gennodejs.dir
 /home/user/ARobot/Ros/catkin_ws/build/ur10_mover/CMakeFiles/ur10_mover_generate_messages_nodejs.dir
 /home/user/ARobot/Ros/catkin_ws/build/ur10_mover/CMakeFiles/install/strip.dir
@@ -234,6 +233,7 @@
 /home/user/ARobot/Ros/catkin_ws/build/ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_TrainingService.dir
 /home/user/ARobot/Ros/catkin_ws/build/ur10_mover/CMakeFiles/list_install_components.dir
 /home/user/ARobot/Ros/catkin_ws/build/ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_TrainingDataService.dir
+/home/user/ARobot/Ros/catkin_ws/build/ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir
 /home/user/ARobot/Ros/catkin_ws/build/ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_py.dir
 /home/user/ARobot/Ros/catkin_ws/build/ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir
 /home/user/ARobot/Ros/catkin_ws/build/ur10_mover/CMakeFiles/install/local.dir
@@ -246,6 +246,8 @@
 /home/user/ARobot/Ros/catkin_ws/build/ur10_mover/CMakeFiles/controller_manager_msgs_generate_messages_cpp.dir
 /home/user/ARobot/Ros/catkin_ws/build/ur10_mover/CMakeFiles/roscpp_generate_messages_py.dir
 /home/user/ARobot/Ros/catkin_ws/build/ur10_mover/CMakeFiles/controller_manager_msgs_generate_messages_lisp.dir
+/home/user/ARobot/Ros/catkin_ws/build/ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir
+/home/user/ARobot/Ros/catkin_ws/build/ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir
 /home/user/ARobot/Ros/catkin_ws/build/ur10_mover/CMakeFiles/rebuild_cache.dir
 /home/user/ARobot/Ros/catkin_ws/build/ur10_mover/CMakeFiles/roscpp_generate_messages_eus.dir
 /home/user/ARobot/Ros/catkin_ws/build/ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_PlannerService.dir
@@ -260,14 +262,14 @@
 /home/user/ARobot/Ros/catkin_ws/build/ur10_mover/CMakeFiles/_run_tests_ur10_mover_roslaunch-check.dir
 /home/user/ARobot/Ros/catkin_ws/build/ur10_mover/CMakeFiles/roscpp_generate_messages_nodejs.dir
 /home/user/ARobot/Ros/catkin_ws/build/ur10_mover/CMakeFiles/run_tests_ur10_mover_roslaunch-check_launch.dir
-/home/user/ARobot/Ros/catkin_ws/build/ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir
-/home/user/ARobot/Ros/catkin_ws/build/ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir
 /home/user/ARobot/Ros/catkin_ws/build/ur10_mover/CMakeFiles/run_tests_ur10_mover_roslaunch-check.dir
 /home/user/ARobot/Ros/catkin_ws/build/ur10_mover/CMakeFiles/_run_tests_ur10_mover_roslaunch-check_launch.dir
 /home/user/ARobot/Ros/catkin_ws/build/ur10_mover/CMakeFiles/ur10_mover_generate_messages_cpp.dir
+/home/user/ARobot/Ros/catkin_ws/build/ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_ListOfPoses.dir
 /home/user/ARobot/Ros/catkin_ws/build/ur10_mover/CMakeFiles/ur10_mover_generate_messages.dir
 /home/user/ARobot/Ros/catkin_ws/build/ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_DiscardService.dir
-/home/user/ARobot/Ros/catkin_ws/build/ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir
+/home/user/ARobot/Ros/catkin_ws/build/ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir
+/home/user/ARobot/Ros/catkin_ws/build/ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_GetTrainingDataService.dir
 /home/user/ARobot/Ros/catkin_ws/build/ur_description/CMakeFiles/run_tests_ur_description_roslaunch-check_tests_roslaunch_test_ur20.xml.dir
 /home/user/ARobot/Ros/catkin_ws/build/ur_description/CMakeFiles/run_tests_ur_description_roslaunch-check_tests_roslaunch_test_ur16e.xml.dir
 /home/user/ARobot/Ros/catkin_ws/build/ur_description/CMakeFiles/_run_tests_ur_description_roslaunch-check_tests_roslaunch_test_ur16e.xml.dir

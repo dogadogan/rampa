@@ -374,7 +374,6 @@ ur10_mover/preinstall:
 
 # Recursive "clean" directory target.
 ur10_mover/clean: ur10_mover/CMakeFiles/ur10_mover_genpy.dir/clean
-ur10_mover/clean: ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/clean
 ur10_mover/clean: ur10_mover/CMakeFiles/ur10_mover_gennodejs.dir/clean
 ur10_mover/clean: ur10_mover/CMakeFiles/ur10_mover_generate_messages_nodejs.dir/clean
 ur10_mover/clean: ur10_mover/CMakeFiles/ur10_mover_genlisp.dir/clean
@@ -384,6 +383,7 @@ ur10_mover/clean: ur10_mover/CMakeFiles/ur10_mover_generate_messages_eus.dir/cle
 ur10_mover/clean: ur10_mover/CMakeFiles/ur10_mover_gencpp.dir/clean
 ur10_mover/clean: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_TrainingService.dir/clean
 ur10_mover/clean: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_TrainingDataService.dir/clean
+ur10_mover/clean: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/clean
 ur10_mover/clean: ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/clean
 ur10_mover/clean: ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/clean
 ur10_mover/clean: ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/clean
@@ -394,6 +394,8 @@ ur10_mover/clean: ur10_mover/CMakeFiles/clean_test_results_ur10_mover.dir/clean
 ur10_mover/clean: ur10_mover/CMakeFiles/controller_manager_msgs_generate_messages_cpp.dir/clean
 ur10_mover/clean: ur10_mover/CMakeFiles/roscpp_generate_messages_py.dir/clean
 ur10_mover/clean: ur10_mover/CMakeFiles/controller_manager_msgs_generate_messages_lisp.dir/clean
+ur10_mover/clean: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/clean
+ur10_mover/clean: ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/clean
 ur10_mover/clean: ur10_mover/CMakeFiles/roscpp_generate_messages_eus.dir/clean
 ur10_mover/clean: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_PlannerService.dir/clean
 ur10_mover/clean: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_ExecutionService.dir/clean
@@ -406,14 +408,14 @@ ur10_mover/clean: ur10_mover/CMakeFiles/_run_tests_ur10_mover.dir/clean
 ur10_mover/clean: ur10_mover/CMakeFiles/_run_tests_ur10_mover_roslaunch-check.dir/clean
 ur10_mover/clean: ur10_mover/CMakeFiles/roscpp_generate_messages_nodejs.dir/clean
 ur10_mover/clean: ur10_mover/CMakeFiles/run_tests_ur10_mover_roslaunch-check_launch.dir/clean
-ur10_mover/clean: ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/clean
-ur10_mover/clean: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/clean
 ur10_mover/clean: ur10_mover/CMakeFiles/run_tests_ur10_mover_roslaunch-check.dir/clean
 ur10_mover/clean: ur10_mover/CMakeFiles/_run_tests_ur10_mover_roslaunch-check_launch.dir/clean
 ur10_mover/clean: ur10_mover/CMakeFiles/ur10_mover_generate_messages_cpp.dir/clean
+ur10_mover/clean: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_ListOfPoses.dir/clean
 ur10_mover/clean: ur10_mover/CMakeFiles/ur10_mover_generate_messages.dir/clean
 ur10_mover/clean: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_DiscardService.dir/clean
-ur10_mover/clean: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/clean
+ur10_mover/clean: ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/clean
+ur10_mover/clean: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_GetTrainingDataService.dir/clean
 
 .PHONY : ur10_mover/clean
 
@@ -850,7 +852,7 @@ moveit_msgs/CMakeFiles/moveit_msgs_genpy.dir/all: moveit_msgs/CMakeFiles/moveit_
 
 # Build rule for subdir invocation for target.
 moveit_msgs/CMakeFiles/moveit_msgs_genpy.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 18
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 19
 	$(MAKE) -f CMakeFiles/Makefile2 moveit_msgs/CMakeFiles/moveit_msgs_genpy.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 0
 .PHONY : moveit_msgs/CMakeFiles/moveit_msgs_genpy.dir/rule
@@ -984,12 +986,12 @@ moveit_msgs/CMakeFiles/moveit_msgs_generate_messages_py.dir/all: moveit_msgs/CMa
 moveit_msgs/CMakeFiles/moveit_msgs_generate_messages_py.dir/all: moveit_msgs/CMakeFiles/_moveit_msgs_generate_messages_check_deps_GraspPlanning.dir/all
 	$(MAKE) -f moveit_msgs/CMakeFiles/moveit_msgs_generate_messages_py.dir/build.make moveit_msgs/CMakeFiles/moveit_msgs_generate_messages_py.dir/depend
 	$(MAKE) -f moveit_msgs/CMakeFiles/moveit_msgs_generate_messages_py.dir/build.make moveit_msgs/CMakeFiles/moveit_msgs_generate_messages_py.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/user/ARobot/Ros/catkin_ws/build/CMakeFiles --progress-num=75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92 "Built target moveit_msgs_generate_messages_py"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/user/ARobot/Ros/catkin_ws/build/CMakeFiles --progress-num=73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91 "Built target moveit_msgs_generate_messages_py"
 .PHONY : moveit_msgs/CMakeFiles/moveit_msgs_generate_messages_py.dir/all
 
 # Build rule for subdir invocation for target.
 moveit_msgs/CMakeFiles/moveit_msgs_generate_messages_py.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 18
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 19
 	$(MAKE) -f CMakeFiles/Makefile2 moveit_msgs/CMakeFiles/moveit_msgs_generate_messages_py.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 0
 .PHONY : moveit_msgs/CMakeFiles/moveit_msgs_generate_messages_py.dir/rule
@@ -2401,7 +2403,7 @@ moveit_msgs/CMakeFiles/moveit_msgs_genlisp.dir/all: moveit_msgs/CMakeFiles/movei
 
 # Build rule for subdir invocation for target.
 moveit_msgs/CMakeFiles/moveit_msgs_genlisp.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 19
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 18
 	$(MAKE) -f CMakeFiles/Makefile2 moveit_msgs/CMakeFiles/moveit_msgs_genlisp.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 0
 .PHONY : moveit_msgs/CMakeFiles/moveit_msgs_genlisp.dir/rule
@@ -3129,12 +3131,12 @@ moveit_msgs/CMakeFiles/moveit_msgs_generate_messages_lisp.dir/all: moveit_msgs/C
 moveit_msgs/CMakeFiles/moveit_msgs_generate_messages_lisp.dir/all: moveit_msgs/CMakeFiles/_moveit_msgs_generate_messages_check_deps_GraspPlanning.dir/all
 	$(MAKE) -f moveit_msgs/CMakeFiles/moveit_msgs_generate_messages_lisp.dir/build.make moveit_msgs/CMakeFiles/moveit_msgs_generate_messages_lisp.dir/depend
 	$(MAKE) -f moveit_msgs/CMakeFiles/moveit_msgs_generate_messages_lisp.dir/build.make moveit_msgs/CMakeFiles/moveit_msgs_generate_messages_lisp.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/user/ARobot/Ros/catkin_ws/build/CMakeFiles --progress-num=38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56 "Built target moveit_msgs_generate_messages_lisp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/user/ARobot/Ros/catkin_ws/build/CMakeFiles --progress-num=38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55 "Built target moveit_msgs_generate_messages_lisp"
 .PHONY : moveit_msgs/CMakeFiles/moveit_msgs_generate_messages_lisp.dir/all
 
 # Build rule for subdir invocation for target.
 moveit_msgs/CMakeFiles/moveit_msgs_generate_messages_lisp.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 19
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 18
 	$(MAKE) -f CMakeFiles/Makefile2 moveit_msgs/CMakeFiles/moveit_msgs_generate_messages_lisp.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 0
 .PHONY : moveit_msgs/CMakeFiles/moveit_msgs_generate_messages_lisp.dir/rule
@@ -3813,7 +3815,7 @@ moveit_msgs/CMakeFiles/moveit_msgs_generate_messages.dir/all: moveit_msgs/CMakeF
 
 # Build rule for subdir invocation for target.
 moveit_msgs/CMakeFiles/moveit_msgs_generate_messages.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 91
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 90
 	$(MAKE) -f CMakeFiles/Makefile2 moveit_msgs/CMakeFiles/moveit_msgs_generate_messages.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 0
 .PHONY : moveit_msgs/CMakeFiles/moveit_msgs_generate_messages.dir/rule
@@ -4082,12 +4084,12 @@ moveit_msgs/CMakeFiles/moveit_msgs_generate_messages_nodejs.dir/all: moveit_msgs
 moveit_msgs/CMakeFiles/moveit_msgs_generate_messages_nodejs.dir/all: moveit_msgs/CMakeFiles/_moveit_msgs_generate_messages_check_deps_GraspPlanning.dir/all
 	$(MAKE) -f moveit_msgs/CMakeFiles/moveit_msgs_generate_messages_nodejs.dir/build.make moveit_msgs/CMakeFiles/moveit_msgs_generate_messages_nodejs.dir/depend
 	$(MAKE) -f moveit_msgs/CMakeFiles/moveit_msgs_generate_messages_nodejs.dir/build.make moveit_msgs/CMakeFiles/moveit_msgs_generate_messages_nodejs.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/user/ARobot/Ros/catkin_ws/build/CMakeFiles --progress-num=57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74 "Built target moveit_msgs_generate_messages_nodejs"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/user/ARobot/Ros/catkin_ws/build/CMakeFiles --progress-num=56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72 "Built target moveit_msgs_generate_messages_nodejs"
 .PHONY : moveit_msgs/CMakeFiles/moveit_msgs_generate_messages_nodejs.dir/all
 
 # Build rule for subdir invocation for target.
 moveit_msgs/CMakeFiles/moveit_msgs_generate_messages_nodejs.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 18
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 17
 	$(MAKE) -f CMakeFiles/Makefile2 moveit_msgs/CMakeFiles/moveit_msgs_generate_messages_nodejs.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 0
 .PHONY : moveit_msgs/CMakeFiles/moveit_msgs_generate_messages_nodejs.dir/rule
@@ -4519,7 +4521,7 @@ moveit_msgs/CMakeFiles/moveit_msgs_gennodejs.dir/all: moveit_msgs/CMakeFiles/mov
 
 # Build rule for subdir invocation for target.
 moveit_msgs/CMakeFiles/moveit_msgs_gennodejs.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 18
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 17
 	$(MAKE) -f CMakeFiles/Makefile2 moveit_msgs/CMakeFiles/moveit_msgs_gennodejs.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 0
 .PHONY : moveit_msgs/CMakeFiles/moveit_msgs_gennodejs.dir/rule
@@ -5708,7 +5710,7 @@ ur10_mover/CMakeFiles/ur10_mover_genpy.dir/all: ur10_mover/CMakeFiles/ur10_mover
 
 # Build rule for subdir invocation for target.
 ur10_mover/CMakeFiles/ur10_mover_genpy.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 20
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 22
 	$(MAKE) -f CMakeFiles/Makefile2 ur10_mover/CMakeFiles/ur10_mover_genpy.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 0
 .PHONY : ur10_mover/CMakeFiles/ur10_mover_genpy.dir/rule
@@ -5724,44 +5726,6 @@ ur10_mover/CMakeFiles/ur10_mover_genpy.dir/clean:
 .PHONY : ur10_mover/CMakeFiles/ur10_mover_genpy.dir/clean
 
 #=============================================================================
-# Target rules for target ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir
-
-# All Build rule for target.
-ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/all: ros_tcp_endpoint/CMakeFiles/std_msgs_generate_messages_py.dir/all
-ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/all: moveit_msgs/CMakeFiles/moveit_msgs_generate_messages_py.dir/all
-ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/all: moveit_msgs/CMakeFiles/sensor_msgs_generate_messages_py.dir/all
-ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/all: moveit_msgs/CMakeFiles/geometry_msgs_generate_messages_py.dir/all
-ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_TrainingService.dir/all
-ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_TrainingDataService.dir/all
-ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_PlannerService.dir/all
-ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_ExecutionService.dir/all
-ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_GripperService.dir/all
-ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/all
-ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_DiscardService.dir/all
-ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/all
-	$(MAKE) -f ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/build.make ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/depend
-	$(MAKE) -f ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/build.make ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/user/ARobot/Ros/catkin_ws/build/CMakeFiles --progress-num=99,100 "Built target ur10_mover_generate_messages_py"
-.PHONY : ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/all
-
-# Build rule for subdir invocation for target.
-ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 20
-	$(MAKE) -f CMakeFiles/Makefile2 ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 0
-.PHONY : ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/rule
-
-# Convenience name for target.
-ur10_mover_generate_messages_py: ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/rule
-
-.PHONY : ur10_mover_generate_messages_py
-
-# clean rule for target.
-ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/clean:
-	$(MAKE) -f ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/build.make ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/clean
-.PHONY : ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/clean
-
-#=============================================================================
 # Target rules for target ur10_mover/CMakeFiles/ur10_mover_gennodejs.dir
 
 # All Build rule for target.
@@ -5773,7 +5737,7 @@ ur10_mover/CMakeFiles/ur10_mover_gennodejs.dir/all: ur10_mover/CMakeFiles/ur10_m
 
 # Build rule for subdir invocation for target.
 ur10_mover/CMakeFiles/ur10_mover_gennodejs.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 19
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 18
 	$(MAKE) -f CMakeFiles/Makefile2 ur10_mover/CMakeFiles/ur10_mover_gennodejs.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 0
 .PHONY : ur10_mover/CMakeFiles/ur10_mover_gennodejs.dir/rule
@@ -5798,20 +5762,22 @@ ur10_mover/CMakeFiles/ur10_mover_generate_messages_nodejs.dir/all: moveit_msgs/C
 ur10_mover/CMakeFiles/ur10_mover_generate_messages_nodejs.dir/all: moveit_msgs/CMakeFiles/moveit_msgs_generate_messages_nodejs.dir/all
 ur10_mover/CMakeFiles/ur10_mover_generate_messages_nodejs.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_TrainingService.dir/all
 ur10_mover/CMakeFiles/ur10_mover_generate_messages_nodejs.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_TrainingDataService.dir/all
+ur10_mover/CMakeFiles/ur10_mover_generate_messages_nodejs.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/all
+ur10_mover/CMakeFiles/ur10_mover_generate_messages_nodejs.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/all
 ur10_mover/CMakeFiles/ur10_mover_generate_messages_nodejs.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_PlannerService.dir/all
 ur10_mover/CMakeFiles/ur10_mover_generate_messages_nodejs.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_ExecutionService.dir/all
 ur10_mover/CMakeFiles/ur10_mover_generate_messages_nodejs.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_GripperService.dir/all
-ur10_mover/CMakeFiles/ur10_mover_generate_messages_nodejs.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/all
+ur10_mover/CMakeFiles/ur10_mover_generate_messages_nodejs.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_ListOfPoses.dir/all
 ur10_mover/CMakeFiles/ur10_mover_generate_messages_nodejs.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_DiscardService.dir/all
-ur10_mover/CMakeFiles/ur10_mover_generate_messages_nodejs.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/all
+ur10_mover/CMakeFiles/ur10_mover_generate_messages_nodejs.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_GetTrainingDataService.dir/all
 	$(MAKE) -f ur10_mover/CMakeFiles/ur10_mover_generate_messages_nodejs.dir/build.make ur10_mover/CMakeFiles/ur10_mover_generate_messages_nodejs.dir/depend
 	$(MAKE) -f ur10_mover/CMakeFiles/ur10_mover_generate_messages_nodejs.dir/build.make ur10_mover/CMakeFiles/ur10_mover_generate_messages_nodejs.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/user/ARobot/Ros/catkin_ws/build/CMakeFiles --progress-num=98 "Built target ur10_mover_generate_messages_nodejs"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/user/ARobot/Ros/catkin_ws/build/CMakeFiles --progress-num=97 "Built target ur10_mover_generate_messages_nodejs"
 .PHONY : ur10_mover/CMakeFiles/ur10_mover_generate_messages_nodejs.dir/all
 
 # Build rule for subdir invocation for target.
 ur10_mover/CMakeFiles/ur10_mover_generate_messages_nodejs.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 19
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 18
 	$(MAKE) -f CMakeFiles/Makefile2 ur10_mover/CMakeFiles/ur10_mover_generate_messages_nodejs.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 0
 .PHONY : ur10_mover/CMakeFiles/ur10_mover_generate_messages_nodejs.dir/rule
@@ -5838,7 +5804,7 @@ ur10_mover/CMakeFiles/ur10_mover_genlisp.dir/all: ur10_mover/CMakeFiles/ur10_mov
 
 # Build rule for subdir invocation for target.
 ur10_mover/CMakeFiles/ur10_mover_genlisp.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 21
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 20
 	$(MAKE) -f CMakeFiles/Makefile2 ur10_mover/CMakeFiles/ur10_mover_genlisp.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 0
 .PHONY : ur10_mover/CMakeFiles/ur10_mover_genlisp.dir/rule
@@ -5863,20 +5829,22 @@ ur10_mover/CMakeFiles/ur10_mover_generate_messages_lisp.dir/all: moveit_msgs/CMa
 ur10_mover/CMakeFiles/ur10_mover_generate_messages_lisp.dir/all: moveit_msgs/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/all
 ur10_mover/CMakeFiles/ur10_mover_generate_messages_lisp.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_TrainingService.dir/all
 ur10_mover/CMakeFiles/ur10_mover_generate_messages_lisp.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_TrainingDataService.dir/all
+ur10_mover/CMakeFiles/ur10_mover_generate_messages_lisp.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/all
+ur10_mover/CMakeFiles/ur10_mover_generate_messages_lisp.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/all
 ur10_mover/CMakeFiles/ur10_mover_generate_messages_lisp.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_PlannerService.dir/all
 ur10_mover/CMakeFiles/ur10_mover_generate_messages_lisp.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_ExecutionService.dir/all
 ur10_mover/CMakeFiles/ur10_mover_generate_messages_lisp.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_GripperService.dir/all
-ur10_mover/CMakeFiles/ur10_mover_generate_messages_lisp.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/all
+ur10_mover/CMakeFiles/ur10_mover_generate_messages_lisp.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_ListOfPoses.dir/all
 ur10_mover/CMakeFiles/ur10_mover_generate_messages_lisp.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_DiscardService.dir/all
-ur10_mover/CMakeFiles/ur10_mover_generate_messages_lisp.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/all
+ur10_mover/CMakeFiles/ur10_mover_generate_messages_lisp.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_GetTrainingDataService.dir/all
 	$(MAKE) -f ur10_mover/CMakeFiles/ur10_mover_generate_messages_lisp.dir/build.make ur10_mover/CMakeFiles/ur10_mover_generate_messages_lisp.dir/depend
 	$(MAKE) -f ur10_mover/CMakeFiles/ur10_mover_generate_messages_lisp.dir/build.make ur10_mover/CMakeFiles/ur10_mover_generate_messages_lisp.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/user/ARobot/Ros/catkin_ws/build/CMakeFiles --progress-num=96,97 "Built target ur10_mover_generate_messages_lisp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/user/ARobot/Ros/catkin_ws/build/CMakeFiles --progress-num=95,96 "Built target ur10_mover_generate_messages_lisp"
 .PHONY : ur10_mover/CMakeFiles/ur10_mover_generate_messages_lisp.dir/all
 
 # Build rule for subdir invocation for target.
 ur10_mover/CMakeFiles/ur10_mover_generate_messages_lisp.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 21
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 20
 	$(MAKE) -f CMakeFiles/Makefile2 ur10_mover/CMakeFiles/ur10_mover_generate_messages_lisp.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 0
 .PHONY : ur10_mover/CMakeFiles/ur10_mover_generate_messages_lisp.dir/rule
@@ -5903,7 +5871,7 @@ ur10_mover/CMakeFiles/ur10_mover_geneus.dir/all: ur10_mover/CMakeFiles/ur10_move
 
 # Build rule for subdir invocation for target.
 ur10_mover/CMakeFiles/ur10_mover_geneus.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 19
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 20
 	$(MAKE) -f CMakeFiles/Makefile2 ur10_mover/CMakeFiles/ur10_mover_geneus.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 0
 .PHONY : ur10_mover/CMakeFiles/ur10_mover_geneus.dir/rule
@@ -5928,20 +5896,22 @@ ur10_mover/CMakeFiles/ur10_mover_generate_messages_eus.dir/all: moveit_msgs/CMak
 ur10_mover/CMakeFiles/ur10_mover_generate_messages_eus.dir/all: moveit_msgs/CMakeFiles/sensor_msgs_generate_messages_eus.dir/all
 ur10_mover/CMakeFiles/ur10_mover_generate_messages_eus.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_TrainingService.dir/all
 ur10_mover/CMakeFiles/ur10_mover_generate_messages_eus.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_TrainingDataService.dir/all
+ur10_mover/CMakeFiles/ur10_mover_generate_messages_eus.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/all
+ur10_mover/CMakeFiles/ur10_mover_generate_messages_eus.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/all
 ur10_mover/CMakeFiles/ur10_mover_generate_messages_eus.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_PlannerService.dir/all
 ur10_mover/CMakeFiles/ur10_mover_generate_messages_eus.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_ExecutionService.dir/all
 ur10_mover/CMakeFiles/ur10_mover_generate_messages_eus.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_GripperService.dir/all
-ur10_mover/CMakeFiles/ur10_mover_generate_messages_eus.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/all
+ur10_mover/CMakeFiles/ur10_mover_generate_messages_eus.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_ListOfPoses.dir/all
 ur10_mover/CMakeFiles/ur10_mover_generate_messages_eus.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_DiscardService.dir/all
-ur10_mover/CMakeFiles/ur10_mover_generate_messages_eus.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/all
+ur10_mover/CMakeFiles/ur10_mover_generate_messages_eus.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_GetTrainingDataService.dir/all
 	$(MAKE) -f ur10_mover/CMakeFiles/ur10_mover_generate_messages_eus.dir/build.make ur10_mover/CMakeFiles/ur10_mover_generate_messages_eus.dir/depend
 	$(MAKE) -f ur10_mover/CMakeFiles/ur10_mover_generate_messages_eus.dir/build.make ur10_mover/CMakeFiles/ur10_mover_generate_messages_eus.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/user/ARobot/Ros/catkin_ws/build/CMakeFiles --progress-num=95 "Built target ur10_mover_generate_messages_eus"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/user/ARobot/Ros/catkin_ws/build/CMakeFiles --progress-num=93,94 "Built target ur10_mover_generate_messages_eus"
 .PHONY : ur10_mover/CMakeFiles/ur10_mover_generate_messages_eus.dir/all
 
 # Build rule for subdir invocation for target.
 ur10_mover/CMakeFiles/ur10_mover_generate_messages_eus.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 19
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 20
 	$(MAKE) -f CMakeFiles/Makefile2 ur10_mover/CMakeFiles/ur10_mover_generate_messages_eus.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 0
 .PHONY : ur10_mover/CMakeFiles/ur10_mover_generate_messages_eus.dir/rule
@@ -5968,7 +5938,7 @@ ur10_mover/CMakeFiles/ur10_mover_gencpp.dir/all: ur10_mover/CMakeFiles/ur10_move
 
 # Build rule for subdir invocation for target.
 ur10_mover/CMakeFiles/ur10_mover_gencpp.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 20
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 19
 	$(MAKE) -f CMakeFiles/Makefile2 ur10_mover/CMakeFiles/ur10_mover_gencpp.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 0
 .PHONY : ur10_mover/CMakeFiles/ur10_mover_gencpp.dir/rule
@@ -6036,6 +6006,33 @@ _ur10_mover_generate_messages_check_deps_TrainingDataService: ur10_mover/CMakeFi
 ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_TrainingDataService.dir/clean:
 	$(MAKE) -f ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_TrainingDataService.dir/build.make ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_TrainingDataService.dir/clean
 .PHONY : ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_TrainingDataService.dir/clean
+
+#=============================================================================
+# Target rules for target ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir
+
+# All Build rule for target.
+ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/all:
+	$(MAKE) -f ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/build.make ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/depend
+	$(MAKE) -f ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/build.make ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/user/ARobot/Ros/catkin_ws/build/CMakeFiles --progress-num= "Built target _ur10_mover_generate_messages_check_deps_StateService"
+.PHONY : ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/all
+
+# Build rule for subdir invocation for target.
+ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 0
+	$(MAKE) -f CMakeFiles/Makefile2 ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 0
+.PHONY : ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/rule
+
+# Convenience name for target.
+_ur10_mover_generate_messages_check_deps_StateService: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/rule
+
+.PHONY : _ur10_mover_generate_messages_check_deps_StateService
+
+# clean rule for target.
+ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/clean:
+	$(MAKE) -f ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/build.make ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/clean
+.PHONY : ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/clean
 
 #=============================================================================
 # Target rules for target ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_py.dir
@@ -6306,6 +6303,60 @@ controller_manager_msgs_generate_messages_lisp: ur10_mover/CMakeFiles/controller
 ur10_mover/CMakeFiles/controller_manager_msgs_generate_messages_lisp.dir/clean:
 	$(MAKE) -f ur10_mover/CMakeFiles/controller_manager_msgs_generate_messages_lisp.dir/build.make ur10_mover/CMakeFiles/controller_manager_msgs_generate_messages_lisp.dir/clean
 .PHONY : ur10_mover/CMakeFiles/controller_manager_msgs_generate_messages_lisp.dir/clean
+
+#=============================================================================
+# Target rules for target ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir
+
+# All Build rule for target.
+ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/all:
+	$(MAKE) -f ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/build.make ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/depend
+	$(MAKE) -f ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/build.make ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/user/ARobot/Ros/catkin_ws/build/CMakeFiles --progress-num= "Built target _ur10_mover_generate_messages_check_deps_SampleService"
+.PHONY : ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/all
+
+# Build rule for subdir invocation for target.
+ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 0
+	$(MAKE) -f CMakeFiles/Makefile2 ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 0
+.PHONY : ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/rule
+
+# Convenience name for target.
+_ur10_mover_generate_messages_check_deps_SampleService: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/rule
+
+.PHONY : _ur10_mover_generate_messages_check_deps_SampleService
+
+# clean rule for target.
+ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/clean:
+	$(MAKE) -f ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/build.make ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/clean
+.PHONY : ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/clean
+
+#=============================================================================
+# Target rules for target ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir
+
+# All Build rule for target.
+ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/all:
+	$(MAKE) -f ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/build.make ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/depend
+	$(MAKE) -f ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/build.make ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/user/ARobot/Ros/catkin_ws/build/CMakeFiles --progress-num= "Built target rosgraph_msgs_generate_messages_nodejs"
+.PHONY : ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/all
+
+# Build rule for subdir invocation for target.
+ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 0
+	$(MAKE) -f CMakeFiles/Makefile2 ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 0
+.PHONY : ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule
+
+# Convenience name for target.
+rosgraph_msgs_generate_messages_nodejs: ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule
+
+.PHONY : rosgraph_msgs_generate_messages_nodejs
+
+# clean rule for target.
+ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/clean:
+	$(MAKE) -f ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/build.make ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/clean
+.PHONY : ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/clean
 
 #=============================================================================
 # Target rules for target ur10_mover/CMakeFiles/roscpp_generate_messages_eus.dir
@@ -6632,60 +6683,6 @@ ur10_mover/CMakeFiles/run_tests_ur10_mover_roslaunch-check_launch.dir/clean:
 .PHONY : ur10_mover/CMakeFiles/run_tests_ur10_mover_roslaunch-check_launch.dir/clean
 
 #=============================================================================
-# Target rules for target ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir
-
-# All Build rule for target.
-ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/all:
-	$(MAKE) -f ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/build.make ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/depend
-	$(MAKE) -f ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/build.make ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/user/ARobot/Ros/catkin_ws/build/CMakeFiles --progress-num= "Built target rosgraph_msgs_generate_messages_nodejs"
-.PHONY : ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/all
-
-# Build rule for subdir invocation for target.
-ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 0
-	$(MAKE) -f CMakeFiles/Makefile2 ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 0
-.PHONY : ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule
-
-# Convenience name for target.
-rosgraph_msgs_generate_messages_nodejs: ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule
-
-.PHONY : rosgraph_msgs_generate_messages_nodejs
-
-# clean rule for target.
-ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/clean:
-	$(MAKE) -f ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/build.make ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/clean
-.PHONY : ur10_mover/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/clean
-
-#=============================================================================
-# Target rules for target ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir
-
-# All Build rule for target.
-ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/all:
-	$(MAKE) -f ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/build.make ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/depend
-	$(MAKE) -f ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/build.make ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/user/ARobot/Ros/catkin_ws/build/CMakeFiles --progress-num= "Built target _ur10_mover_generate_messages_check_deps_SampleService"
-.PHONY : ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/all
-
-# Build rule for subdir invocation for target.
-ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 0
-	$(MAKE) -f CMakeFiles/Makefile2 ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 0
-.PHONY : ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/rule
-
-# Convenience name for target.
-_ur10_mover_generate_messages_check_deps_SampleService: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/rule
-
-.PHONY : _ur10_mover_generate_messages_check_deps_SampleService
-
-# clean rule for target.
-ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/clean:
-	$(MAKE) -f ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/build.make ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/clean
-.PHONY : ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/clean
-
-#=============================================================================
 # Target rules for target ur10_mover/CMakeFiles/run_tests_ur10_mover_roslaunch-check.dir
 
 # All Build rule for target.
@@ -6750,20 +6747,22 @@ ur10_mover/CMakeFiles/ur10_mover_generate_messages_cpp.dir/all: moveit_msgs/CMak
 ur10_mover/CMakeFiles/ur10_mover_generate_messages_cpp.dir/all: moveit_msgs/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/all
 ur10_mover/CMakeFiles/ur10_mover_generate_messages_cpp.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_TrainingService.dir/all
 ur10_mover/CMakeFiles/ur10_mover_generate_messages_cpp.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_TrainingDataService.dir/all
+ur10_mover/CMakeFiles/ur10_mover_generate_messages_cpp.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/all
+ur10_mover/CMakeFiles/ur10_mover_generate_messages_cpp.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/all
 ur10_mover/CMakeFiles/ur10_mover_generate_messages_cpp.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_PlannerService.dir/all
 ur10_mover/CMakeFiles/ur10_mover_generate_messages_cpp.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_ExecutionService.dir/all
 ur10_mover/CMakeFiles/ur10_mover_generate_messages_cpp.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_GripperService.dir/all
-ur10_mover/CMakeFiles/ur10_mover_generate_messages_cpp.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/all
+ur10_mover/CMakeFiles/ur10_mover_generate_messages_cpp.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_ListOfPoses.dir/all
 ur10_mover/CMakeFiles/ur10_mover_generate_messages_cpp.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_DiscardService.dir/all
-ur10_mover/CMakeFiles/ur10_mover_generate_messages_cpp.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/all
+ur10_mover/CMakeFiles/ur10_mover_generate_messages_cpp.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_GetTrainingDataService.dir/all
 	$(MAKE) -f ur10_mover/CMakeFiles/ur10_mover_generate_messages_cpp.dir/build.make ur10_mover/CMakeFiles/ur10_mover_generate_messages_cpp.dir/depend
 	$(MAKE) -f ur10_mover/CMakeFiles/ur10_mover_generate_messages_cpp.dir/build.make ur10_mover/CMakeFiles/ur10_mover_generate_messages_cpp.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/user/ARobot/Ros/catkin_ws/build/CMakeFiles --progress-num=93,94 "Built target ur10_mover_generate_messages_cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/user/ARobot/Ros/catkin_ws/build/CMakeFiles --progress-num=92 "Built target ur10_mover_generate_messages_cpp"
 .PHONY : ur10_mover/CMakeFiles/ur10_mover_generate_messages_cpp.dir/all
 
 # Build rule for subdir invocation for target.
 ur10_mover/CMakeFiles/ur10_mover_generate_messages_cpp.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 20
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 19
 	$(MAKE) -f CMakeFiles/Makefile2 ur10_mover/CMakeFiles/ur10_mover_generate_messages_cpp.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 0
 .PHONY : ur10_mover/CMakeFiles/ur10_mover_generate_messages_cpp.dir/rule
@@ -6779,14 +6778,41 @@ ur10_mover/CMakeFiles/ur10_mover_generate_messages_cpp.dir/clean:
 .PHONY : ur10_mover/CMakeFiles/ur10_mover_generate_messages_cpp.dir/clean
 
 #=============================================================================
+# Target rules for target ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_ListOfPoses.dir
+
+# All Build rule for target.
+ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_ListOfPoses.dir/all:
+	$(MAKE) -f ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_ListOfPoses.dir/build.make ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_ListOfPoses.dir/depend
+	$(MAKE) -f ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_ListOfPoses.dir/build.make ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_ListOfPoses.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/user/ARobot/Ros/catkin_ws/build/CMakeFiles --progress-num= "Built target _ur10_mover_generate_messages_check_deps_ListOfPoses"
+.PHONY : ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_ListOfPoses.dir/all
+
+# Build rule for subdir invocation for target.
+ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_ListOfPoses.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 0
+	$(MAKE) -f CMakeFiles/Makefile2 ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_ListOfPoses.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 0
+.PHONY : ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_ListOfPoses.dir/rule
+
+# Convenience name for target.
+_ur10_mover_generate_messages_check_deps_ListOfPoses: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_ListOfPoses.dir/rule
+
+.PHONY : _ur10_mover_generate_messages_check_deps_ListOfPoses
+
+# clean rule for target.
+ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_ListOfPoses.dir/clean:
+	$(MAKE) -f ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_ListOfPoses.dir/build.make ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_ListOfPoses.dir/clean
+.PHONY : ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_ListOfPoses.dir/clean
+
+#=============================================================================
 # Target rules for target ur10_mover/CMakeFiles/ur10_mover_generate_messages.dir
 
 # All Build rule for target.
-ur10_mover/CMakeFiles/ur10_mover_generate_messages.dir/all: ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/all
 ur10_mover/CMakeFiles/ur10_mover_generate_messages.dir/all: ur10_mover/CMakeFiles/ur10_mover_generate_messages_nodejs.dir/all
 ur10_mover/CMakeFiles/ur10_mover_generate_messages.dir/all: ur10_mover/CMakeFiles/ur10_mover_generate_messages_lisp.dir/all
 ur10_mover/CMakeFiles/ur10_mover_generate_messages.dir/all: ur10_mover/CMakeFiles/ur10_mover_generate_messages_eus.dir/all
 ur10_mover/CMakeFiles/ur10_mover_generate_messages.dir/all: ur10_mover/CMakeFiles/ur10_mover_generate_messages_cpp.dir/all
+ur10_mover/CMakeFiles/ur10_mover_generate_messages.dir/all: ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/all
 	$(MAKE) -f ur10_mover/CMakeFiles/ur10_mover_generate_messages.dir/build.make ur10_mover/CMakeFiles/ur10_mover_generate_messages.dir/depend
 	$(MAKE) -f ur10_mover/CMakeFiles/ur10_mover_generate_messages.dir/build.make ur10_mover/CMakeFiles/ur10_mover_generate_messages.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/user/ARobot/Ros/catkin_ws/build/CMakeFiles --progress-num= "Built target ur10_mover_generate_messages"
@@ -6837,31 +6863,71 @@ ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_DiscardService.di
 .PHONY : ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_DiscardService.dir/clean
 
 #=============================================================================
-# Target rules for target ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir
+# Target rules for target ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir
 
 # All Build rule for target.
-ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/all:
-	$(MAKE) -f ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/build.make ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/depend
-	$(MAKE) -f ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/build.make ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/user/ARobot/Ros/catkin_ws/build/CMakeFiles --progress-num= "Built target _ur10_mover_generate_messages_check_deps_StateService"
-.PHONY : ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/all
+ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/all: ros_tcp_endpoint/CMakeFiles/std_msgs_generate_messages_py.dir/all
+ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/all: moveit_msgs/CMakeFiles/moveit_msgs_generate_messages_py.dir/all
+ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/all: moveit_msgs/CMakeFiles/sensor_msgs_generate_messages_py.dir/all
+ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/all: moveit_msgs/CMakeFiles/geometry_msgs_generate_messages_py.dir/all
+ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_TrainingService.dir/all
+ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_TrainingDataService.dir/all
+ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/all
+ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/all
+ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_PlannerService.dir/all
+ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_ExecutionService.dir/all
+ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_GripperService.dir/all
+ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_ListOfPoses.dir/all
+ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_DiscardService.dir/all
+ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/all: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_GetTrainingDataService.dir/all
+	$(MAKE) -f ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/build.make ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/depend
+	$(MAKE) -f ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/build.make ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/user/ARobot/Ros/catkin_ws/build/CMakeFiles --progress-num=98,99,100 "Built target ur10_mover_generate_messages_py"
+.PHONY : ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/all
 
 # Build rule for subdir invocation for target.
-ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/rule: cmake_check_build_system
+ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 22
+	$(MAKE) -f CMakeFiles/Makefile2 ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 0
-	$(MAKE) -f CMakeFiles/Makefile2 ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 0
-.PHONY : ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/rule
+.PHONY : ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/rule
 
 # Convenience name for target.
-_ur10_mover_generate_messages_check_deps_StateService: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/rule
+ur10_mover_generate_messages_py: ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/rule
 
-.PHONY : _ur10_mover_generate_messages_check_deps_StateService
+.PHONY : ur10_mover_generate_messages_py
 
 # clean rule for target.
-ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/clean:
-	$(MAKE) -f ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/build.make ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/clean
-.PHONY : ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_StateService.dir/clean
+ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/clean:
+	$(MAKE) -f ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/build.make ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/clean
+.PHONY : ur10_mover/CMakeFiles/ur10_mover_generate_messages_py.dir/clean
+
+#=============================================================================
+# Target rules for target ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_GetTrainingDataService.dir
+
+# All Build rule for target.
+ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_GetTrainingDataService.dir/all:
+	$(MAKE) -f ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_GetTrainingDataService.dir/build.make ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_GetTrainingDataService.dir/depend
+	$(MAKE) -f ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_GetTrainingDataService.dir/build.make ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_GetTrainingDataService.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/user/ARobot/Ros/catkin_ws/build/CMakeFiles --progress-num= "Built target _ur10_mover_generate_messages_check_deps_GetTrainingDataService"
+.PHONY : ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_GetTrainingDataService.dir/all
+
+# Build rule for subdir invocation for target.
+ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_GetTrainingDataService.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 0
+	$(MAKE) -f CMakeFiles/Makefile2 ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_GetTrainingDataService.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/ARobot/Ros/catkin_ws/build/CMakeFiles 0
+.PHONY : ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_GetTrainingDataService.dir/rule
+
+# Convenience name for target.
+_ur10_mover_generate_messages_check_deps_GetTrainingDataService: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_GetTrainingDataService.dir/rule
+
+.PHONY : _ur10_mover_generate_messages_check_deps_GetTrainingDataService
+
+# clean rule for target.
+ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_GetTrainingDataService.dir/clean:
+	$(MAKE) -f ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_GetTrainingDataService.dir/build.make ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_GetTrainingDataService.dir/clean
+.PHONY : ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_GetTrainingDataService.dir/clean
 
 #=============================================================================
 # Target rules for target ur_description/CMakeFiles/run_tests_ur_description_roslaunch-check_tests_roslaunch_test_ur20.xml.dir
