@@ -1,0 +1,12 @@
+(cl:in-package moveit_msgs-msg)
+(cl:export '(NAME-VAL
+          NAME
+          JOINT_CONSTRAINTS-VAL
+          JOINT_CONSTRAINTS
+          POSITION_CONSTRAINTS-VAL
+          POSITION_CONSTRAINTS
+          ORIENTATION_CONSTRAINTS-VAL
+          ORIENTATION_CONSTRAINTS
+          VISIBILITY_CONSTRAINTS-VAL
+          VISIBILITY_CONSTRAINTS
+))

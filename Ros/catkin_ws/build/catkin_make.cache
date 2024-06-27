@@ -1,0 +1,2 @@
+moveit_msgs:ros_tcp_endpoint:ur10_moveit_config:ur10_mover:ur_description
+-DCATKIN_DEVEL_PREFIX=/home/user/ARobot/Ros/catkin_ws/devel -DCMAKE_INSTALL_PREFIX=/home/user/ARobot/Ros/catkin_ws/install -G Unix Makefiles

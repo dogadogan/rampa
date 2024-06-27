@@ -7,11 +7,13 @@ import time
 from movement_primitives.promp import ProMP
 
 from geometry_msgs.msg import Pose
+from ur10_mover.msg import ListOfPoses
 
 from ur10_mover.srv import TrainingDataService, TrainingDataServiceRequest, TrainingDataServiceResponse
 from ur10_mover.srv import TrainingService, TrainingServiceRequest, TrainingServiceResponse
 from ur10_mover.srv import SampleService, SampleServiceRequest, SampleServiceResponse
 from ur10_mover.srv import PlannerService, PlannerServiceRequest, PlannerServiceResponse
+from ur10_mover.srv import GetTrainingDataService, GetTrainingDataServiceRequest, GetTrainingDataServiceResponse
 
 rospy.init_node('ur10_ProMP_server')
 rospy.sleep(2)
@@ -23,6 +25,7 @@ p = ProMP(n_dims=n_dims,n_weights_per_dim=20)
 
 def save_trajectory_to_data(req):
     rospy.loginfo("Starting")
+    rospy.loginfo(req.pose_list)
     response = TrainingDataServiceResponse()
     rospy.loginfo("Received training data")
 
@@ -59,8 +62,6 @@ def convert_data_file_to_list(input_file):
     for point in saved_trajectory:
         point= [float(i) for i in point[1:-2].split(',')]
         traj.append(point)
-    rospy.loginfo("traj")    
-    rospy.loginfo(traj)
     return traj
 
 def interpolate_points(points, total_points):
@@ -79,7 +80,6 @@ def interpolate_points(points, total_points):
             ratio = (j + 1) / (num_points + 1)  # Calculate ratio between start and end points
             interpolated_point = (1 - ratio) * start_point + ratio * end_point  # Linear interpolation formula
             interpolated_points.append(interpolated_point)
-    rospy.loginfo(interpolated_points)
     return np.array(interpolated_points)
 
 def start_training(req):
@@ -137,14 +137,63 @@ def sample_trajectory(req):
         pose.position.x, pose.position.y, pose.position.z = point[0], point[1], point[2]
         response_trajectory.append(pose)
     response.sampled_trajectory = response_trajectory
-    rospy.loginfo(len(response_trajectory))
+
+    rospy.loginfo("Returned sampled trajectory with length " + str(len(response_trajectory)))
+
+    file_path = os.path.join(os.path.dirname(__file__), 'sample.txt')
+    with open(file_path, 'w+') as file:
+        for point in trajectory_p[0]:
+            file.write(str(point) + '\n')
+    return response
+
+def delete_training_data(req):
+    rospy.loginfo("Starting")
+    response = TrainingServiceResponse()
+    rospy.loginfo("Received deletion trigger.")
+
+    directory_name = os.path.join(os.path.dirname(__file__), 'data')
+    for filename in os.listdir(directory_name):
+        file_path = os.path.join(directory_name, filename)
+        os.remove(file_path)
+        print("Deleted: " + file_path)
+        response.output_msg = "success"
     return response
 
 
+def send_training_data(req):
+    
+    rospy.loginfo("Starting")
+    response = GetTrainingDataServiceResponse()
+    rospy.loginfo("Training data requested.")
+    
+    data = read_data_files()
+
+    for trajectory in data:
+        listOfPoses = ListOfPoses()
+        for pose in trajectory:
+            currPose = Pose()
+            #ros to unity conversion
+            currPose.position.x = -1 * pose[1]
+            currPose.position.y = pose[2]
+            currPose.position.z = pose[0]
+            listOfPoses.pose_list.append(currPose)
+        response.trajectoryList.append(listOfPoses)
+    
+    return response
+
+    
+
+
 def proMP_server():
+    
     rospy.Service("save_training_data", TrainingDataService, save_trajectory_to_data)
     rospy.Service("start_training", TrainingService, start_training)
     rospy.Service("sample",SampleService,sample_trajectory)
+    
+    rospy.Service("delete_training_data", TrainingService, delete_training_data)
+
+    rospy.Service("get_training_data", GetTrainingDataService, send_training_data)
+
     rospy.spin()
 
 if __name__ == "__main__":

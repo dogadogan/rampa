@@ -1,0 +1,170 @@
+; Auto-generated. Do not edit!
+
+
+(cl:in-package moveit_msgs-msg)
+
+
+;//! \htmlinclude PlannerParams.msg.html
+
+(cl:defclass <PlannerParams> (roslisp-msg-protocol:ros-message)
+  ((keys
+    :reader keys
+    :initarg :keys
+    :type (cl:vector cl:string)
+   :initform (cl:make-array 0 :element-type 'cl:string :initial-element ""))
+   (values
+    :reader values
+    :initarg :values
+    :type (cl:vector cl:string)
+   :initform (cl:make-array 0 :element-type 'cl:string :initial-element ""))
+   (descriptions
+    :reader descriptions
+    :initarg :descriptions
+    :type (cl:vector cl:string)
+   :initform (cl:make-array 0 :element-type 'cl:string :initial-element "")))
+)
+
+(cl:defclass PlannerParams (<PlannerParams>)
+  ())
+
+(cl:defmethod cl:initialize-instance :after ((m <PlannerParams>) cl:&rest args)
+  (cl:declare (cl:ignorable args))
+  (cl:unless (cl:typep m 'PlannerParams)
+    (roslisp-msg-protocol:msg-deprecation-warning "using old message class name moveit_msgs-msg:<PlannerParams> is deprecated: use moveit_msgs-msg:PlannerParams instead.")))
+
+(cl:ensure-generic-function 'keys-val :lambda-list '(m))
+(cl:defmethod keys-val ((m <PlannerParams>))
+  (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader moveit_msgs-msg:keys-val is deprecated.  Use moveit_msgs-msg:keys instead.")
+  (keys m))
+
+(cl:ensure-generic-function 'values-val :lambda-list '(m))
+(cl:defmethod values-val ((m <PlannerParams>))
+  (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader moveit_msgs-msg:values-val is deprecated.  Use moveit_msgs-msg:values instead.")
+  (values m))
+
+(cl:ensure-generic-function 'descriptions-val :lambda-list '(m))
+(cl:defmethod descriptions-val ((m <PlannerParams>))
+  (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader moveit_msgs-msg:descriptions-val is deprecated.  Use moveit_msgs-msg:descriptions instead.")
+  (descriptions m))
+(cl:defmethod roslisp-msg-protocol:serialize ((msg <PlannerParams>) ostream)
+  "Serializes a message object of type '<PlannerParams>"
+  (cl:let ((__ros_arr_len (cl:length (cl:slot-value msg 'keys))))
+    (cl:write-byte (cl:ldb (cl:byte 8 0) __ros_arr_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 8) __ros_arr_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 16) __ros_arr_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 24) __ros_arr_len) ostream))
+  (cl:map cl:nil #'(cl:lambda (ele) (cl:let ((__ros_str_len (cl:length ele)))
+    (cl:write-byte (cl:ldb (cl:byte 8 0) __ros_str_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 8) __ros_str_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 16) __ros_str_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 24) __ros_str_len) ostream))
+  (cl:map cl:nil #'(cl:lambda (c) (cl:write-byte (cl:char-code c) ostream)) ele))
+   (cl:slot-value msg 'keys))
+  (cl:let ((__ros_arr_len (cl:length (cl:slot-value msg 'values))))
+    (cl:write-byte (cl:ldb (cl:byte 8 0) __ros_arr_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 8) __ros_arr_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 16) __ros_arr_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 24) __ros_arr_len) ostream))
+  (cl:map cl:nil #'(cl:lambda (ele) (cl:let ((__ros_str_len (cl:length ele)))
+    (cl:write-byte (cl:ldb (cl:byte 8 0) __ros_str_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 8) __ros_str_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 16) __ros_str_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 24) __ros_str_len) ostream))
+  (cl:map cl:nil #'(cl:lambda (c) (cl:write-byte (cl:char-code c) ostream)) ele))
+   (cl:slot-value msg 'values))
+  (cl:let ((__ros_arr_len (cl:length (cl:slot-value msg 'descriptions))))
+    (cl:write-byte (cl:ldb (cl:byte 8 0) __ros_arr_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 8) __ros_arr_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 16) __ros_arr_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 24) __ros_arr_len) ostream))
+  (cl:map cl:nil #'(cl:lambda (ele) (cl:let ((__ros_str_len (cl:length ele)))
+    (cl:write-byte (cl:ldb (cl:byte 8 0) __ros_str_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 8) __ros_str_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 16) __ros_str_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 24) __ros_str_len) ostream))
+  (cl:map cl:nil #'(cl:lambda (c) (cl:write-byte (cl:char-code c) ostream)) ele))
+   (cl:slot-value msg 'descriptions))
+)
+(cl:defmethod roslisp-msg-protocol:deserialize ((msg <PlannerParams>) istream)
+  "Deserializes a message object of type '<PlannerParams>"
+  (cl:let ((__ros_arr_len 0))
+    (cl:setf (cl:ldb (cl:byte 8 0) __ros_arr_len) (cl:read-byte istream))
+    (cl:setf (cl:ldb (cl:byte 8 8) __ros_arr_len) (cl:read-byte istream))
+    (cl:setf (cl:ldb (cl:byte 8 16) __ros_arr_len) (cl:read-byte istream))
+    (cl:setf (cl:ldb (cl:byte 8 24) __ros_arr_len) (cl:read-byte istream))
+  (cl:setf (cl:slot-value msg 'keys) (cl:make-array __ros_arr_len))
+  (cl:let ((vals (cl:slot-value msg 'keys)))
+    (cl:dotimes (i __ros_arr_len)
+    (cl:let ((__ros_str_len 0))
+      (cl:setf (cl:ldb (cl:byte 8 0) __ros_str_len) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 8) __ros_str_len) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 16) __ros_str_len) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 24) __ros_str_len) (cl:read-byte istream))
+      (cl:setf (cl:aref vals i) (cl:make-string __ros_str_len))
+      (cl:dotimes (__ros_str_idx __ros_str_len msg)
+        (cl:setf (cl:char (cl:aref vals i) __ros_str_idx) (cl:code-char (cl:read-byte istream))))))))
+  (cl:let ((__ros_arr_len 0))
+    (cl:setf (cl:ldb (cl:byte 8 0) __ros_arr_len) (cl:read-byte istream))
+    (cl:setf (cl:ldb (cl:byte 8 8) __ros_arr_len) (cl:read-byte istream))
+    (cl:setf (cl:ldb (cl:byte 8 16) __ros_arr_len) (cl:read-byte istream))
+    (cl:setf (cl:ldb (cl:byte 8 24) __ros_arr_len) (cl:read-byte istream))
+  (cl:setf (cl:slot-value msg 'values) (cl:make-array __ros_arr_len))
+  (cl:let ((vals (cl:slot-value msg 'values)))
+    (cl:dotimes (i __ros_arr_len)
+    (cl:let ((__ros_str_len 0))
+      (cl:setf (cl:ldb (cl:byte 8 0) __ros_str_len) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 8) __ros_str_len) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 16) __ros_str_len) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 24) __ros_str_len) (cl:read-byte istream))
+      (cl:setf (cl:aref vals i) (cl:make-string __ros_str_len))
+      (cl:dotimes (__ros_str_idx __ros_str_len msg)
+        (cl:setf (cl:char (cl:aref vals i) __ros_str_idx) (cl:code-char (cl:read-byte istream))))))))
+  (cl:let ((__ros_arr_len 0))
+    (cl:setf (cl:ldb (cl:byte 8 0) __ros_arr_len) (cl:read-byte istream))
+    (cl:setf (cl:ldb (cl:byte 8 8) __ros_arr_len) (cl:read-byte istream))
+    (cl:setf (cl:ldb (cl:byte 8 16) __ros_arr_len) (cl:read-byte istream))
+    (cl:setf (cl:ldb (cl:byte 8 24) __ros_arr_len) (cl:read-byte istream))
+  (cl:setf (cl:slot-value msg 'descriptions) (cl:make-array __ros_arr_len))
+  (cl:let ((vals (cl:slot-value msg 'descriptions)))
+    (cl:dotimes (i __ros_arr_len)
+    (cl:let ((__ros_str_len 0))
+      (cl:setf (cl:ldb (cl:byte 8 0) __ros_str_len) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 8) __ros_str_len) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 16) __ros_str_len) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 24) __ros_str_len) (cl:read-byte istream))
+      (cl:setf (cl:aref vals i) (cl:make-string __ros_str_len))
+      (cl:dotimes (__ros_str_idx __ros_str_len msg)
+        (cl:setf (cl:char (cl:aref vals i) __ros_str_idx) (cl:code-char (cl:read-byte istream))))))))
+  msg
+)
+(cl:defmethod roslisp-msg-protocol:ros-datatype ((msg (cl:eql '<PlannerParams>)))
+  "Returns string type for a message object of type '<PlannerParams>"
+  "moveit_msgs/PlannerParams")
+(cl:defmethod roslisp-msg-protocol:ros-datatype ((msg (cl:eql 'PlannerParams)))
+  "Returns string type for a message object of type 'PlannerParams"
+  "moveit_msgs/PlannerParams")
+(cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql '<PlannerParams>)))
+  "Returns md5sum for a message object of type '<PlannerParams>"
+  "cebdf4927996b9026bcf59a160d64145")
+(cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql 'PlannerParams)))
+  "Returns md5sum for a message object of type 'PlannerParams"
+  "cebdf4927996b9026bcf59a160d64145")
+(cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql '<PlannerParams>)))
+  "Returns full string definition for message of type '<PlannerParams>"
+  (cl:format cl:nil "# parameter names (same size as values)~%string[] keys~%~%# parameter values (same size as keys)~%string[] values~%~%# parameter description (can be empty)~%string[] descriptions~%~%~%"))
+(cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql 'PlannerParams)))
+  "Returns full string definition for message of type 'PlannerParams"
+  (cl:format cl:nil "# parameter names (same size as values)~%string[] keys~%~%# parameter values (same size as keys)~%string[] values~%~%# parameter description (can be empty)~%string[] descriptions~%~%~%"))
+(cl:defmethod roslisp-msg-protocol:serialization-length ((msg <PlannerParams>))
+  (cl:+ 0
+     4 (cl:reduce #'cl:+ (cl:slot-value msg 'keys) :key #'(cl:lambda (ele) (cl:declare (cl:ignorable ele)) (cl:+ 4 (cl:length ele))))
+     4 (cl:reduce #'cl:+ (cl:slot-value msg 'values) :key #'(cl:lambda (ele) (cl:declare (cl:ignorable ele)) (cl:+ 4 (cl:length ele))))
+     4 (cl:reduce #'cl:+ (cl:slot-value msg 'descriptions) :key #'(cl:lambda (ele) (cl:declare (cl:ignorable ele)) (cl:+ 4 (cl:length ele))))
+))
+(cl:defmethod roslisp-msg-protocol:ros-message-to-list ((msg <PlannerParams>))
+  "Converts a ROS message object to a list"
+  (cl:list 'PlannerParams
+    (cl:cons ':keys (keys msg))
+    (cl:cons ':values (values msg))
+    (cl:cons ':descriptions (descriptions msg))
+))
