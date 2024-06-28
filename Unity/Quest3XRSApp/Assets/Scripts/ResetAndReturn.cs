@@ -4,14 +4,17 @@ using Unity.Robotics.ROSTCPConnector;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEditor;
 
 public class ResetandReturn : MonoBehaviour
 {
-    public Toggle isRealTime;
+    public Toggle isRealTime; // used in returning from TrajCaptureMenu to MainMenu
     public GameObject MainMenu;
     public GameObject TrajCaptureMenu;
-
+    public GameObject TestModelMenu;
     public GameObject MLTrainingMenu;
+
+    public TrainAndTest TrainAndTest;
 
     // public PlanRequestGeneratorRealTime planRequestGeneratorRealTime;
     public TrajectoryPlanner trajectoryPlanner;
@@ -27,6 +30,7 @@ public class ResetandReturn : MonoBehaviour
     public enum Mode {
         TrajCapturetoMainMenu,
         MLTrainingtoMainMenu,
+        TestModelMenuToMainMenu,
         JointReset
     }
     public Mode mode;
@@ -42,38 +46,40 @@ public class ResetandReturn : MonoBehaviour
                 }
                 goToMainMenuFunc();
                 setSliders();
-
                 break;
+            
             case Mode.MLTrainingtoMainMenu:
                 
                 goToMainMenuFunc();
 
-                // what happens if a training model is running?
+                // TODO: what happens if a training model is running?
 
                 break;
+            
+            case Mode.TestModelMenuToMainMenu:
 
+                TrainAndTest.SetExecutionPermissionOnRealRobot(false); // disable the button for future menu uses
+                goToMainMenuFunc();
+                break;
+                
             case Mode.JointReset:
 
                 setSliders();
                 break;
         }
     }
-
-
-
-
+    
     public void goToMainMenuFunc()
     {
         MainMenu.SetActive(true);
         TrajCaptureMenu.SetActive(false);
         MLTrainingMenu.SetActive(false);
+        TestModelMenu.SetActive(false);
     }
 
     public void setSliders() {
         HelperFunctions.SetSliders(_resetCondition);
     }
-
-
-
+    
     
 }

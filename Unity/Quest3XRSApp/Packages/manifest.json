@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "com.meta.xr.depthapi": "file:/Users/serdarbahar/Unity-DepthAPI/Packages/com.meta.xr.depthapi",
     "com.meta.xr.sdk.all": "62.0.0",
     "com.meta.xr.sdk.interaction.ovr.samples": "62.0.0",
     "com.unity.collab-proxy": "2.3.1",

@@ -1,13 +1,5 @@
 {
   "dependencies": {
-    "com.meta.xr.depthapi": {
-      "version": "file:/Users/serdarbahar/Unity-DepthAPI/Packages/com.meta.xr.depthapi",
-      "depth": 0,
-      "source": "local",
-      "dependencies": {
-        "com.unity.xr.oculus": "4.2.0"
-      }
-    },
     "com.meta.xr.mrutilitykit": {
       "version": "62.0.0",
       "depth": 1,

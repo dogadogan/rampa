@@ -5,6 +5,7 @@ using RosMessageTypes.Ur10Mover;
 using Unity.Robotics.ROSTCPConnector;
 using RosMessageTypes.Geometry;
 using System.Collections;
+using JetBrains.Annotations;
 using TMPro;
 using UnityEngine.UI;
 
@@ -25,19 +26,19 @@ public class TrainAndTest : MonoBehaviour
     public TrajectoryPlanner trajectoryPlanner;
     public PrevRecordedTrajectories prevRecordedTrajectories;
 
-    public Button testButton;   
+    public Button testButtoninMainMenu;   
 
     private enum State {
         Untrained,
         Training,
         Trained
     }
-
     private State state;
 
     public TMP_Text loadingText;
 
-    public List<Button> buttonsInMainMenu;
+    public List<Button> TestMenu_ButtonsList;
+    public Button TestMenu_ExecuteOnRealRobotButton;
     
     // Start is called before the first frame update
     void Start()
@@ -45,11 +46,9 @@ public class TrainAndTest : MonoBehaviour
         
         state = State.Untrained;
 
-        testButton.interactable = false;
+        testButtoninMainMenu.interactable = false;
 
         loadingText.text = "no training data";
-        
-
         
 
         m_Ros = ROSConnection.GetOrCreateInstance();
@@ -93,7 +92,7 @@ public class TrainAndTest : MonoBehaviour
     public void TriggerTrainingResponse(TrainingServiceResponse response)
     {
         state = State.Trained;
-        testButton.interactable = true;
+        testButtoninMainMenu.interactable = true;
         UpdateText();
     }
 
@@ -101,7 +100,10 @@ public class TrainAndTest : MonoBehaviour
     public void TestModel()
     {
         // make buttons in main menu uninteractable
-        SetInteractable(false);
+        SetAllButtonsInteractable(false);
+        // they are made interactable after the request is completed in PlanRequesstGeneraterWithPoses - ExecuteTrajectories
+        
+        
 
         var request = new SampleServiceRequest();
         request.start_point = HelperFunctions.GeneratePoseMsg(source.transform.position);
@@ -130,7 +132,7 @@ public class TrainAndTest : MonoBehaviour
 
     public void TriggerDeleteResponse(TrainingServiceResponse response) {
         state = State.Untrained;
-        testButton.interactable = false;
+        testButtoninMainMenu.interactable = false;
         UpdateText();
     }
 
@@ -179,12 +181,17 @@ public class TrainAndTest : MonoBehaviour
         }
     }
 
-    public void SetInteractable(bool interactable)
+    public void SetAllButtonsInteractable(bool interactable)
     {
-        foreach (var button in buttonsInMainMenu)
+        foreach (var button in TestMenu_ButtonsList)
         {
             button.interactable = interactable;
         }
+    }
+
+    public void SetExecutionPermissionOnRealRobot(bool permission)
+    {
+        TestMenu_ExecuteOnRealRobotButton.interactable = permission;
     }
     
 }

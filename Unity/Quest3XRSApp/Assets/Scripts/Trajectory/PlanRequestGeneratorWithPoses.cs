@@ -109,7 +109,7 @@ public class PlanRequestGeneratorWithPoses : MonoBehaviour
             
         }
         if (fromTraining) {
-            drawService.trainAndTest.SetInteractable(true);
+            drawService.trainAndTest.SetAllButtonsInteractable(true);
         }
         else {
             drawService.UpdateDrawingState();
