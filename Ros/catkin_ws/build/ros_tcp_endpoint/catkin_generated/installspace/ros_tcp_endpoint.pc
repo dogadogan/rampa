@@ -1,0 +1,8 @@
+prefix=/home/user/ARobot/Ros/catkin_ws/install
+
+Name: ros_tcp_endpoint
+Description: Description of ros_tcp_endpoint
+Version: 0.7.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: message_runtime

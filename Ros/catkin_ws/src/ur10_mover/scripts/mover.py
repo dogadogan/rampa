@@ -3,7 +3,6 @@
 from __future__ import print_function
 
 
-
 import rospy
 
 import sys
@@ -13,7 +12,7 @@ import numpy as np
 import os
 
 from sensor_msgs.msg import JointState
-from moveit_msgs.msg import RobotState
+from moveit_msgs.msg import RobotState,RobotTrajectory
 from geometry_msgs.msg import Pose
 
 from ur10_mover.srv import PlannerService, PlannerServiceRequest, PlannerServiceResponse
@@ -21,12 +20,8 @@ from ur10_mover.srv import StateService, StateServiceRequest, StateServiceRespon
 from ur10_mover.srv import ExecutionService, ExecutionServiceRequest, ExecutionServiceResponse
 from ur10_mover.srv import DiscardService, DiscardServiceRequest, DiscardServiceResponse
 
-from tf2_msgs.msg import TFMessage
 from sensor_msgs.msg import JointState
 from geometry_msgs.msg import Pose, WrenchStamped
-from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
-from control_msgs.msg import FollowJointTrajectoryActionGoal
-from actionlib_msgs.msg import GoalStatusArray
 from ur10_interface import UR10
 
 joint_names = ['shoulder_pan_joint', 'shoulder_lift_joint', 'elbow_joint', 'wrist_1_joint', 'wrist_2_joint', 'wrist_3_joint']
@@ -84,30 +79,21 @@ def execute_joint_angles(joint_angles,group):
 
 def plan_pick_and_place(req):
     rospy.loginfo(rospy.get_caller_id() + "Plan Requested:\n")
-    rospy.loginfo(req)
-    rospy.loginfo("Request is over")
 
     response = PlannerServiceResponse()
-    jp = robot.get_joint_position()
-    rospy.loginfo("Current position")
-    rospy.loginfo(jp)
-    
-
-    group_name = "manipulator"
-    move_group = moveit_commander.MoveGroupCommander(group_name)
+    response.request_type = req.request_type
 
     rospy.loginfo("Recieved pose count is:")
     rospy.loginfo(len(req.pose_list))
+    rospy.loginfo(req.pose_list)
 
     current_pose = move_group.get_current_pose().pose
-    rospy.loginfo("current_pose")
-    rospy.loginfo(current_pose)
 
     current_orientation = current_pose.orientation
     down_orientation = Pose().orientation
     down_orientation.x, down_orientation.y, down_orientation.z, down_orientation.w = 1,0,0,0
 
-    previous_ending_joint_angles = robot.get_joint_position()
+    previous_ending_joint_angles = req.joints_input #robot.get_joint_position()
     for pose in req.pose_list:
         pose.orientation = down_orientation
         trajectory = plan_trajectory(move_group,pose,previous_ending_joint_angles) 
@@ -120,8 +106,72 @@ def plan_pick_and_place(req):
             return response
         previous_ending_joint_angles = trajectory.joint_trajectory.points[-1].positions
         response.trajectories.append(trajectory)
+
     move_group.clear_pose_targets()
     save_trajectory(response.trajectories)
+    #rospy.loginfo(response.trajectories)
+    response.pose_list = req.pose_list
+
+    return response
+
+def convert_data_file_to_list(input_file):
+    traj = []
+    saved_trajectory = input_file.readlines()
+    input_file.close()
+    for point in saved_trajectory:
+        point= [float(i) for i in point[1:-2].split(',')]
+        traj.append(point)
+    rospy.loginfo("traj")    
+    rospy.loginfo(traj)
+    return traj
+
+def plan_pick_and_place2(req):
+
+    rospy.loginfo(rospy.get_caller_id() + "Plan Requested:\n")
+
+    response = PlannerServiceResponse()
+    response.request_type = req.request_type
+
+    rospy.loginfo("Recieved pose count is:")
+    rospy.loginfo(len(req.pose_list))
+    rospy.loginfo(req.pose_list)
+
+    current_pose = move_group.get_current_pose().pose
+
+
+
+    file_path = os.path.join(os.path.dirname(__file__), 'sample.txt')
+    with open(file_path, 'r') as input_file:
+        pose_list = convert_data_file_to_list(input_file)
+        
+
+    current_orientation = current_pose.orientation
+    down_orientation = Pose().orientation
+    down_orientation.x, down_orientation.y, down_orientation.z, down_orientation.w = 1,0,0,0
+
+    previous_ending_joint_angles = req.joints_input #robot.get_joint_position()
+
+    rospy.loginfo(req.joints_input)
+
+    for pose_xyz in pose_list:
+        pose = Pose()
+        pose.orientation = down_orientation
+        pose.position.x, pose.position.y, pose.position.z = pose_xyz[0] , pose_xyz[1], pose_xyz[2]
+        trajectory = plan_trajectory(move_group,pose,previous_ending_joint_angles) 
+        if not trajectory.joint_trajectory.points:
+            rospy.logerr("AN ERROR OCCURED WHILE PLANNING!")
+            rospy.logerr(pose)
+            response.output_msg = "Timeout"
+            if len(response.trajectories) > 0:
+                save_trajectory(response.trajectories)
+            return response
+        previous_ending_joint_angles = trajectory.joint_trajectory.points[-1].positions
+        response.trajectories.append(trajectory)
+
+    move_group.clear_pose_targets()
+    save_trajectory(response.trajectories)
+    #rospy.loginfo(response.trajectories)
+    response.pose_list = pose_list
 
     return response
 
@@ -158,6 +208,7 @@ def execute_on_real_robot(req):
     response = ExecutionServiceResponse()
     input_file = open("trajectory.txt", 'r')
     saved_trajectory = input_file.readlines()
+    
     traj = []
     rospy.loginfo("Executing trajectory with " + str(len(saved_trajectory)) +" intermediate states.")
     for state in saved_trajectory:
@@ -165,8 +216,11 @@ def execute_on_real_robot(req):
         #state = [state[i] for i in joint_order]
         traj.append(state)
     input_file.close()
-    rospy.loginfo("Trajectory execution request is sent to driver.")
-    robot.set_joint_positions(traj)
+    
+    # TODO move_group needs another format input to run on simulation
+    
+    #rospy.loginfo("Trajectory execution request is sent to driver.")
+    #robot.set_joint_positions(traj)
     return response
 
 def moveit_server():
@@ -183,7 +237,11 @@ def moveit_server():
 
 rospy.init_node('ur10_mover_server')
 robot = UR10()
+group_name = "manipulator"
+move_group = moveit_commander.MoveGroupCommander(group_name)
+
 rospy.sleep(2)
+
 
 if __name__ == "__main__":
     moveit_server()

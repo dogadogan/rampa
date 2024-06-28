@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/user/ARobot/Ros/catkin_ws/install/setup.sh
