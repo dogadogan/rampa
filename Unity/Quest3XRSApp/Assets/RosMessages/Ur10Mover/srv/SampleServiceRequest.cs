@@ -14,21 +14,18 @@ namespace RosMessageTypes.Ur10Mover
         public override string RosMessageName => k_RosMessageName;
 
         public string input_msg;
-        public Geometry.PoseMsg start_point;
-        public Geometry.PoseMsg end_point;
+        public Geometry.PoseMsg[] condition_poses;
 
         public SampleServiceRequest()
         {
             this.input_msg = "";
-            this.start_point = new Geometry.PoseMsg();
-            this.end_point = new Geometry.PoseMsg();
+            this.condition_poses = new Geometry.PoseMsg[0];
         }
 
-        public SampleServiceRequest(string input_msg, Geometry.PoseMsg start_point, Geometry.PoseMsg end_point)
+        public SampleServiceRequest(string input_msg, Geometry.PoseMsg[] condition_poses)
         {
             this.input_msg = input_msg;
-            this.start_point = start_point;
-            this.end_point = end_point;
+            this.condition_poses = condition_poses;
         }
 
         public static SampleServiceRequest Deserialize(MessageDeserializer deserializer) => new SampleServiceRequest(deserializer);
@@ -36,23 +33,21 @@ namespace RosMessageTypes.Ur10Mover
         private SampleServiceRequest(MessageDeserializer deserializer)
         {
             deserializer.Read(out this.input_msg);
-            this.start_point = Geometry.PoseMsg.Deserialize(deserializer);
-            this.end_point = Geometry.PoseMsg.Deserialize(deserializer);
+            deserializer.Read(out this.condition_poses, Geometry.PoseMsg.Deserialize, deserializer.ReadLength());
         }
 
         public override void SerializeTo(MessageSerializer serializer)
         {
             serializer.Write(this.input_msg);
-            serializer.Write(this.start_point);
-            serializer.Write(this.end_point);
+            serializer.WriteLength(this.condition_poses);
+            serializer.Write(this.condition_poses);
         }
 
         public override string ToString()
         {
             return "SampleServiceRequest: " +
             "\ninput_msg: " + input_msg.ToString() +
-            "\nstart_point: " + start_point.ToString() +
-            "\nend_point: " + end_point.ToString();
+            "\ncondition_poses: " + System.String.Join(", ", condition_poses.ToList());
         }
 
 #if UNITY_EDITOR

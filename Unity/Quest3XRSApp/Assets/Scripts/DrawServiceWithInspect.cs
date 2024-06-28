@@ -187,6 +187,7 @@ public class DrawServiceWithInspect : MonoBehaviour
         lineRenderer.positionCount = 0;
 
         StopAllCoroutines();
+        targetPoints.Clear();
 
 
         // set the buttons to be non-interactable in the initial state
