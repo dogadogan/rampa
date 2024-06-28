@@ -9,12 +9,11 @@ import struct
 import geometry_msgs.msg
 
 class SampleServiceRequest(genpy.Message):
-  _md5sum = "ec27827d7596622107b85c17b74da906"
+  _md5sum = "993774274d001bbccdbd64f2063ef909"
   _type = "ur10_mover/SampleServiceRequest"
   _has_header = False  # flag to mark the presence of a Header object
   _full_text = """string input_msg
-geometry_msgs/Pose start_point
-geometry_msgs/Pose end_point
+geometry_msgs/Pose[] condition_poses
 
 ================================================================================
 MSG: geometry_msgs/Pose
@@ -38,8 +37,8 @@ float64 y
 float64 z
 float64 w
 """
-  __slots__ = ['input_msg','start_point','end_point']
-  _slot_types = ['string','geometry_msgs/Pose','geometry_msgs/Pose']
+  __slots__ = ['input_msg','condition_poses']
+  _slot_types = ['string','geometry_msgs/Pose[]']
 
   def __init__(self, *args, **kwds):
     """
@@ -49,7 +48,7 @@ float64 w
     changes.  You cannot mix in-order arguments and keyword arguments.
 
     The available fields are:
-       input_msg,start_point,end_point
+       input_msg,condition_poses
 
     :param args: complete set of field values, in .msg order
     :param kwds: use keyword arguments corresponding to message field names
@@ -60,14 +59,11 @@ float64 w
       # message fields cannot be None, assign default values for those that are
       if self.input_msg is None:
         self.input_msg = ''
-      if self.start_point is None:
-        self.start_point = geometry_msgs.msg.Pose()
-      if self.end_point is None:
-        self.end_point = geometry_msgs.msg.Pose()
+      if self.condition_poses is None:
+        self.condition_poses = []
     else:
       self.input_msg = ''
-      self.start_point = geometry_msgs.msg.Pose()
-      self.end_point = geometry_msgs.msg.Pose()
+      self.condition_poses = []
 
   def _get_types(self):
     """
@@ -87,8 +83,15 @@ float64 w
         _x = _x.encode('utf-8')
         length = len(_x)
       buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-      _x = self
-      buff.write(_get_struct_14d().pack(_x.start_point.position.x, _x.start_point.position.y, _x.start_point.position.z, _x.start_point.orientation.x, _x.start_point.orientation.y, _x.start_point.orientation.z, _x.start_point.orientation.w, _x.end_point.position.x, _x.end_point.position.y, _x.end_point.position.z, _x.end_point.orientation.x, _x.end_point.orientation.y, _x.end_point.orientation.z, _x.end_point.orientation.w))
+      length = len(self.condition_poses)
+      buff.write(_struct_I.pack(length))
+      for val1 in self.condition_poses:
+        _v1 = val1.position
+        _x = _v1
+        buff.write(_get_struct_3d().pack(_x.x, _x.y, _x.z))
+        _v2 = val1.orientation
+        _x = _v2
+        buff.write(_get_struct_4d().pack(_x.x, _x.y, _x.z, _x.w))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -100,10 +103,8 @@ float64 w
     if python3:
       codecs.lookup_error("rosmsg").msg_type = self._type
     try:
-      if self.start_point is None:
-        self.start_point = geometry_msgs.msg.Pose()
-      if self.end_point is None:
-        self.end_point = geometry_msgs.msg.Pose()
+      if self.condition_poses is None:
+        self.condition_poses = None
       end = 0
       start = end
       end += 4
@@ -114,10 +115,23 @@ float64 w
         self.input_msg = str[start:end].decode('utf-8', 'rosmsg')
       else:
         self.input_msg = str[start:end]
-      _x = self
       start = end
-      end += 112
-      (_x.start_point.position.x, _x.start_point.position.y, _x.start_point.position.z, _x.start_point.orientation.x, _x.start_point.orientation.y, _x.start_point.orientation.z, _x.start_point.orientation.w, _x.end_point.position.x, _x.end_point.position.y, _x.end_point.position.z, _x.end_point.orientation.x, _x.end_point.orientation.y, _x.end_point.orientation.z, _x.end_point.orientation.w,) = _get_struct_14d().unpack(str[start:end])
+      end += 4
+      (length,) = _struct_I.unpack(str[start:end])
+      self.condition_poses = []
+      for i in range(0, length):
+        val1 = geometry_msgs.msg.Pose()
+        _v3 = val1.position
+        _x = _v3
+        start = end
+        end += 24
+        (_x.x, _x.y, _x.z,) = _get_struct_3d().unpack(str[start:end])
+        _v4 = val1.orientation
+        _x = _v4
+        start = end
+        end += 32
+        (_x.x, _x.y, _x.z, _x.w,) = _get_struct_4d().unpack(str[start:end])
+        self.condition_poses.append(val1)
       return self
     except struct.error as e:
       raise genpy.DeserializationError(e)  # most likely buffer underfill
@@ -136,8 +150,15 @@ float64 w
         _x = _x.encode('utf-8')
         length = len(_x)
       buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-      _x = self
-      buff.write(_get_struct_14d().pack(_x.start_point.position.x, _x.start_point.position.y, _x.start_point.position.z, _x.start_point.orientation.x, _x.start_point.orientation.y, _x.start_point.orientation.z, _x.start_point.orientation.w, _x.end_point.position.x, _x.end_point.position.y, _x.end_point.position.z, _x.end_point.orientation.x, _x.end_point.orientation.y, _x.end_point.orientation.z, _x.end_point.orientation.w))
+      length = len(self.condition_poses)
+      buff.write(_struct_I.pack(length))
+      for val1 in self.condition_poses:
+        _v5 = val1.position
+        _x = _v5
+        buff.write(_get_struct_3d().pack(_x.x, _x.y, _x.z))
+        _v6 = val1.orientation
+        _x = _v6
+        buff.write(_get_struct_4d().pack(_x.x, _x.y, _x.z, _x.w))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -150,10 +171,8 @@ float64 w
     if python3:
       codecs.lookup_error("rosmsg").msg_type = self._type
     try:
-      if self.start_point is None:
-        self.start_point = geometry_msgs.msg.Pose()
-      if self.end_point is None:
-        self.end_point = geometry_msgs.msg.Pose()
+      if self.condition_poses is None:
+        self.condition_poses = None
       end = 0
       start = end
       end += 4
@@ -164,10 +183,23 @@ float64 w
         self.input_msg = str[start:end].decode('utf-8', 'rosmsg')
       else:
         self.input_msg = str[start:end]
-      _x = self
       start = end
-      end += 112
-      (_x.start_point.position.x, _x.start_point.position.y, _x.start_point.position.z, _x.start_point.orientation.x, _x.start_point.orientation.y, _x.start_point.orientation.z, _x.start_point.orientation.w, _x.end_point.position.x, _x.end_point.position.y, _x.end_point.position.z, _x.end_point.orientation.x, _x.end_point.orientation.y, _x.end_point.orientation.z, _x.end_point.orientation.w,) = _get_struct_14d().unpack(str[start:end])
+      end += 4
+      (length,) = _struct_I.unpack(str[start:end])
+      self.condition_poses = []
+      for i in range(0, length):
+        val1 = geometry_msgs.msg.Pose()
+        _v7 = val1.position
+        _x = _v7
+        start = end
+        end += 24
+        (_x.x, _x.y, _x.z,) = _get_struct_3d().unpack(str[start:end])
+        _v8 = val1.orientation
+        _x = _v8
+        start = end
+        end += 32
+        (_x.x, _x.y, _x.z, _x.w,) = _get_struct_4d().unpack(str[start:end])
+        self.condition_poses.append(val1)
       return self
     except struct.error as e:
       raise genpy.DeserializationError(e)  # most likely buffer underfill
@@ -176,12 +208,18 @@ _struct_I = genpy.struct_I
 def _get_struct_I():
     global _struct_I
     return _struct_I
-_struct_14d = None
-def _get_struct_14d():
-    global _struct_14d
-    if _struct_14d is None:
-        _struct_14d = struct.Struct("<14d")
-    return _struct_14d
+_struct_3d = None
+def _get_struct_3d():
+    global _struct_3d
+    if _struct_3d is None:
+        _struct_3d = struct.Struct("<3d")
+    return _struct_3d
+_struct_4d = None
+def _get_struct_4d():
+    global _struct_4d
+    if _struct_4d is None:
+        _struct_4d = struct.Struct("<4d")
+    return _struct_4d
 # This Python file uses the following encoding: utf-8
 """autogenerated by genpy from ur10_mover/SampleServiceResponse.msg. Do not edit."""
 import codecs
@@ -270,11 +308,11 @@ float64 w
       length = len(self.sampled_trajectory)
       buff.write(_struct_I.pack(length))
       for val1 in self.sampled_trajectory:
-        _v1 = val1.position
-        _x = _v1
+        _v9 = val1.position
+        _x = _v9
         buff.write(_get_struct_3d().pack(_x.x, _x.y, _x.z))
-        _v2 = val1.orientation
-        _x = _v2
+        _v10 = val1.orientation
+        _x = _v10
         buff.write(_get_struct_4d().pack(_x.x, _x.y, _x.z, _x.w))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
@@ -305,13 +343,13 @@ float64 w
       self.sampled_trajectory = []
       for i in range(0, length):
         val1 = geometry_msgs.msg.Pose()
-        _v3 = val1.position
-        _x = _v3
+        _v11 = val1.position
+        _x = _v11
         start = end
         end += 24
         (_x.x, _x.y, _x.z,) = _get_struct_3d().unpack(str[start:end])
-        _v4 = val1.orientation
-        _x = _v4
+        _v12 = val1.orientation
+        _x = _v12
         start = end
         end += 32
         (_x.x, _x.y, _x.z, _x.w,) = _get_struct_4d().unpack(str[start:end])
@@ -337,11 +375,11 @@ float64 w
       length = len(self.sampled_trajectory)
       buff.write(_struct_I.pack(length))
       for val1 in self.sampled_trajectory:
-        _v5 = val1.position
-        _x = _v5
+        _v13 = val1.position
+        _x = _v13
         buff.write(_get_struct_3d().pack(_x.x, _x.y, _x.z))
-        _v6 = val1.orientation
-        _x = _v6
+        _v14 = val1.orientation
+        _x = _v14
         buff.write(_get_struct_4d().pack(_x.x, _x.y, _x.z, _x.w))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
@@ -373,13 +411,13 @@ float64 w
       self.sampled_trajectory = []
       for i in range(0, length):
         val1 = geometry_msgs.msg.Pose()
-        _v7 = val1.position
-        _x = _v7
+        _v15 = val1.position
+        _x = _v15
         start = end
         end += 24
         (_x.x, _x.y, _x.z,) = _get_struct_3d().unpack(str[start:end])
-        _v8 = val1.orientation
-        _x = _v8
+        _v16 = val1.orientation
+        _x = _v16
         start = end
         end += 32
         (_x.x, _x.y, _x.z, _x.w,) = _get_struct_4d().unpack(str[start:end])
@@ -406,6 +444,6 @@ def _get_struct_4d():
     return _struct_4d
 class SampleService(object):
   _type          = 'ur10_mover/SampleService'
-  _md5sum = '1dd2b2140805e81dd0283cb593e2adc5'
+  _md5sum = '122912d5b5e242242626c58ddc8030aa'
   _request_class  = SampleServiceRequest
   _response_class = SampleServiceResponse

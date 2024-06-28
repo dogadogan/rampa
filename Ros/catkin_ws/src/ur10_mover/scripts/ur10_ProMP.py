@@ -6,6 +6,7 @@ import os
 import time
 from movement_primitives.promp import ProMP
 from movement_primitives.dmp import DMP
+from gmr import GMM
 
 
 from geometry_msgs.msg import Pose
@@ -25,8 +26,11 @@ last_training = ""
 sample_length = 100
 n_dims = 3
 
+priors = 20 # number of GMM components
+
 p = ProMP(n_dims=n_dims,n_weights_per_dim=20)
 d = DMP(n_dims=n_dims, n_weights_per_dim=20)
+g = GMM(n_components=priors, random_state=1234)
 
 def save_trajectory_to_data(req):
     rospy.loginfo("Starting")
@@ -143,6 +147,16 @@ def start_training(req):
         rospy.loginfo("Finished training")
 
         last_training = "dmp"
+    
+    elif (req.input_msg == "gmm"):
+        Y = demo_data.reshape(demo_data.shape[0], -1)
+
+        rospy.loginfo("Starting to train")
+        # Training
+        g.from_samples(Y)
+        rospy.loginfo("Finished training")
+
+        last_training = "gmm"
 
     isTraining = False
     response.output_msg = "success"
@@ -154,8 +168,11 @@ def sample_trajectory(req):
 
     rospy.loginfo("Received sample request")
     response = SampleServiceResponse()
-    start_pos = req.start_point.position
-    end_pos = req.end_point.position
+    condition_poses = []
+    for pose in req.condition_poses:
+        condition_poses.append(pose.position)
+        
+    T = np.linspace(0,1,len(condition_poses)) # generate time steps
 
     trajectory = ""
 
@@ -163,19 +180,38 @@ def sample_trajectory(req):
 
     if (last_training == "promp"):
         # conditioning model
-        rospy.loginfo("Conditioning model")
-        p_start = p.condition_position([start_pos.x,start_pos.y,start_pos.z], t=0)
-        p_end = p_start.condition_position([end_pos.x,end_pos.y,end_pos.z], t=1)
-        trajectory = p_end.sample_trajectories(T=np.linspace(0,1,sample_length).reshape(sample_length), n_samples=1, random_state=np.random.RandomState(seed=1234))
+        _p = p
+        for i in range(len(condition_poses)):
+            pose = condition_poses[i]
+            rospy.loginfo(T[i])
+            _p = _p.condition_position([pose.x,pose.y,pose.z],t=T[i])
+
+        #sampling
+        trajectory = _p.sample_trajectories(T=np.linspace(0,1,sample_length).reshape(sample_length), n_samples=1, random_state=np.random.RandomState(seed=1234))
 
     elif (last_training == "dmp"):
 
-        d.configure(start_y= np.array([start_pos.x,start_pos.y,start_pos.z]), goal_y=np.array([end_pos.x,end_pos.y,end_pos.z]))
-        t, trajectory = d.open_loop()
-        t = t[:sample_length]
+        _d = d
+        
+        for i in range(0, len(condition_poses)):
+            pose = condition_poses[i]
+            _d.configure(t = T[i], goal_y = np.array([pose.x, pose.y, pose.z]))
+
+        t, trajectory = _d.open_loop()
         trajectory = trajectory[:sample_length]
+    
+    elif (last_training == "gmm"):
 
 
+        start = np.array([start_pos.x,start_pos.y,start_pos.z])
+        end = np.array([end_pos.x,end_pos.y,end_pos.z])
+
+        _g = g
+        _g = _g.condition([0,-1], [start, end])
+        trajectory = _g.sample(1)
+        trajectory = np.insert(trajectory, 0, start)
+        trajectory = np.append(trajectory, end)
+                        
 
     rospy.loginfo("SAMPLED TRAJECTORY")
     
@@ -187,7 +223,7 @@ def sample_trajectory(req):
         sample = trajectory[0]
 
         rospy.loginfo(sample)
-    elif (last_training == "dmp"):
+    else:
         sample = trajectory
 
     response_trajectory = []

@@ -16,7 +16,6 @@
 #include <ros/message_operations.h>
 
 #include <geometry_msgs/Pose.h>
-#include <geometry_msgs/Pose.h>
 
 namespace ur10_mover
 {
@@ -27,13 +26,11 @@ struct SampleServiceRequest_
 
   SampleServiceRequest_()
     : input_msg()
-    , start_point()
-    , end_point()  {
+    , condition_poses()  {
     }
   SampleServiceRequest_(const ContainerAllocator& _alloc)
     : input_msg(_alloc)
-    , start_point(_alloc)
-    , end_point(_alloc)  {
+    , condition_poses(_alloc)  {
   (void)_alloc;
     }
 
@@ -42,11 +39,8 @@ struct SampleServiceRequest_
    typedef std::basic_string<char, std::char_traits<char>, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<char>> _input_msg_type;
   _input_msg_type input_msg;
 
-   typedef  ::geometry_msgs::Pose_<ContainerAllocator>  _start_point_type;
-  _start_point_type start_point;
-
-   typedef  ::geometry_msgs::Pose_<ContainerAllocator>  _end_point_type;
-  _end_point_type end_point;
+   typedef std::vector< ::geometry_msgs::Pose_<ContainerAllocator> , typename std::allocator_traits<ContainerAllocator>::template rebind_alloc< ::geometry_msgs::Pose_<ContainerAllocator> >> _condition_poses_type;
+  _condition_poses_type condition_poses;
 
 
 
@@ -78,8 +72,7 @@ template<typename ContainerAllocator1, typename ContainerAllocator2>
 bool operator==(const ::ur10_mover::SampleServiceRequest_<ContainerAllocator1> & lhs, const ::ur10_mover::SampleServiceRequest_<ContainerAllocator2> & rhs)
 {
   return lhs.input_msg == rhs.input_msg &&
-    lhs.start_point == rhs.start_point &&
-    lhs.end_point == rhs.end_point;
+    lhs.condition_poses == rhs.condition_poses;
 }
 
 template<typename ContainerAllocator1, typename ContainerAllocator2>
@@ -136,12 +129,12 @@ struct MD5Sum< ::ur10_mover::SampleServiceRequest_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "ec27827d7596622107b85c17b74da906";
+    return "993774274d001bbccdbd64f2063ef909";
   }
 
   static const char* value(const ::ur10_mover::SampleServiceRequest_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0xec27827d75966221ULL;
-  static const uint64_t static_value2 = 0x07b85c17b74da906ULL;
+  static const uint64_t static_value1 = 0x993774274d001bbcULL;
+  static const uint64_t static_value2 = 0xcdbd64f2063ef909ULL;
 };
 
 template<class ContainerAllocator>
@@ -161,8 +154,7 @@ struct Definition< ::ur10_mover::SampleServiceRequest_<ContainerAllocator> >
   static const char* value()
   {
     return "string input_msg\n"
-"geometry_msgs/Pose start_point\n"
-"geometry_msgs/Pose end_point\n"
+"geometry_msgs/Pose[] condition_poses\n"
 "\n"
 "================================================================================\n"
 "MSG: geometry_msgs/Pose\n"
@@ -204,8 +196,7 @@ namespace serialization
     template<typename Stream, typename T> inline static void allInOne(Stream& stream, T m)
     {
       stream.next(m.input_msg);
-      stream.next(m.start_point);
-      stream.next(m.end_point);
+      stream.next(m.condition_poses);
     }
 
     ROS_DECLARE_ALLINONE_SERIALIZER
@@ -226,12 +217,14 @@ struct Printer< ::ur10_mover::SampleServiceRequest_<ContainerAllocator> >
   {
     s << indent << "input_msg: ";
     Printer<std::basic_string<char, std::char_traits<char>, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<char>>>::stream(s, indent + "  ", v.input_msg);
-    s << indent << "start_point: ";
-    s << std::endl;
-    Printer< ::geometry_msgs::Pose_<ContainerAllocator> >::stream(s, indent + "  ", v.start_point);
-    s << indent << "end_point: ";
-    s << std::endl;
-    Printer< ::geometry_msgs::Pose_<ContainerAllocator> >::stream(s, indent + "  ", v.end_point);
+    s << indent << "condition_poses[]" << std::endl;
+    for (size_t i = 0; i < v.condition_poses.size(); ++i)
+    {
+      s << indent << "  condition_poses[" << i << "]: ";
+      s << std::endl;
+      s << indent;
+      Printer< ::geometry_msgs::Pose_<ContainerAllocator> >::stream(s, indent + "    ", v.condition_poses[i]);
+    }
   }
 };
 

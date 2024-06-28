@@ -1,6 +1,5 @@
 string input_msg
-geometry_msgs/Pose start_point
-geometry_msgs/Pose end_point
+geometry_msgs/Pose[] condition_poses
 ---
 string output_msg
 geometry_msgs/Pose[] sampled_trajectory

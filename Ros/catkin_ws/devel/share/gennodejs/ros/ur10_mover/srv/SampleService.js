@@ -23,8 +23,7 @@ class SampleServiceRequest {
     if (initObj === null) {
       // initObj === null is a special case for deserialization where we don't initialize fields
       this.input_msg = null;
-      this.start_point = null;
-      this.end_point = null;
+      this.condition_poses = null;
     }
     else {
       if (initObj.hasOwnProperty('input_msg')) {
@@ -33,17 +32,11 @@ class SampleServiceRequest {
       else {
         this.input_msg = '';
       }
-      if (initObj.hasOwnProperty('start_point')) {
-        this.start_point = initObj.start_point
+      if (initObj.hasOwnProperty('condition_poses')) {
+        this.condition_poses = initObj.condition_poses
       }
       else {
-        this.start_point = new geometry_msgs.msg.Pose();
-      }
-      if (initObj.hasOwnProperty('end_point')) {
-        this.end_point = initObj.end_point
-      }
-      else {
-        this.end_point = new geometry_msgs.msg.Pose();
+        this.condition_poses = [];
       }
     }
   }
@@ -52,10 +45,12 @@ class SampleServiceRequest {
     // Serializes a message object of type SampleServiceRequest
     // Serialize message field [input_msg]
     bufferOffset = _serializer.string(obj.input_msg, buffer, bufferOffset);
-    // Serialize message field [start_point]
-    bufferOffset = geometry_msgs.msg.Pose.serialize(obj.start_point, buffer, bufferOffset);
-    // Serialize message field [end_point]
-    bufferOffset = geometry_msgs.msg.Pose.serialize(obj.end_point, buffer, bufferOffset);
+    // Serialize message field [condition_poses]
+    // Serialize the length for message field [condition_poses]
+    bufferOffset = _serializer.uint32(obj.condition_poses.length, buffer, bufferOffset);
+    obj.condition_poses.forEach((val) => {
+      bufferOffset = geometry_msgs.msg.Pose.serialize(val, buffer, bufferOffset);
+    });
     return bufferOffset;
   }
 
@@ -65,17 +60,21 @@ class SampleServiceRequest {
     let data = new SampleServiceRequest(null);
     // Deserialize message field [input_msg]
     data.input_msg = _deserializer.string(buffer, bufferOffset);
-    // Deserialize message field [start_point]
-    data.start_point = geometry_msgs.msg.Pose.deserialize(buffer, bufferOffset);
-    // Deserialize message field [end_point]
-    data.end_point = geometry_msgs.msg.Pose.deserialize(buffer, bufferOffset);
+    // Deserialize message field [condition_poses]
+    // Deserialize array length for message field [condition_poses]
+    len = _deserializer.uint32(buffer, bufferOffset);
+    data.condition_poses = new Array(len);
+    for (let i = 0; i < len; ++i) {
+      data.condition_poses[i] = geometry_msgs.msg.Pose.deserialize(buffer, bufferOffset)
+    }
     return data;
   }
 
   static getMessageSize(object) {
     let length = 0;
     length += _getByteLength(object.input_msg);
-    return length + 116;
+    length += 56 * object.condition_poses.length;
+    return length + 8;
   }
 
   static datatype() {
@@ -85,15 +84,14 @@ class SampleServiceRequest {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return 'ec27827d7596622107b85c17b74da906';
+    return '993774274d001bbccdbd64f2063ef909';
   }
 
   static messageDefinition() {
     // Returns full string definition for message
     return `
     string input_msg
-    geometry_msgs/Pose start_point
-    geometry_msgs/Pose end_point
+    geometry_msgs/Pose[] condition_poses
     
     ================================================================================
     MSG: geometry_msgs/Pose
@@ -133,18 +131,14 @@ class SampleServiceRequest {
       resolved.input_msg = ''
     }
 
-    if (msg.start_point !== undefined) {
-      resolved.start_point = geometry_msgs.msg.Pose.Resolve(msg.start_point)
+    if (msg.condition_poses !== undefined) {
+      resolved.condition_poses = new Array(msg.condition_poses.length);
+      for (let i = 0; i < resolved.condition_poses.length; ++i) {
+        resolved.condition_poses[i] = geometry_msgs.msg.Pose.Resolve(msg.condition_poses[i]);
+      }
     }
     else {
-      resolved.start_point = new geometry_msgs.msg.Pose()
-    }
-
-    if (msg.end_point !== undefined) {
-      resolved.end_point = geometry_msgs.msg.Pose.Resolve(msg.end_point)
-    }
-    else {
-      resolved.end_point = new geometry_msgs.msg.Pose()
+      resolved.condition_poses = []
     }
 
     return resolved;
@@ -281,6 +275,6 @@ class SampleServiceResponse {
 module.exports = {
   Request: SampleServiceRequest,
   Response: SampleServiceResponse,
-  md5sum() { return '1dd2b2140805e81dd0283cb593e2adc5'; },
+  md5sum() { return '122912d5b5e242242626c58ddc8030aa'; },
   datatype() { return 'ur10_mover/SampleService'; }
 };
