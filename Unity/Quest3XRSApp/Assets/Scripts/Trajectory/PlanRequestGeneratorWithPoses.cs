@@ -21,6 +21,8 @@ public class PlanRequestGeneratorWithPoses : MonoBehaviour
 
     public List<Vector3> previousPoses = new List<Vector3>();
 
+    public List<Quaternion> previousOrientations = new List<Quaternion>();
+
     public int currentIndexPointer = 0;
     public Button backButton;
     public Button nextButton;
@@ -36,24 +38,26 @@ public class PlanRequestGeneratorWithPoses : MonoBehaviour
     public GameObject executeOnRealRobotButton;
     
     
-    public void GenerateRequest(List<Vector3> poseList)
+    public void GenerateRequest(List<Vector3> poseList, List<Quaternion> orientationList)
     {
         var request = new PlannerServiceRequest();
 
         for (int i = 0; i < poseList.Count; i++)
         {
             previousPoses.Add(poseList[i]);
+            previousOrientations.Add(orientationList[i]);
         }
 
         Vector3[] poses = poseList.ToArray();
+        Quaternion[] orientations = orientationList.ToArray();
 
         request.request_type = "poses";
-        request.joints_input =  HelperFunctions.CurrentJointConfig();
+        request.joints_input = HelperFunctions.CurrentJointConfig();
 
         PoseMsg[] pose_list = new PoseMsg[poses.Length];
         for (int i = 0; i < poses.Length; i++)
         {
-            pose_list[i] = HelperFunctions.GeneratePoseMsg(poses[i]);
+            pose_list[i] = HelperFunctions.GeneratePoseMsg(poses[i], orientations[i]);
         }
         request.pose_list = pose_list;
         TrajectoryPlanner.SendRequest(request);
@@ -228,6 +232,7 @@ public class PlanRequestGeneratorWithPoses : MonoBehaviour
         // newly added, isn't it needed?
         previousPoints.Clear();
         previousPoses.Clear();
+        previousOrientations.Clear()
 
         currentIndexPointer = 0;
 

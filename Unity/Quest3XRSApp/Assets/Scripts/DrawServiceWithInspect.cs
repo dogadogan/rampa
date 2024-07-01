@@ -248,7 +248,7 @@ public class DrawServiceWithInspect : MonoBehaviour
 
     public void SendTrainingData()
     {
-        trainAndTest.SendTrainingData(PlanRequestGeneratorWithPoses.previousPoses);
+        trainAndTest.SendTrainingData(PlanRequestGeneratorWithPoses.previousPoses, PlanRequestGeneratorWithPoses.previousOrientations);
         PlanRequestGeneratorWithPoses.ResetGenerator(true);
         UpdateDrawingState(true);
     }

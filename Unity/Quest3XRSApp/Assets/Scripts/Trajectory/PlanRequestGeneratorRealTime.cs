@@ -20,6 +20,7 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
     private bool waitingForResponse = false;
     public List<double[]> previousPoints = new List<double[]>();
     public List<Vector3> previousPoses = new List<Vector3>();
+    public List<Quaternion> previousOrientations = new List<Quaternion>();
     
     private double[] jointConfig;
     public int currentIndexPointer = 0;
@@ -72,16 +73,17 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
         
     }
 
-    private void GenerateRequest(Vector3 pose)
+    private void GenerateRequest(Vector3 pose, Quaternion orientation)
     {
         var request = new PlannerServiceRequest();
         request.request_type = "realTime";
         request.joints_input = jointConfig;
 
         previousPoses.Add(pose);
+        previousOrientations.Add(orientation);
         
         PoseMsg[] pose_list = new PoseMsg[1];
-        pose_list[0] = HelperFunctions.GeneratePoseMsg(pose);
+        pose_list[0] = HelperFunctions.GeneratePoseMsg(pose, orientation);
         request.pose_list = pose_list;
         Debug.LogWarning("Request Sent");
         Debug.LogWarning(request);
@@ -161,6 +163,7 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
 
         previousPoints.Clear();
         previousPoses.Clear();
+        previousOrientations.Clear();
 
         currentIndexPointer = 0;
 

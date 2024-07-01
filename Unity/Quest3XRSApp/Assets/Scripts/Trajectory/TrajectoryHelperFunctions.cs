@@ -27,7 +27,7 @@ public class TrajectoryHelperFunctions : MonoBehaviour
         return joints;
     }
 
-    public PoseMsg GeneratePoseMsg(Vector3 pose)
+    public PoseMsg GeneratePoseMsg(Vector3 pose, Quaternion orientation)
     {
         debugText.text += "baseLink:  " + baseLink.transform.position;
 
@@ -42,7 +42,7 @@ public class TrajectoryHelperFunctions : MonoBehaviour
         return new PoseMsg
         {
             position = rotatedDirection.To<FLU>(),
-            orientation = Quaternion.Euler(90, 0, 0).To<FLU>()
+            orientation = orientation.To<FLU>()
         };
         
     }
