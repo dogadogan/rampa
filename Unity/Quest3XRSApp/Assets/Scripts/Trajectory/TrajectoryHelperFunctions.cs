@@ -39,7 +39,6 @@ public class TrajectoryHelperFunctions : MonoBehaviour
         Vector3 rotatedDirection = baseReverseRotation * direction;
         
         
-        
         return new PoseMsg
         {
             position = rotatedDirection.To<FLU>(),
