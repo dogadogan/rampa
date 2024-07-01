@@ -85,7 +85,7 @@ public class TrainAndTest : MonoBehaviour
         PoseMsg[] pose_list = new PoseMsg[poses.Count];
         for (int i = 0; i < poses.Count; i++)
         {
-            pose_list[i] = HelperFunctions.GeneratePoseMsgForTraining(poses[i]);
+            pose_list[i] = HelperFunctions.GeneratePoseMsg(poses[i]);
             Debug.LogWarning("asd pose:" + pose_list[i].position);
         }
         request.pose_list = pose_list;

@@ -29,47 +29,25 @@ public class TrajectoryHelperFunctions : MonoBehaviour
 
     public PoseMsg GeneratePoseMsg(Vector3 pose)
     {
-
         debugText.text += "baseLink:  " + baseLink.transform.position;
 
         Vector3 direction = pose - baseLink.transform.position;
 
         // Create a rotation quaternion around the pivotPoint
-        Quaternion rotation = Quaternion.Euler(0, -baseLink.transform.eulerAngles.y, 0);
-
+        Quaternion baseReverseRotation = Quaternion.Euler(0, -baseLink.transform.eulerAngles.y, 0);
         // Rotate the direction vector
-        Vector3 rotatedDirection = rotation * direction;
-
-        Vector3 rotatedPoint = baseLink.transform.position + rotatedDirection;
+        Vector3 rotatedDirection = baseReverseRotation * direction;
+        
+        
+        
         return new PoseMsg
         {
-            position = (rotatedPoint- baseLink.transform.position).To<FLU>(),
-
-            // The hardcoded x/z angles assure that the gripper is always positioned above the target cube before grasping.
+            position = rotatedDirection.To<FLU>(),
             orientation = Quaternion.Euler(90, 0, 0).To<FLU>()
         };
         
     }
-    
-    public PoseMsg GeneratePoseMsgForTraining(Vector3 pose)
-    {
-        
-        Vector3 direction = pose - baseLink.transform.position;
-
-        // Create a rotation quaternion around the pivotPoint
-        Quaternion rotation = Quaternion.Euler(0, -baseLink.transform.eulerAngles.y, 0);
-
-        // Rotate the direction vector
-        Vector3 rotatedDirection = rotation * direction;
-
-        return new PoseMsg
-        {
-            position = (rotatedDirection).To<FLU>(),
-            // The hardcoded x/z angles assure that the gripper is always positioned above the target cube before grasping.
-            orientation = Quaternion.Euler(90, 0, 0).To<FLU>()
-        };
-        
-    }
+ 
 
     public void SetJointAngles(JointTrajectoryPointMsg t)
     {

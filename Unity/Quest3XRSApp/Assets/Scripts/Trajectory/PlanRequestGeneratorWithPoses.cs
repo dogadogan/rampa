@@ -74,12 +74,9 @@ public class PlanRequestGeneratorWithPoses : MonoBehaviour
                 drawService.UpdateDrawingState();
                 StartCoroutine(ExecuteTrajectories(response));
             }
-
-            
             
         }
     }
-    
     
     IEnumerator ExecuteTrajectories(PlannerServiceResponse response, bool fromTraining = false)
     {
@@ -97,9 +94,9 @@ public class PlanRequestGeneratorWithPoses : MonoBehaviour
                 {
 
                     if (t == lastPoint)
-                {   
-                    previousPoints.Add( HelperFunctions.GetJointAngles(t));
-                }
+                    {   
+                        previousPoints.Add( HelperFunctions.GetJointAngles(t));
+                    }
 
                     HelperFunctions.SetJointAngles(t);
                     yield return new WaitForSeconds(k_JointAssignmentWait);
