@@ -7,10 +7,9 @@ using UnityEngine.UI;
 public class PlanRequestGeneratorWithTarget : MonoBehaviour
 {
     const float k_JointAssignmentWait = 0.1f;
-    public GameObject m_Target;
     public TrajectoryHelperFunctions HelperFunctions;
     public TrajectoryPlanner TrajectoryPlanner;
-    public void GenerateRequest()
+    public void GenerateRequest(GameObject m_Target)
     {
         var request = new PlannerServiceRequest();
         

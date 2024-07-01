@@ -26,6 +26,8 @@ public class TrainAndTest : MonoBehaviour
 
 
     private List<GameObject> waypoints = new List<GameObject>();
+
+    private List<double[]> jointAngles = new List<double[]>();
     
     public GameObject conditionPrefab;
     public TrajectoryPlanner trajectoryPlanner;
@@ -250,12 +252,14 @@ public class TrainAndTest : MonoBehaviour
         TestMenu_ExecuteOnRealRobotButton.interactable = permission;
     }
 
-    public void ClearWaypoints() {
+    public void ClearWaypoints()
+    {
         foreach (var waypoint in waypoints)
         {
             Destroy(waypoint);
         }
         waypoints.Clear();
     }
+
     
 }

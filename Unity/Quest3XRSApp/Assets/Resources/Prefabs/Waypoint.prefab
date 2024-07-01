@@ -338,6 +338,7 @@ GameObject:
   - component: {fileID: 7034770045287580477}
   - component: {fileID: 5370348606496721143}
   - component: {fileID: -8464282452100468811}
+  - component: {fileID: 1445080016702266257}
   m_Layer: 0
   m_Name: Waypoint
   m_TagString: Untagged
@@ -606,10 +607,34 @@ MonoBehaviour:
   _interactableView: {fileID: 1082394760882407162}
   _whenHover:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1445080016702266257}
+        m_TargetAssemblyTypeName: Waypoint, Assembly-CSharp
+        m_MethodName: ShowMenu
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   _whenUnhover:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1445080016702266257}
+        m_TargetAssemblyTypeName: Waypoint, Assembly-CSharp
+        m_MethodName: HideMenu
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   _whenSelect:
     m_PersistentCalls:
       m_Calls: []
@@ -650,3 +675,28 @@ MonoBehaviour:
   _resetGrabOnGrabsUpdated: 1
   _physicsGrabbable: {fileID: 0}
   _movementProvider: {fileID: 0}
+--- !u!114 &1445080016702266257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9153244281187923240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78a0bb2ff37cf4652af63b493b51436c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MenuPrefab: {fileID: 4668504941399057399, guid: 3ad3a00356a904660ac43d78ba7726e8, type: 3}
+  WaypointPrefab: {fileID: 9153244281187923240}
+  WaypointObject: {fileID: 0}
+  MenuObject: {fileID: 0}
+  planRequestGeneratorWithTarget: {fileID: 0}
+  debugText: {fileID: 0}
+  jointAngles:
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
