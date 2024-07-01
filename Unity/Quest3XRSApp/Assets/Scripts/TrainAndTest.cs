@@ -76,7 +76,7 @@ public class TrainAndTest : MonoBehaviour
 
     }
     
-    public void SendTrainingData( List<Vector3> poses)
+    public void SendTrainingData( List<Vector3> poses, List<Quaternion> orientations)
     {
         var request = new TrainingDataServiceRequest();
         Debug.LogWarning("asd in function");
@@ -85,7 +85,7 @@ public class TrainAndTest : MonoBehaviour
         PoseMsg[] pose_list = new PoseMsg[poses.Count];
         for (int i = 0; i < poses.Count; i++)
         {
-            pose_list[i] = HelperFunctions.GeneratePoseMsg(poses[i]);
+            pose_list[i] = HelperFunctions.GeneratePoseMsg(poses[i], orientations[i]);
             Debug.LogWarning("asd pose:" + pose_list[i].position);
         }
         request.pose_list = pose_list;

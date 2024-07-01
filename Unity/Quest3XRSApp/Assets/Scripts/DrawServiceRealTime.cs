@@ -205,7 +205,7 @@ public class DrawServiceRealTime: MonoBehaviour
 
     public void SendTrainingData()
     {
-        trainAndTest.SendTrainingData(planRequestGeneratorRealTime.previousPoses);
+        trainAndTest.SendTrainingData(planRequestGeneratorRealTime.previousPoses, planRequestGeneratorRealTime.previousOrientations);
         planRequestGeneratorRealTime.ResetGenerator(true);
         UpdateDrawingState(true);
     }
