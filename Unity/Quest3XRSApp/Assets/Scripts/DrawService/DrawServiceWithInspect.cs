@@ -70,6 +70,7 @@ public class DrawServiceWithInspect : MonoBehaviour
     
                 isFirstPart = false;
                 loadingText.GetComponent<TMP_Text>().text = "drawing trajectory";
+                handOrientation.SetIndicator(true);
             }
             if (numberOfPoints % 5 == 0)
             {        
@@ -93,7 +94,7 @@ public class DrawServiceWithInspect : MonoBehaviour
                 lineRenderer.positionCount = numberOfPoints;
                 lineRenderer.SetPosition(numberOfPoints - 1,  hand.PointerPose.position);
                 if (recordOrientationToggle.isOn && numberOfPoints > 1) {
-                    handOrientation.UpdateHandOrientationIndicator(lineRenderer.GetPosition(numberOfPoints - 2), lineRenderer.GetPosition(numberOfPoints - 1));
+                    handOrientation.UpdateHandOrientationIndicator(lineRenderer.GetPosition(numberOfPoints - 1), lineRenderer.GetPosition(numberOfPoints - 2));
                 }
             }
             yield return new WaitForSeconds(interval);
@@ -119,7 +120,6 @@ public class DrawServiceWithInspect : MonoBehaviour
                 anotherTrajectoryButton.SetActive(false);
                 executeOnRealRobotButton.SetActive(false);
                 executeButton.SetActive(true);
-                handOrientation.SetIndicator(true);
 
                 StartCoroutine(DrawTrajectory(0.05f));
                 break;
@@ -172,7 +172,6 @@ public class DrawServiceWithInspect : MonoBehaviour
                     
                     handleMenu(true);
                     redrawButton.interactable = false;
-                    handOrientation.SetIndicator(true);
 
                     // update line renderer
                     double remainingPointsRate = (double) PlanRequestGeneratorWithPoses.currentIndexPointer  / PlanRequestGeneratorWithPoses.previousPoints.Count;

@@ -9,7 +9,7 @@ public class HandOrientation : MonoBehaviour
     public DrawServiceRealTime drawServiceRealTime;
     public DrawServiceWithInspect drawServiceWithInspect;
     
-    public GameObject hand;
+    public OVRHand hand;
     GameObject handOrientationIndicator;
     
     public GameObject handOrientationIndicatorModel;
@@ -19,7 +19,7 @@ public class HandOrientation : MonoBehaviour
     {
         handOrientationIndicator = Instantiate(
             handOrientationIndicatorModel,
-            hand.transform.position,
+            hand.PointerPose.position,
             Quaternion.identity
         );
         
@@ -49,7 +49,8 @@ public class HandOrientation : MonoBehaviour
         Vector3 planeNormal = Vector3.Cross(trajectoryTangentVector, new Vector3(0, 1, 0));
         planeNormal = planeNormal.normalized;
 
-        handOrientationIndicator.transform.rotation = GetMirroredQuaternion(hand.transform.rotation, planeNormal);
+        handOrientationIndicator.transform.rotation = GetMirroredQuaternion(hand.PointerPose.rotation, planeNormal);
+        handOrientationIndicator.transform.position = hand.PointerPose.position;
         
     }
     
