@@ -84,7 +84,7 @@ public class HandOrientation : MonoBehaviour
         return mirroredRotation;
     }
 
-    public Quaternion GetQuaternion() {
+    public Quaternion GetRotation() {
         return handOrientationIndicator.transform.rotation;
     }
     

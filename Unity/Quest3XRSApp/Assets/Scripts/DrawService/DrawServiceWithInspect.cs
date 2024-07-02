@@ -4,6 +4,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.Serialization;
 
 public class DrawServiceWithInspect : MonoBehaviour
 {
@@ -17,7 +18,7 @@ public class DrawServiceWithInspect : MonoBehaviour
 
 
     public Toggle recordOrientationToggle;
-    public HandOrientation HandOrientation;
+    public HandOrientation handOrientation;
     public GameObject bar;
     public GameObject sliderPosition;
     public GameObject loadingText;
@@ -80,7 +81,7 @@ public class DrawServiceWithInspect : MonoBehaviour
                 if (!isFirstPart) {
                     targetPoints.Add(hand.PointerPose.position);
                     if (recordOrientationToggle.isOn) {
-                        targetOrientations.Add(HandOrientation.GetQuaternion());
+                        targetOrientations.Add(handOrientation.GetRotation());
                     }
                     else {
                         targetOrientations.Add(Quaternion.Euler(90,0,0));
@@ -92,7 +93,7 @@ public class DrawServiceWithInspect : MonoBehaviour
                 lineRenderer.positionCount = numberOfPoints;
                 lineRenderer.SetPosition(numberOfPoints - 1,  hand.PointerPose.position);
                 if (recordOrientationToggle.isOn && numberOfPoints > 1) {
-                    HandOrientation.UpdateHandOrientationIndicator(lineRenderer.GetPosition(numberOfPoints - 2), lineRenderer.GetPosition(numberOfPoints - 1));
+                    handOrientation.UpdateHandOrientationIndicator(lineRenderer.GetPosition(numberOfPoints - 2), lineRenderer.GetPosition(numberOfPoints - 1));
                 }
             }
             yield return new WaitForSeconds(interval);
@@ -118,14 +119,14 @@ public class DrawServiceWithInspect : MonoBehaviour
                 anotherTrajectoryButton.SetActive(false);
                 executeOnRealRobotButton.SetActive(false);
                 executeButton.SetActive(true);
-                HandOrientation.SetIndicator(true);
+                handOrientation.SetIndicator(true);
 
                 StartCoroutine(DrawTrajectory(0.05f));
                 break;
 
             case State.DrawTrajectory:
                 state = State.WaitingForExecution;
-                HandOrientation.SetIndicator(false);
+                handOrientation.SetIndicator(false);
                 executeButton.GetComponent<Button>().interactable = true;
                 PlanRequestGeneratorWithPoses.PrevRecordedTrajectories.SetInteractable(true);
                 loadingText.GetComponent<TMP_Text>().text = "trajectory recorded";
@@ -171,7 +172,7 @@ public class DrawServiceWithInspect : MonoBehaviour
                     
                     handleMenu(true);
                     redrawButton.interactable = false;
-                    HandOrientation.SetIndicator(true);
+                    handOrientation.SetIndicator(true);
 
                     // update line renderer
                     double remainingPointsRate = (double) PlanRequestGeneratorWithPoses.currentIndexPointer  / PlanRequestGeneratorWithPoses.previousPoints.Count;
