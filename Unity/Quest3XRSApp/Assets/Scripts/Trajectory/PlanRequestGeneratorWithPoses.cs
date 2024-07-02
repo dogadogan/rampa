@@ -232,7 +232,7 @@ public class PlanRequestGeneratorWithPoses : MonoBehaviour
         // newly added, isn't it needed?
         previousPoints.Clear();
         previousPoses.Clear();
-        previousOrientations.Clear()
+        previousOrientations.Clear();
 
         currentIndexPointer = 0;
 

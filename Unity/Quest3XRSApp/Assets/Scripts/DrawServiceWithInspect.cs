@@ -12,8 +12,12 @@ public class DrawServiceWithInspect : MonoBehaviour
     private Color lineColor = Color.magenta;
     private float lineWidth = 0.015f;
     private List<Vector3> targetPoints = new List<Vector3>();
+    private List<Quaternion> targetOrientations = new List<Quaternion>();
     private State state;
 
+
+    public Toggle recordOrientationToggle;
+    public HandOrientation HandOrientation;
     public GameObject bar;
     public GameObject sliderPosition;
     public GameObject loadingText;
@@ -26,6 +30,8 @@ public class DrawServiceWithInspect : MonoBehaviour
     public Button addToTrainingButton;
     public GameObject anotherTrajectoryButton;
     public GameObject executeOnRealRobotButton;
+
+
 
 
     public TMP_Text debugText;
@@ -71,13 +77,23 @@ public class DrawServiceWithInspect : MonoBehaviour
                     UpdateDrawingState();
                     break;
                 }
-                if (!isFirstPart)
+                if (!isFirstPart) {
                     targetPoints.Add(hand.PointerPose.position);
+                    if (recordOrientationToggle.isOn) {
+                        targetOrientations.Add(HandOrientation.GetQuaternion());
+                    }
+                    else {
+                        targetOrientations.Add(Quaternion.Euler(90,0,0));
+                    }
+                }
             }
             if (!isFirstPart) {
                 numberOfPoints++;
                 lineRenderer.positionCount = numberOfPoints;
                 lineRenderer.SetPosition(numberOfPoints - 1,  hand.PointerPose.position);
+                if (recordOrientationToggle.isOn && numberOfPoints > 1) {
+                    HandOrientation.UpdateHandOrientationIndicator(lineRenderer.GetPosition(numberOfPoints - 2), lineRenderer.GetPosition(numberOfPoints - 1));
+                }
             }
             yield return new WaitForSeconds(interval);
         }
@@ -86,7 +102,7 @@ public class DrawServiceWithInspect : MonoBehaviour
 
     private void TriggerPublishMethod()
     {
-        PlanRequestGeneratorWithPoses.GenerateRequest(targetPoints);
+        PlanRequestGeneratorWithPoses.GenerateRequest(targetPoints, targetOrientations);
     } 
 
     public void UpdateDrawingState(bool finalized = false)
@@ -95,18 +111,21 @@ public class DrawServiceWithInspect : MonoBehaviour
         {
             case State.Initial:
                 state = State.DrawTrajectory;
+
                 lineRenderer.positionCount = 0;
                 handleMenu(true);
 
                 anotherTrajectoryButton.SetActive(false);
                 executeOnRealRobotButton.SetActive(false);
                 executeButton.SetActive(true);
+                HandOrientation.SetIndicator(true);
 
                 StartCoroutine(DrawTrajectory(0.05f));
                 break;
 
             case State.DrawTrajectory:
                 state = State.WaitingForExecution;
+                HandOrientation.SetIndicator(false);
                 executeButton.GetComponent<Button>().interactable = true;
                 PlanRequestGeneratorWithPoses.PrevRecordedTrajectories.SetInteractable(true);
                 loadingText.GetComponent<TMP_Text>().text = "trajectory recorded";
@@ -148,9 +167,11 @@ public class DrawServiceWithInspect : MonoBehaviour
                 else {
                     // redraw from current waypoint is clicked
                     state = State.DrawTrajectory;
+
                     
                     handleMenu(true);
                     redrawButton.interactable = false;
+                    HandOrientation.SetIndicator(true);
 
                     // update line renderer
                     double remainingPointsRate = (double) PlanRequestGeneratorWithPoses.currentIndexPointer  / PlanRequestGeneratorWithPoses.previousPoints.Count;

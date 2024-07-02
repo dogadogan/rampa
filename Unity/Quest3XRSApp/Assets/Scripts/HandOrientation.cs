@@ -26,7 +26,7 @@ public class HandOrientation : MonoBehaviour
         handOrientationIndicator.SetActive(false);
     }
 
-    void SetIndicator(bool set)
+    public void SetIndicator(bool set)
     {
         handOrientationIndicator.SetActive(set);
     }
@@ -36,7 +36,10 @@ public class HandOrientation : MonoBehaviour
      *  with respect to the plane formed by the 2 points that are also perpendicular to the ground. Then updates the hand
      * orientation indicator to show the new mirrored orientation.
      */
-    void UpdateHandOrientationIndicator(Vector3 point1, Vector3 point2)
+    
+    
+    
+    public void UpdateHandOrientationIndicator(Vector3 point1, Vector3 point2)
     {
         
         Vector3 trajectoryTangentVector = point1 - point2;
@@ -79,6 +82,10 @@ public class HandOrientation : MonoBehaviour
         Quaternion mirroredRotation = Quaternion.LookRotation(mirroredMatrix.GetColumn(2), mirroredMatrix.GetColumn(1));
 
         return mirroredRotation;
+    }
+
+    public Quaternion GetQuaternion() {
+        return handOrientationIndicator.transform.rotation;
     }
     
     

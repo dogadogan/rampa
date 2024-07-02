@@ -73,13 +73,15 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
         
     }
 
-    private void GenerateRequest(Vector3 pose, Quaternion orientation)
+    private void GenerateRequest(Vector3 pose)
     {
         var request = new PlannerServiceRequest();
         request.request_type = "realTime";
         request.joints_input = jointConfig;
 
         previousPoses.Add(pose);
+
+        Quaternion orientation = Quaternion.Euler(90,0,0);
         previousOrientations.Add(orientation);
         
         PoseMsg[] pose_list = new PoseMsg[1];

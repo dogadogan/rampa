@@ -37,12 +37,13 @@ public class TrajectoryHelperFunctions : MonoBehaviour
         Quaternion baseReverseRotation = Quaternion.Euler(0, -baseLink.transform.eulerAngles.y, 0);
         // Rotate the direction vector
         Vector3 rotatedDirection = baseReverseRotation * direction;
-        
+
+        Quaternion rotatedOrientation = orientation * baseReverseRotation;
         
         return new PoseMsg
         {
             position = rotatedDirection.To<FLU>(),
-            orientation = orientation.To<FLU>()
+            orientation = rotatedOrientation.To<FLU>()
         };
         
     }

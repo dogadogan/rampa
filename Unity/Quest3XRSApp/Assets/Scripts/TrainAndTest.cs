@@ -133,14 +133,14 @@ public class TrainAndTest : MonoBehaviour
         // they are made interactable after the request is completed in PlanRequesstGeneraterWithPoses - ExecuteTrajectories
         
         var request = new SampleServiceRequest();
-        var start_point = HelperFunctions.GeneratePoseMsg(source.transform.position);
-        var end_point = HelperFunctions.GeneratePoseMsg(target.transform.position);
+        var start_point = HelperFunctions.GeneratePoseMsg(source.transform.position, source.transform.rotation);
+        var end_point = HelperFunctions.GeneratePoseMsg(target.transform.position, source.transform.rotation);
         var req_waypoints = new PoseMsg[waypoints.Count + 2]; 
         req_waypoints[0] = start_point;
         req_waypoints[waypoints.Count + 1] = end_point;
         for (int i = 0; i < waypoints.Count; i++)
         {
-            req_waypoints[i + 1] = HelperFunctions.GeneratePoseMsg(waypoints[i].transform.position);
+            req_waypoints[i + 1] = HelperFunctions.GeneratePoseMsg(waypoints[i].transform.position, waypoints[i].transform.rotation);
         }
         request.condition_poses = req_waypoints;
         m_Ros.SendServiceMessage<SampleServiceResponse>(testService, request, TestModelResponse);
