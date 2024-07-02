@@ -26,7 +26,7 @@ public class HandOrientation : MonoBehaviour
         handOrientationIndicator.SetActive(false);
     }
 
-    public void SetIndicator(bool set)
+    public void ShowIndicator(bool set)
     {
         handOrientationIndicator.SetActive(set);
     }

@@ -5,48 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="52630e7e-4dfe-48dd-ad03-1f23ac0209ec" name="Changes" comment="HandOrientation class done">
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/DrawService.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Misc.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Unused.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Quest3XRSApp/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Quest3XRSApp/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/AdjustText.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Misc/AdjustText.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/AdjustText.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Misc/AdjustText.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/CollisionLog.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Misc/CollisionLog.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/CollisionLog.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Misc/CollisionLog.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/CustomController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Misc/CustomController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/CustomController.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Misc/CustomController.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/DrawServiceRealTime.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/DrawService/DrawServiceRealTime.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/DrawServiceRealTime.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/DrawService/DrawServiceRealTime.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/DrawServiceWithInspect.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/DrawService/DrawServiceWithInspect.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/DrawServiceWithInspect.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/DrawService/DrawServiceWithInspect.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/FixedRotation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Unused/FixedRotation.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/FixedRotation.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Unused/FixedRotation.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/GetTransform.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Misc/GetTransform.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/GetTransform.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Misc/GetTransform.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Gripper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Unused/Gripper.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Gripper.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Unused/Gripper.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/HandOrientation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Misc/HandOrientation.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/HandOrientation.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Misc/HandOrientation.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/HandleAddToTrainingSet.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Misc/HandleAddToTrainingSet.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/HandleAddToTrainingSet.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Misc/HandleAddToTrainingSet.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/HandleRedrawButton.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Misc/HandleRedrawButton.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/HandleRedrawButton.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Misc/HandleRedrawButton.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/HandleTrajCapture.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Misc/HandleTrajCapture.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/HandleTrajCapture.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Misc/HandleTrajCapture.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/LogControllerTransform.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Misc/LogControllerTransform.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/LogControllerTransform.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Misc/LogControllerTransform.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/PrevRecordedTrajectories.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Misc/PrevRecordedTrajectories.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/PrevRecordedTrajectories.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Misc/PrevRecordedTrajectories.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/ResetAndReturn.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Misc/ResetAndReturn.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/ResetAndReturn.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Misc/ResetAndReturn.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/RotateJoints.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Misc/RotateJoints.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/RotateJoints.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Misc/RotateJoints.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Teleport.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Misc/Teleport.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Teleport.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Misc/Teleport.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TrainAndTest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Misc/TrainAndTest.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TrainAndTest.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Misc/TrainAndTest.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Waypoint.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Misc/Waypoint.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Waypoint.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Misc/Waypoint.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/DrawService/DrawServiceWithInspect.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/DrawService/DrawServiceWithInspect.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Misc/HandOrientation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Misc/HandOrientation.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -242,7 +204,7 @@
       <workItem from="1717506590859" duration="7634000" />
       <workItem from="1719252550221" duration="23048000" />
       <workItem from="1719581473435" duration="7862000" />
-      <workItem from="1719851358624" duration="11821000" />
+      <workItem from="1719851358624" duration="16275000" />
     </task>
     <task id="LOCAL-00001" summary="Hand Orientation started">
       <option name="closed" value="true" />
