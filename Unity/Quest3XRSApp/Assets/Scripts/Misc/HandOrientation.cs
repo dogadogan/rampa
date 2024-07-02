@@ -51,16 +51,23 @@ public class HandOrientation : MonoBehaviour
     public void UpdateHandOrientationIndicator(Vector3 point1, Vector3 point2)
     {
         
+        if (OVRInput.GetLocalControllerVelocity(controller).magnitude < 0.1)
+        {
+            // don't touch the rotation if the controller is moving slowly
+            handOrientationIndicator.transform.position = OVRInput.GetLocalControllerPosition(controller);
+            return;
+        }
+        
         Vector3 trajectoryTangentVector = point1 - point2;
         Vector3 trajectoryTangentWithoutY = new Vector3(trajectoryTangentVector.x, 0, trajectoryTangentVector.z);
 
         Vector3 planeNormal;
-        if (trajectoryTangentWithoutY.magnitude < 0.01) // if the trajectory is vertical
+        if (trajectoryTangentWithoutY.magnitude < 0.01) // if the trajectory is vertical use the x axis as the normal
         {
             planeNormal = Vector3.Cross(trajectoryTangentVector, new Vector3(1, 0, 0));
         }
-        else
-        {
+        else // otherwise use the y axis as the normal
+        { 
             planeNormal = Vector3.Cross(trajectoryTangentVector, new Vector3(0, 1, 0));   
         }
         
