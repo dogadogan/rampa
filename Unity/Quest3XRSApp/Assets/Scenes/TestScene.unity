@@ -14912,6 +14912,7 @@ MonoBehaviour:
   drawServiceWithInspect: {fileID: 2138264129}
   hand: {fileID: 2138264125}
   handOrientationIndicatorModel: {fileID: 7533673776425174605, guid: 72938ee9d405545cab60200183dcea1c, type: 3}
+  controller: 2
 --- !u!1 &888906136
 GameObject:
   m_ObjectHideFlags: 0
@@ -35246,6 +35247,7 @@ MonoBehaviour:
   lineRenderer: {fileID: 255347229}
   recordOrientationToggle: {fileID: 1944410047}
   handOrientation: {fileID: 886951543}
+  controller: 2
   bar: {fileID: 679214490}
   sliderPosition: {fileID: 914773113}
   loadingText: {fileID: 1032662679}

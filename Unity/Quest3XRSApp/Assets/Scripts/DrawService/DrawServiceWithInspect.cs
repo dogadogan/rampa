@@ -22,6 +22,7 @@ public class DrawServiceWithInspect : MonoBehaviour
 
     public Toggle recordOrientationToggle;
     public HandOrientation handOrientation;
+    public OVRInput.Controller controller;
     public GameObject bar;
     public GameObject sliderPosition;
     public GameObject loadingText;
@@ -71,27 +72,50 @@ public class DrawServiceWithInspect : MonoBehaviour
         loadingText.GetComponent<TMP_Text>().text = "pinch to start drawing";
         while (true)
         {
-            if (hand.GetFingerIsPinching(OVRHand.HandFinger.Index))
-            {
-    
-                isFirstPart = false;
-                loadingText.GetComponent<TMP_Text>().text = "drawing trajectory";
-                handOrientation.ShowIndicator(true);
+            if (!recordOrientationToggle.isOn) {
+                if (hand.GetFingerIsPinching(OVRHand.HandFinger.Index))
+                {
+        
+                    isFirstPart = false;
+                    loadingText.GetComponent<TMP_Text>().text = "drawing trajectory";
+                }
+            }
+            else {
+                if (OVRInput.Get(OVRInput.Button.One))
+                {
+                    isFirstPart = false;
+                    loadingText.GetComponent<TMP_Text>().text = "drawing trajectory";
+                    handOrientation.ShowIndicator(true);
+                }
             }
             if (numberOfPoints % 5 == 0) // add new point to trajectory every 5 points
             {        
-                if (!hand.GetFingerIsPinching(OVRHand.HandFinger.Index) && !isFirstPart)
-                {
-                    UpdateDrawingState();
-                    break;
+                
+                if (!recordOrientationToggle.isOn) {
+                    if (!hand.GetFingerIsPinching(OVRHand.HandFinger.Index) && !isFirstPart)
+                    {
+                        UpdateDrawingState();
+                        break;
+                    }
                 }
+                else {
+                    if (!OVRInput.Get(OVRInput.Button.One) && !isFirstPart)
+                    {
+                        handOrientation.ShowIndicator(false);
+                        UpdateDrawingState();
+                        break;
+                    }
+                }
+
                 if (!isFirstPart) {
-                    targetPoints.Add(hand.PointerPose.position);
+                    
                     if (recordOrientationToggle.isOn) {
                         targetOrientations.Add(handOrientation.GetRotation());
+                        targetPoints.Add(OVRInput.GetLocalControllerPosition(controller));
                     }
                     else {
                         targetOrientations.Add(Quaternion.Euler(90,0,0));
+                        targetPoints.Add(hand.PointerPose.position);
                     }
                 }
             }
@@ -99,7 +123,12 @@ public class DrawServiceWithInspect : MonoBehaviour
             { 
                 numberOfPoints++;
                 lineRenderer.positionCount = numberOfPoints;
-                lineRenderer.SetPosition(numberOfPoints - 1,  hand.PointerPose.position);
+                if (!recordOrientationToggle.isOn) {
+                    lineRenderer.SetPosition(numberOfPoints - 1,  hand.PointerPose.position);
+                }
+                else {
+                    lineRenderer.SetPosition(numberOfPoints - 1, OVRInput.GetLocalControllerPosition(controller));
+                }
                 if (recordOrientationToggle.isOn && numberOfPoints > 1) {
                     if (Vector3.Distance(trajectorySamplePoints_point1, lineRenderer.GetPosition(numberOfPoints - 1)) > 0.007) {
                         trajectorySamplePoints_point2 = trajectorySamplePoints_point1;
