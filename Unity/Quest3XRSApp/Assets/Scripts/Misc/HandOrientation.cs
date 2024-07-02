@@ -14,6 +14,8 @@ public class HandOrientation : MonoBehaviour
     
     public GameObject handOrientationIndicatorModel;
 
+    public OVRInput.Controller controller;
+
 
     void Start()
     {
@@ -24,6 +26,8 @@ public class HandOrientation : MonoBehaviour
         );
         
         handOrientationIndicator.SetActive(false);
+
+
     }
 
     public void SetIndicator(bool set)
@@ -49,8 +53,8 @@ public class HandOrientation : MonoBehaviour
         Vector3 planeNormal = Vector3.Cross(trajectoryTangentVector, new Vector3(0, 1, 0));
         planeNormal = planeNormal.normalized;
 
-        handOrientationIndicator.transform.rotation = GetMirroredQuaternion(hand.PointerPose.rotation, planeNormal);
-        handOrientationIndicator.transform.position = hand.PointerPose.position;
+        handOrientationIndicator.transform.rotation = GetMirroredQuaternion(OVRInput.GetLocalControllerRotation(controller), planeNormal);
+        handOrientationIndicator.transform.position = OVRInput.GetLocalControllerPosition(controller);
         
     }
     
