@@ -1,7 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using UnityEngine;
+using Matrix4x4 = UnityEngine.Matrix4x4;
+using Quaternion = UnityEngine.Quaternion;
+using Vector3 = UnityEngine.Vector3;
+using Vector4 = UnityEngine.Vector4;
 
 public class HandOrientation : MonoBehaviour
 {
@@ -47,10 +52,18 @@ public class HandOrientation : MonoBehaviour
     {
         
         Vector3 trajectoryTangentVector = point1 - point2;
+        Vector3 trajectoryTangentWithoutY = new Vector3(trajectoryTangentVector.x, 0, trajectoryTangentVector.z);
+
+        Vector3 planeNormal;
+        if (trajectoryTangentWithoutY.magnitude < 0.01) // if the trajectory is vertical
+        {
+            planeNormal = Vector3.Cross(trajectoryTangentVector, new Vector3(1, 0, 0));
+        }
+        else
+        {
+            planeNormal = Vector3.Cross(trajectoryTangentVector, new Vector3(0, 1, 0));   
+        }
         
-        // We take the cross product of the tangent vector and the upwards (0, 1, 0) vector so that the new vector is 
-        // both perpendicular to the tangent vector and the ground.
-        Vector3 planeNormal = Vector3.Cross(trajectoryTangentVector, new Vector3(0, 1, 0));
         planeNormal = planeNormal.normalized;
 
         handOrientationIndicator.transform.rotation = GetMirroredQuaternion(OVRInput.GetLocalControllerRotation(controller), planeNormal);

@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="52630e7e-4dfe-48dd-ad03-1f23ac0209ec" name="Changes" comment="HandOrientation class done">
+    <list default="true" id="52630e7e-4dfe-48dd-ad03-1f23ac0209ec" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Quest3XRSApp/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Quest3XRSApp/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/DrawService/DrawServiceWithInspect.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/DrawService/DrawServiceWithInspect.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Misc/HandOrientation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Misc/HandOrientation.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" afterDir="false" />
     </list>
@@ -20,8 +19,9 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/AdjustText.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///Users/toprak/Desktop/ARobot/Unity/Quest3XRSApp/Assets/Scripts/DrawService/DrawServiceWithInspect.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Users/toprak/Desktop/ARobot/Unity/Quest3XRSApp/Assets/Scripts/HandOrientation.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Misc/AdjustText.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Trajectory/PlanRequestGeneratorRealTime.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Trajectory/TrajectoryHelperFunctions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Trajectory/TrajectoryPlanner.cs" root0="FORCE_HIGHLIGHTING" />
@@ -204,7 +204,7 @@
       <workItem from="1717506590859" duration="7634000" />
       <workItem from="1719252550221" duration="23048000" />
       <workItem from="1719581473435" duration="7862000" />
-      <workItem from="1719851358624" duration="16275000" />
+      <workItem from="1719851358624" duration="19514000" />
     </task>
     <task id="LOCAL-00001" summary="Hand Orientation started">
       <option name="closed" value="true" />
@@ -222,7 +222,15 @@
       <option name="project" value="LOCAL" />
       <updated>1719871260885</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Recording hand orientation with pinch completed">
+      <option name="closed" value="true" />
+      <created>1719922494393</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1719922494393</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -241,6 +249,7 @@
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
     <MESSAGE value="Hand Orientation started" />
     <MESSAGE value="HandOrientation class done" />
-    <option name="LAST_COMMIT_MESSAGE" value="HandOrientation class done" />
+    <MESSAGE value="Recording hand orientation with pinch completed" />
+    <option name="LAST_COMMIT_MESSAGE" value="Recording hand orientation with pinch completed" />
   </component>
 </project>
