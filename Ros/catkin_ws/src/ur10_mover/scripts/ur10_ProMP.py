@@ -4,6 +4,7 @@ import rospy
 import numpy as np
 import os
 import time
+import math
 from movement_primitives.promp import ProMP
 from movement_primitives.dmp import DMP
 from gmr import GMM
@@ -24,54 +25,61 @@ rospy.sleep(2)
 isTraining = False
 last_training = ""
 sample_length = 100
-n_dims = 3
+n_dims_pos = 3
+n_dims_or = 4
+
+filenames = []
 
 priors = 20 # number of GMM components
 
-p = ProMP(n_dims=n_dims,n_weights_per_dim=20)
-d = DMP(n_dims=n_dims, n_weights_per_dim=20)
-g = GMM(n_components=priors, random_state=1234)
+p_pos = ProMP(n_dims=n_dims_pos,n_weights_per_dim=20)
+p_or = ProMP(n_dims=n_dims_or, n_weights_per_dim=20)
+
+d_pos = DMP(n_dims=n_dims_pos, n_weights_per_dim=20)
+d_or = DMP(n_dims=n_dims_or, n_weights_per_dim=20)
+
+g_pos_x = GMM(n_components=priors, random_state=1234)
+g_pos_y = GMM(n_components=priors, random_state=1234)
+g_pos_z = GMM(n_components=priors, random_state=1234)
+g_or_x = GMM(n_components=priors, random_state=1234)
+g_or_y = GMM(n_components=priors, random_state=1234)
+g_or_z = GMM(n_components=priors, random_state=1234)
+g_or_w = GMM(n_components=priors, random_state=1234)
 
 def save_trajectory_to_data(req):
+
+    global filenames
+
     rospy.loginfo("Starting")
     rospy.loginfo(req.pose_list)
     response = TrainingDataServiceResponse()
     rospy.loginfo("Received training data")
 
     timestamp = str(int(time.time() * 1000))
-    filename = f"data_{timestamp}.txt"
-    file_path = os.path.join(os.path.dirname(__file__), 'data', filename)
+    filename = f"data_{timestamp}.npy"
     rospy.loginfo("Received training data")
     if len(req.pose_list) == 0:
         response.output_msg = "no point given"
         return response
     rospy.loginfo("Opening file")
-    with open(file_path, 'w+') as file:
-        for pose in req.pose_list:
-            pose_list = [pose.position.x, pose.position.y, pose.position.z]
-            file.write(str(pose_list) + '\n')
+    trajectory = []
+    for pose in req.pose_list:
+        pose_list = [pose.position.x, pose.position.y, pose.position.z,
+                         pose.orientation.x, pose.orientation.y, pose.orientation.z, pose.orientation.w]
+        
+        trajectory.append(pose_list)
+    trajectory = np.array(trajectory)
+    np.save(filename, trajectory)
+    filenames.append(filename)
     response.output_msg = "success"
     return response
 
 def read_data_files():
-    data_folder_path = os.path.join(os.path.dirname(__file__), 'data')
     trajectory_list= []
-    for filename in os.listdir(data_folder_path):
-        if filename.startswith("data_"):
-            file_path = os.path.join(data_folder_path, filename)
-            with open(file_path, 'r') as input_file:
-                traj = convert_data_file_to_list(input_file)
-                trajectory_list.append(traj)
+    for filename in filenames:
+        trajectory = np.load(filename)
+        trajectory_list.append(trajectory)
     return trajectory_list
-
-def convert_data_file_to_list(input_file):
-    traj = []
-    saved_trajectory = input_file.readlines()
-    input_file.close()
-    for point in saved_trajectory:
-        point= [float(i) for i in point[1:-2].split(',')]
-        traj.append(point)
-    return traj
 
 def interpolate_points(points, total_points):
     num_segments = len(points) - 1
@@ -114,20 +122,26 @@ def start_training(req):
         all_demonstrations.append(interpolated_points)
     #rospy.loginfo(all_demonstrations)
     demo_data = np.array(all_demonstrations)
-    demo_data = demo_data.reshape((number_of_demonstrations, sample_length, n_dims))
+    demo_data = demo_data.reshape((number_of_demonstrations, sample_length, n_dims_pos + n_dims_or))
 
-    rospy.loginfo(req.input_msg)
+    demo_data_pos = demo_data[:,:,:3]
+    demo_data_or = demo_data[:,:,-4:]
 
+    rospy.loginfo(demo_data_pos.shape)
+    rospy.loginfo(demo_data_or.shape)
+    
     if (req.input_msg == "promp"):
         Ts = np.linspace(0, 1, sample_length).reshape((1, sample_length))  # Generate Ts for one demonstration
         Ts = np.tile(Ts, (number_of_demonstrations, 1))
         #Ts = np.linspace(0,1,sample_length).reshape((number_of_demonstrations,sample_length)) 
-        Ys = demo_data
+        Ypos = demo_data_pos
+        Yor = demo_data_or
 
         rospy.loginfo("Starting to train")
 
         # Training
-        p.imitate(Ts,Ys)
+        p_pos.imitate(Ts,Ypos)
+        p_or.imitate(Ts,Yor)
 
         rospy.loginfo("Finished training")
 
@@ -135,28 +149,47 @@ def start_training(req):
 
     elif (req.input_msg == "dmp"):
 
-        Y = demo_data
+        Ypos = demo_data_pos
+        Yor = demo_data_or
         Ts = np.linspace(0,1,sample_length).reshape(sample_length)
 
         rospy.loginfo("Starting to train")
 
         # Training
-        for i, traj in enumerate(Y):
-            d.imitate(T=Ts, Y = traj)
+        for i, traj in enumerate(Ypos):
+            d_pos.imitate(T=Ts, Y = traj)
+        
+        for i, traj in enumerate(Yor):
+            d_or.imitate(T=Ts, Y = traj)
 
         rospy.loginfo("Finished training")
 
         last_training = "dmp"
     
+    
     elif (req.input_msg == "gmm"):
-        Y = demo_data.reshape(demo_data.shape[0], -1)
+
+        Ypos_x = demo_data_pos[:,:,0]
+        Ypos_y = demo_data_pos[:,:,1]
+        Ypos_z = demo_data_pos[:,:,2]
+
+        Yor_x = demo_data_or[:,:,0]
+        Yor_y = demo_data_or[:,:,1]
+        Yor_z = demo_data_or[:,:,2]
+        Yor_w = demo_data_or[:,:,3]
 
         rospy.loginfo("Starting to train")
         # Training
-        g.from_samples(Y)
+        g_pos_x.from_samples(Ypos_x)
+        g_pos_y.from_samples(Ypos_y)
+        g_pos_z.from_samples(Ypos_z)
+        g_or_x.from_samples(Yor_x)
+        g_or_y.from_samples(Yor_y)
+        g_or_x.from_samples(Yor_z)
+        g_or_x.from_samples(Yor_w)
         rospy.loginfo("Finished training")
 
-        last_training = "gmm"
+        last_training = "gmm" 
 
     isTraining = False
     response.output_msg = "success"
@@ -168,91 +201,125 @@ def sample_trajectory(req):
 
     rospy.loginfo("Received sample request")
     response = SampleServiceResponse()
+    rospy.loginfo(req.condition_poses)
     condition_poses = []
+    condition_orientations = []
     for pose in req.condition_poses:
         condition_poses.append(pose.position)
+        condition_orientations.append(pose.orientation)
         
     T = np.linspace(0,1,len(condition_poses)) # generate time steps
 
-    trajectory = ""
+    rospy.loginfo(condition_poses)
+    rospy.loginfo(condition_orientations)
+
+    trajectory_pos = []
+    trajectory_or = []
 
     rospy.loginfo(last_training)
 
     if (last_training == "promp"):
         # conditioning model
-        _p = p
         for i in range(len(condition_poses)):
             pose = condition_poses[i]
             rospy.loginfo(T[i])
-            _p = _p.condition_position([pose.x,pose.y,pose.z],t=T[i])
+            p_pos.condition_position([pose.x,pose.y,pose.z],t=T[i])
 
         #sampling
-        trajectory = _p.sample_trajectories(T=np.linspace(0,1,sample_length).reshape(sample_length), n_samples=1, random_state=np.random.RandomState(seed=1234))
+        trajectory_pos = p_pos.sample_trajectories(T=np.linspace(0,1,sample_length).reshape(sample_length), n_samples=1, random_state=np.random.RandomState(seed=1234))
+
+        for i in range(len(condition_orientations)):
+            orientation = condition_orientations[i]
+            p_or.condition_position([orientation.x,orientation.y,orientation.z, orientation.w],t=T[i])
+
+        #sampling
+        trajectory_or = p_or.sample_trajectories(T=np.linspace(0,1,sample_length).reshape(sample_length), n_samples=1, random_state=np.random.RandomState(seed=1234))
 
     elif (last_training == "dmp"):
 
-        _d = d
-        
         for i in range(0, len(condition_poses)):
             pose = condition_poses[i]
-            _d.configure(t = T[i], goal_y = np.array([pose.x, pose.y, pose.z]))
+            d_pos.configure(t = T[i], goal_y = np.array([pose.x, pose.y, pose.z]))
 
-        t, trajectory = _d.open_loop()
-        trajectory = trajectory[:sample_length]
+        t, trajectory_pos = d_pos.open_loop()
+        trajectory_pos = trajectory_pos[:sample_length]
+
+        for i in range(0, len(condition_orientations)):
+            orientation = condition_orientations[i]
+            d_or.configure(t = T[i], goal_y = np.array([orientation.x, orientation.y, orientation.z, orientation.w]))
+
+        t, trajectory_or = d_or.open_loop()
+        trajectory_or = trajectory_or[:sample_length]
     
     elif (last_training == "gmm"):
+        
+        for i in range(len(condition_poses)):
+            pos = condition_poses[i]
+            index = (i / (len(condition_poses))) * sample_length
+            index = math.floor(index)
+            g_pos_x.condition([index], pos.x)
+            g_pos_y.condition([index], pos.y)
+            g_pos_z.condition([index], pos.z)
+        
+        for i in range(len(condition_orientations)):
+            orientation = condition_orientations[i]
+            index = (i / (len(condition_orientations))) * sample_length
+            index = math.floor(index)
+            g_or_x.condition([index], orientation.x)
+            g_or_y.condition([index], orientation.y)
+            g_or_z.condition([index], orientation.z)
+            g_or_w.condition([index], orientation.w)
 
+        #sampling
+        trajectory_pos_x = g_pos_x.sample(1)
+        trajectory_pos_y = g_pos_y.sample(1)
+        trajectory_pos_z = g_pos_z.sample(1)
+        trajectory_or_x = g_or_x.sample(1)
+        trajectory_or_y = g_or_y.sample(1)
+        trajectory_or_z = g_or_z.sample(1)
+        trajectory_or_w = g_or_w.sample(1)
 
-        start = np.array([start_pos.x,start_pos.y,start_pos.z])
-        end = np.array([end_pos.x,end_pos.y,end_pos.z])
-
-        _g = g
-        _g = _g.condition([0,-1], [start, end])
-        trajectory = _g.sample(1)
-        trajectory = np.insert(trajectory, 0, start)
-        trajectory = np.append(trajectory, end)
-                        
+        trajectory_pos = np.stack((trajectory_pos_x, trajectory_pos_y, trajectory_pos_z), 1)
+        trajectory_or = np.stack((trajectory_or_x, trajectory_or_y, trajectory_or_z, trajectory_or_w), 1)
 
     rospy.loginfo("SAMPLED TRAJECTORY")
     
-
     sample = []
     if (last_training == "promp"):
         rospy.loginfo("Taking the first trajectory")
-        
-        sample = trajectory[0]
-
-        rospy.loginfo(sample)
+        sample = np.concatenate((trajectory_pos[0],trajectory_or[0]), axis=-1)
     else:
-        sample = trajectory
+        sample = np.concatenate((trajectory_pos,trajectory_or), axis=-1)
 
     response_trajectory = []
     for point in sample: 
         pose = Pose()
         pose.position.x, pose.position.y, pose.position.z = point[0], point[1], point[2]
+        pose.orientation.x, pose.orientation.y, pose.orientation.z, pose.orientation.w = point[3], point[4], point[5], point[6]
         response_trajectory.append(pose)
     response.sampled_trajectory = response_trajectory
 
     rospy.loginfo("Returned sampled trajectory with length " + str(len(response_trajectory)))
 
-    file_path = os.path.join(os.path.dirname(__file__), 'sample.txt')
-    with open(file_path, 'w+') as file:
-        for point in sample:
-            file.write(str(point) + '\n')
+    np.save('sample.npy', sample)
 
     return response
 
 def delete_training_data(req):
+
+    global filenames
+    
     rospy.loginfo("Starting")
     response = TrainingServiceResponse()
     rospy.loginfo("Received deletion trigger.")
 
-    directory_name = os.path.join(os.path.dirname(__file__), 'data')
-    for filename in os.listdir(directory_name):
-        file_path = os.path.join(directory_name, filename)
-        os.remove(file_path)
-        print("Deleted: " + file_path)
+    
+    for filename in filenames:
+        os.remove(filename)
+        print("Deleted: " + filename)
         response.output_msg = "success"
+
+    filenames = []
     return response
 
 
@@ -262,6 +329,18 @@ def send_training_data(req):
     response = GetTrainingDataServiceResponse()
     rospy.loginfo("Training data requested.")
     
+    global filenames
+    filenames = []
+
+    # fill filename
+    prev_files = os.listdir('.')
+    for file in prev_files:
+        if file.endswith('.npy') & file.startswith('data'):
+                filenames.append(file)
+
+    rospy.loginfo(prev_files)
+    rospy.loginfo(filenames)
+
     data = read_data_files()
 
     for trajectory in data:

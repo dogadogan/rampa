@@ -27,11 +27,11 @@ from ur10_interface import UR10
 joint_names = ['shoulder_pan_joint', 'shoulder_lift_joint', 'elbow_joint', 'wrist_1_joint', 'wrist_2_joint', 'wrist_3_joint']
 
 #Between Melodic and Noetic, the return type of plan() changed. moveit_commander has no __version__ variable, so checking the python version as a proxy
-if sys.version_info >= (3, 0):
-    def planCompat(plan):
+    
+def planCombat(plan):
+    if sys.version_info >= (3,0):
         return plan[1]
-else:
-    def planCompat(plan):
+    else:
         return plan
         
 """
@@ -56,7 +56,7 @@ def plan_trajectory(move_group, destination_pose, start_joint_angles):
         """.format(destination_pose, destination_pose)
         raise Exception(exception_str)
 
-    return planCompat(plan)
+    return planCombat(plan)
 
 def execute_joint_angles(joint_angles,group):
     group.set_joint_value_target(joint_angles)
@@ -78,10 +78,27 @@ def execute_joint_angles(joint_angles,group):
 #         return pos_intpl, rot_intpl
 
 def plan_pick_and_place(req):
+
+    ## set move_group's position to reset pose
+    #current_joint_state = JointState()
+    #current_joint_state.name = joint_names
+    #current_joint_state.position = [0, -1.57, 0, -1.57, 0, 0]
+
+    #moveit_robot_state = RobotState()
+    #moveit_robot_state.joint_state = current_joint_state
+    #move_group.set_start_state(moveit_robot_state)
+
+
     rospy.loginfo(rospy.get_caller_id() + "Plan Requested:\n")
 
     response = PlannerServiceResponse()
     response.request_type = req.request_type
+
+    rospy.loginfo(req.pose_list)
+
+    # if (req.request_type == "poses"):
+    #     return cartesian_path(response, req)
+        
 
     rospy.loginfo("Recieved pose count is:")
     rospy.loginfo(len(req.pose_list))
@@ -95,7 +112,12 @@ def plan_pick_and_place(req):
 
     previous_ending_joint_angles = req.joints_input #robot.get_joint_position()
     for pose in req.pose_list:
-        pose.orientation = down_orientation
+        # pose.orientation = down_orientation
+        pose.orientation.x = round(pose.orientation.x, 2)
+        pose.orientation.y = round(pose.orientation.y, 2)
+        pose.orientation.z = round(pose.orientation.z, 2)
+        pose.orientation.w = round(pose.orientation.w, 2)
+
         trajectory = plan_trajectory(move_group,pose,previous_ending_joint_angles) 
         if not trajectory.joint_trajectory.points:
             rospy.logerr("AN ERROR OCCURED WHILE PLANNING")
@@ -124,6 +146,35 @@ def convert_data_file_to_list(input_file):
     rospy.loginfo("traj")    
     rospy.loginfo(traj)
     return traj
+
+
+def cartesian_path(response, req):
+
+
+    rospy.loginfo("Calculating cartesian path")
+
+    down_orientation = Pose().orientation
+    down_orientation.x, down_orientation.y, down_orientation.z, down_orientation.w = 1,0,0,0
+
+    waypoints = []
+
+    for pose in req.pose_list:
+        pose.orientation = down_orientation
+        waypoints.append(copy.deepcopy(pose))
+    
+    (plan, fraction) = move_group.compute_cartesian_path(waypoints, 0.01, 0.0)
+
+
+    move_group.clear_pose_targets()
+
+    rospy.loginfo(plan)
+
+    response.trajectories = [plan]
+    save_trajectory(response.trajectories)
+    #rospy.loginfo(response.trajectories)
+    response.pose_list = req.pose_list
+
+    return response
 
 def plan_pick_and_place2(req):
 
@@ -175,17 +226,19 @@ def plan_pick_and_place2(req):
 
     return response
 
-def save_trajectory(trajectories):
-    f = open("trajectory.txt","w")
-    for trajectory in trajectories:
-        for point in trajectory.joint_trajectory.points:
-            f.write(str(point.positions) + '\n')
-    f.close()
+def save_trajectory(trajectory):
+    traj = []
+    for joint_state in trajectory:
+        for point in joint_state.joint_trajectory.points:
+            point = point.positions
+            traj.append(point)
+    traj = np.array(traj)
+    np.save('trajectory.npy', traj)
+
 
 def discard_last_trajectory(req):
     response = DiscardServiceResponse()
-    discard_file = open("trajectory.txt", 'w') # Open with write mod as an empty file and close it
-    discard_file.close()
+    os.remove('trajectory.npy')
     response.output_msg = "success"
     return response
 
@@ -206,21 +259,20 @@ def return_joint_state(req):
 
 def execute_on_real_robot(req):
     response = ExecutionServiceResponse()
-    input_file = open("trajectory.txt", 'r')
-    saved_trajectory = input_file.readlines()
     
-    traj = []
-    rospy.loginfo("Executing trajectory with " + str(len(saved_trajectory)) +" intermediate states.")
-    for state in saved_trajectory:
-        state= [float(i) for i in state[1:-2].split(',')]
-        #state = [state[i] for i in joint_order]
-        traj.append(state)
-    input_file.close()
+    traj = np.load('trajectory.npy')
+
+    rospy.loginfo("Executing trajectory with " + str(len(traj)) +" intermediate states.")
+    
+    rospy.loginfo(traj.shape)
+    rospy.loginfo(traj)
     
     # TODO move_group needs another format input to run on simulation
     
     #rospy.loginfo("Trajectory execution request is sent to driver.")
-    #robot.set_joint_positions(traj)
+    
+    robot.set_joint_positions(traj)
+
     return response
 
 def moveit_server():
