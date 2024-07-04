@@ -4,6 +4,8 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Unity.VisualScripting;
+using UnityEngine.Serialization;
 
 public class DrawServiceWithInspect : MonoBehaviour
 {
@@ -12,8 +14,15 @@ public class DrawServiceWithInspect : MonoBehaviour
     private Color lineColor = Color.magenta;
     private float lineWidth = 0.015f;
     private List<Vector3> targetPoints = new List<Vector3>();
+    private List<Quaternion> targetOrientations = new List<Quaternion>();
+    private Vector3 trajectorySamplePoints_point1;
+    private Vector3 trajectorySamplePoints_point2;
     private State state;
 
+
+    public Toggle recordOrientationToggle;
+    public HandOrientation handOrientation;
+    public OVRInput.Controller controller;
     public GameObject bar;
     public GameObject sliderPosition;
     public GameObject loadingText;
@@ -26,6 +35,8 @@ public class DrawServiceWithInspect : MonoBehaviour
     public Button addToTrainingButton;
     public GameObject anotherTrajectoryButton;
     public GameObject executeOnRealRobotButton;
+
+    
 
 
     public TMP_Text debugText;
@@ -48,6 +59,9 @@ public class DrawServiceWithInspect : MonoBehaviour
         
         anotherTrajectoryButton.SetActive(false);
         executeOnRealRobotButton.SetActive(false);
+        
+        trajectorySamplePoints_point1 = new Vector3(0, 0, 0);
+        trajectorySamplePoints_point2 = new Vector3(0, 0, 0);
 
         ResetDrawingState();
     }
@@ -58,26 +72,70 @@ public class DrawServiceWithInspect : MonoBehaviour
         loadingText.GetComponent<TMP_Text>().text = "pinch to start drawing";
         while (true)
         {
-            if (hand.GetFingerIsPinching(OVRHand.HandFinger.Index))
-            {
-    
-                isFirstPart = false;
-                loadingText.GetComponent<TMP_Text>().text = "drawing trajectory";
-            }
-            if (numberOfPoints % 5 == 0)
-            {        
-                if (!hand.GetFingerIsPinching(OVRHand.HandFinger.Index) && !isFirstPart)
+            if (!recordOrientationToggle.isOn) {
+                if (hand.GetFingerIsPinching(OVRHand.HandFinger.Index))
                 {
-                    UpdateDrawingState();
-                    break;
+        
+                    isFirstPart = false;
+                    loadingText.GetComponent<TMP_Text>().text = "drawing trajectory";
                 }
-                if (!isFirstPart)
-                    targetPoints.Add(hand.PointerPose.position);
             }
-            if (!isFirstPart) {
+            else {
+                if (OVRInput.Get(OVRInput.Button.One))
+                {
+                    isFirstPart = false;
+                    loadingText.GetComponent<TMP_Text>().text = "drawing trajectory";
+                    handOrientation.ShowIndicator(true);
+                }
+            }
+            if (numberOfPoints % 5 == 0) // add new point to trajectory every 5 points
+            {        
+                
+                if (!recordOrientationToggle.isOn) {
+                    if (!hand.GetFingerIsPinching(OVRHand.HandFinger.Index) && !isFirstPart)
+                    {
+                        UpdateDrawingState();
+                        break;
+                    }
+                }
+                else {
+                    if (!OVRInput.Get(OVRInput.Button.One) && !isFirstPart)
+                    {
+                        handOrientation.ShowIndicator(false);
+                        UpdateDrawingState();
+                        break;
+                    }
+                }
+
+                if (!isFirstPart) {
+                    
+                    if (recordOrientationToggle.isOn) {
+                        targetOrientations.Add(handOrientation.GetRotation());
+                        targetPoints.Add(OVRInput.GetLocalControllerPosition(controller));
+                    }
+                    else {
+                        targetOrientations.Add(Quaternion.Euler(90,0,0));
+                        targetPoints.Add(hand.PointerPose.position);
+                    }
+                }
+            }
+            if (!isFirstPart) // update lineRenderer and handOrientation indicator
+            { 
                 numberOfPoints++;
                 lineRenderer.positionCount = numberOfPoints;
-                lineRenderer.SetPosition(numberOfPoints - 1,  hand.PointerPose.position);
+                if (!recordOrientationToggle.isOn) {
+                    lineRenderer.SetPosition(numberOfPoints - 1,  hand.PointerPose.position);
+                }
+                else {
+                    lineRenderer.SetPosition(numberOfPoints - 1, OVRInput.GetLocalControllerPosition(controller));
+                }
+                if (recordOrientationToggle.isOn && numberOfPoints > 1) {
+                    if (Vector3.Distance(trajectorySamplePoints_point1, lineRenderer.GetPosition(numberOfPoints - 1)) > 0.007) {
+                        trajectorySamplePoints_point2 = trajectorySamplePoints_point1;
+                        trajectorySamplePoints_point1 = lineRenderer.GetPosition(numberOfPoints - 1);
+                        handOrientation.UpdateHandOrientationIndicator(trajectorySamplePoints_point1, trajectorySamplePoints_point2);
+                    } 
+                }
             }
             yield return new WaitForSeconds(interval);
         }
@@ -86,7 +144,7 @@ public class DrawServiceWithInspect : MonoBehaviour
 
     private void TriggerPublishMethod()
     {
-        PlanRequestGeneratorWithPoses.GenerateRequest(targetPoints);
+        PlanRequestGeneratorWithPoses.GenerateRequest(targetPoints, targetOrientations);
     } 
 
     public void UpdateDrawingState(bool finalized = false)
@@ -95,6 +153,7 @@ public class DrawServiceWithInspect : MonoBehaviour
         {
             case State.Initial:
                 state = State.DrawTrajectory;
+
                 lineRenderer.positionCount = 0;
                 handleMenu(true);
 
@@ -107,6 +166,7 @@ public class DrawServiceWithInspect : MonoBehaviour
 
             case State.DrawTrajectory:
                 state = State.WaitingForExecution;
+                handOrientation.ShowIndicator(false);
                 executeButton.GetComponent<Button>().interactable = true;
                 PlanRequestGeneratorWithPoses.PrevRecordedTrajectories.SetInteractable(true);
                 loadingText.GetComponent<TMP_Text>().text = "trajectory recorded";
@@ -148,6 +208,7 @@ public class DrawServiceWithInspect : MonoBehaviour
                 else {
                     // redraw from current waypoint is clicked
                     state = State.DrawTrajectory;
+
                     
                     handleMenu(true);
                     redrawButton.interactable = false;
@@ -187,6 +248,7 @@ public class DrawServiceWithInspect : MonoBehaviour
         lineRenderer.positionCount = 0;
 
         StopAllCoroutines();
+        targetPoints.Clear();
 
 
         // set the buttons to be non-interactable in the initial state
@@ -247,7 +309,7 @@ public class DrawServiceWithInspect : MonoBehaviour
 
     public void SendTrainingData()
     {
-        trainAndTest.SendTrainingData(PlanRequestGeneratorWithPoses.previousPoses);
+        trainAndTest.SendTrainingData(PlanRequestGeneratorWithPoses.previousPoses, PlanRequestGeneratorWithPoses.previousOrientations);
         PlanRequestGeneratorWithPoses.ResetGenerator(true);
         UpdateDrawingState(true);
     }

@@ -59,6 +59,7 @@ public class ResetandReturn : MonoBehaviour
             case Mode.TestModelMenuToMainMenu:
 
                 TrainAndTest.SetExecutionPermissionOnRealRobot(false); // disable the button for future menu uses
+                TrainAndTest.ClearWaypoints();
                 goToMainMenuFunc();
                 break;
                 

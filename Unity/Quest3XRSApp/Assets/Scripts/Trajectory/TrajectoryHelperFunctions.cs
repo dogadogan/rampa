@@ -27,49 +27,27 @@ public class TrajectoryHelperFunctions : MonoBehaviour
         return joints;
     }
 
-    public PoseMsg GeneratePoseMsg(Vector3 pose)
+    public PoseMsg GeneratePoseMsg(Vector3 pose, Quaternion orientation)
     {
-
         debugText.text += "baseLink:  " + baseLink.transform.position;
 
         Vector3 direction = pose - baseLink.transform.position;
 
         // Create a rotation quaternion around the pivotPoint
-        Quaternion rotation = Quaternion.Euler(0, -baseLink.transform.eulerAngles.y, 0);
-
+        Quaternion baseReverseRotation = Quaternion.Euler(0, -baseLink.transform.eulerAngles.y, 0);
         // Rotate the direction vector
-        Vector3 rotatedDirection = rotation * direction;
+        Vector3 rotatedDirection = baseReverseRotation * direction;
 
-        Vector3 rotatedPoint = baseLink.transform.position + rotatedDirection;
+        Quaternion rotatedOrientation = orientation * baseReverseRotation;
+        
         return new PoseMsg
         {
-            position = (rotatedPoint- baseLink.transform.position).To<FLU>(),
-
-            // The hardcoded x/z angles assure that the gripper is always positioned above the target cube before grasping.
-            orientation = Quaternion.Euler(90, 0, 0).To<FLU>()
+            position = rotatedDirection.To<FLU>(),
+            orientation = rotatedOrientation.To<FLU>()
         };
         
     }
-    
-    public PoseMsg GeneratePoseMsgForTraining(Vector3 pose)
-    {
-        
-        Vector3 direction = pose - baseLink.transform.position;
-
-        // Create a rotation quaternion around the pivotPoint
-        Quaternion rotation = Quaternion.Euler(0, -baseLink.transform.eulerAngles.y, 0);
-
-        // Rotate the direction vector
-        Vector3 rotatedDirection = rotation * direction;
-
-        return new PoseMsg
-        {
-            position = (rotatedDirection).To<FLU>(),
-            // The hardcoded x/z angles assure that the gripper is always positioned above the target cube before grasping.
-            orientation = Quaternion.Euler(90, 0, 0).To<FLU>()
-        };
-        
-    }
+ 
 
     public void SetJointAngles(JointTrajectoryPointMsg t)
     {

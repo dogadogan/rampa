@@ -14711,7 +14711,6 @@ GameObject:
   - component: {fileID: 886951540}
   - component: {fileID: 886951541}
   - component: {fileID: 886951542}
-  - component: {fileID: 886951543}
   m_Layer: 0
   m_Name: Publisher
   m_TagString: Untagged
@@ -14782,7 +14781,6 @@ MonoBehaviour:
   TrajectoryPlanner: {fileID: 886951535}
   PrevRecordedTrajectories: {fileID: 886951542}
   previousPoses: []
-  previousOrientations: []
   currentIndexPointer: 0
   backButton: {fileID: 1313081858}
   nextButton: {fileID: 117629141}
@@ -14809,7 +14807,6 @@ MonoBehaviour:
   TrajectoryPlanner: {fileID: 886951535}
   PrevRecordedTrajectories: {fileID: 886951542}
   previousPoses: []
-  previousOrientations: []
   currentIndexPointer: 0
   backButton: {fileID: 1313081858}
   nextButton: {fileID: 117629141}
@@ -14896,23 +14893,6 @@ MonoBehaviour:
   showTrajectoriesinTrajCaptureMenu: {fileID: 2029154551}
   baseLink: {fileID: 318227049}
   debugText: {fileID: 1336661518}
---- !u!114 &886951543
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 886951532}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 111c899f015c44488eed6aca1c734373, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  drawServiceRealTime: {fileID: 2138264128}
-  drawServiceWithInspect: {fileID: 2138264129}
-  hand: {fileID: 2138264125}
-  handOrientationIndicatorModel: {fileID: 7533673776425174605, guid: 72938ee9d405545cab60200183dcea1c, type: 3}
-  controller: 2
 --- !u!1 &888906136
 GameObject:
   m_ObjectHideFlags: 0
@@ -22322,7 +22302,7 @@ GameObject:
   - component: {fileID: 1336661519}
   - component: {fileID: 1336661518}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: DebugText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -35216,8 +35196,6 @@ MonoBehaviour:
   hand: {fileID: 2138264125}
   lineRenderer: {fileID: 255347229}
   planRequestGeneratorRealTime: {fileID: 886951538}
-  HandOrientation: {fileID: 886951543}
-  recordHandOrientationToggle: {fileID: 1944410047}
   trainAndTest: {fileID: 886951541}
   bar: {fileID: 679214490}
   sliderPosition: {fileID: 914773113}
@@ -35245,9 +35223,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hand: {fileID: 2138264125}
   lineRenderer: {fileID: 255347229}
-  recordOrientationToggle: {fileID: 1944410047}
-  handOrientation: {fileID: 886951543}
-  controller: 2
   bar: {fileID: 679214490}
   sliderPosition: {fileID: 914773113}
   loadingText: {fileID: 1032662679}

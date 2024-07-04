@@ -11,6 +11,9 @@ public class DrawServiceRealTime: MonoBehaviour
     private Color lineColor = Color.magenta;
     private float lineWidth = 0.015f;
     public PlanRequestGeneratorRealTime planRequestGeneratorRealTime;
+    public HandOrientation HandOrientation;
+    public Toggle recordHandOrientationToggle;
+
     public TrainAndTest trainAndTest;
     public GameObject bar;
     public GameObject sliderPosition;
@@ -205,7 +208,7 @@ public class DrawServiceRealTime: MonoBehaviour
 
     public void SendTrainingData()
     {
-        trainAndTest.SendTrainingData(planRequestGeneratorRealTime.previousPoses);
+        trainAndTest.SendTrainingData(planRequestGeneratorRealTime.previousPoses, planRequestGeneratorRealTime.previousOrientations);
         planRequestGeneratorRealTime.ResetGenerator(true);
         UpdateDrawingState(true);
     }

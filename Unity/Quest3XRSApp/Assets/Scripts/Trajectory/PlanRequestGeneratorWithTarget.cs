@@ -7,10 +7,9 @@ using UnityEngine.UI;
 public class PlanRequestGeneratorWithTarget : MonoBehaviour
 {
     const float k_JointAssignmentWait = 0.1f;
-    public GameObject m_Target;
     public TrajectoryHelperFunctions HelperFunctions;
     public TrajectoryPlanner TrajectoryPlanner;
-    public void GenerateRequest()
+    public void GenerateRequest(GameObject m_Target)
     {
         var request = new PlannerServiceRequest();
         
@@ -18,7 +17,7 @@ public class PlanRequestGeneratorWithTarget : MonoBehaviour
         request.joints_input = HelperFunctions.CurrentJointConfig();
 
         PoseMsg[] pose_list = new PoseMsg[1];
-        pose_list[0] = HelperFunctions.GeneratePoseMsg(m_Target.transform.position);
+        pose_list[0] = HelperFunctions.GeneratePoseMsg(m_Target.transform.position, m_Target.transform.rotation);
         request.pose_list = pose_list;
         
         TrajectoryPlanner.SendRequest(request);

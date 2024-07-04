@@ -8,13 +8,8 @@ public class GetTransform : MonoBehaviour
     public ArticulationBody baseLink;
     private bool autoTransform = false;
     
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
+    void Start() {}
+    
     void FixedUpdate()
     {
         if (autoTransform)
@@ -28,9 +23,6 @@ public class GetTransform : MonoBehaviour
         }
 
     }
-    
-    
-        
     
     public void ChangeTransformType()
     {

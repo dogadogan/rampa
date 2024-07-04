@@ -23,6 +23,13 @@ public class TrainAndTest : MonoBehaviour
     public TrajectoryHelperFunctions HelperFunctions;
     public GameObject source;
     public GameObject target;
+
+
+    private List<GameObject> waypoints = new List<GameObject>();
+
+    private List<double[]> jointAngles = new List<double[]>();
+    
+    public GameObject conditionPrefab;
     public TrajectoryPlanner trajectoryPlanner;
     public PrevRecordedTrajectories prevRecordedTrajectories;
 
@@ -37,14 +44,22 @@ public class TrainAndTest : MonoBehaviour
 
     public TMP_Text loadingText;
 
+    public TMP_Text debugText;
+
     public List<Button> TestMenu_ButtonsList;
     public Button TestMenu_ExecuteOnRealRobotButton;
+
+    public TMP_Dropdown modelDropdown;
     
     // Start is called before the first frame update
     void Start()
     {
         
         state = State.Untrained;
+
+        debugText.text += "start";
+
+        debugText.text += "waypoints count: " + waypoints.Count;
 
         testButtoninMainMenu.interactable = false;
 
@@ -61,7 +76,7 @@ public class TrainAndTest : MonoBehaviour
 
     }
     
-    public void SendTrainingData( List<Vector3> poses)
+    public void SendTrainingData( List<Vector3> poses, List<Quaternion> orientations)
     {
         var request = new TrainingDataServiceRequest();
         Debug.LogWarning("asd in function");
@@ -70,7 +85,7 @@ public class TrainAndTest : MonoBehaviour
         PoseMsg[] pose_list = new PoseMsg[poses.Count];
         for (int i = 0; i < poses.Count; i++)
         {
-            pose_list[i] = HelperFunctions.GeneratePoseMsgForTraining(poses[i]);
+            pose_list[i] = HelperFunctions.GeneratePoseMsg(poses[i], orientations[i]);
             Debug.LogWarning("asd pose:" + pose_list[i].position);
         }
         request.pose_list = pose_list;
@@ -85,6 +100,20 @@ public class TrainAndTest : MonoBehaviour
         state = State.Training;
         UpdateText();
         var request = new TrainingServiceRequest();
+        if (modelDropdown.value == 0)
+        {
+            request.input_msg = "promp";
+        }
+        else if (modelDropdown.value == 1)
+        {
+            request.input_msg = "dmp";
+        }
+        else if (modelDropdown.value == 2)
+        {
+            request.input_msg = "gmm";
+        }
+
+
         m_Ros.SendServiceMessage<TrainingServiceResponse>(trainTriggerService, request, TriggerTrainingResponse);
     
     }
@@ -103,11 +132,17 @@ public class TrainAndTest : MonoBehaviour
         SetAllButtonsInteractable(false);
         // they are made interactable after the request is completed in PlanRequesstGeneraterWithPoses - ExecuteTrajectories
         
-        
-
         var request = new SampleServiceRequest();
-        request.start_point = HelperFunctions.GeneratePoseMsg(source.transform.position);
-        request.end_point = HelperFunctions.GeneratePoseMsg(target.transform.position);
+        var start_point = HelperFunctions.GeneratePoseMsg(source.transform.position, source.transform.rotation);
+        var end_point = HelperFunctions.GeneratePoseMsg(target.transform.position, source.transform.rotation);
+        var req_waypoints = new PoseMsg[waypoints.Count + 2]; 
+        req_waypoints[0] = start_point;
+        req_waypoints[waypoints.Count + 1] = end_point;
+        for (int i = 0; i < waypoints.Count; i++)
+        {
+            req_waypoints[i + 1] = HelperFunctions.GeneratePoseMsg(waypoints[i].transform.position, waypoints[i].transform.rotation);
+        }
+        request.condition_poses = req_waypoints;
         m_Ros.SendServiceMessage<SampleServiceResponse>(testService, request, TestModelResponse);
     }
     
@@ -121,6 +156,29 @@ public class TrainAndTest : MonoBehaviour
         request.request_type = "poses_training";
         trajectoryPlanner.SendRequest(request);
     }
+
+    public void AddWaypoint() {
+
+        debugText.text = "adding waypoint"; 
+
+        GameObject newCondition = Instantiate<GameObject>(conditionPrefab);
+
+        debugText.text = "instantiated prefab"; 
+
+        newCondition.GetComponentInChildren<TMP_Text>().text = (waypoints.Count + 1).ToString();
+        waypoints.Add(newCondition);
+
+        debugText.text = "waypoints count: " + waypoints.Count;
+    }
+
+    public void DeleteWaypoint() {
+        if (waypoints.Count > 0) {
+            Destroy(waypoints.Last());
+            waypoints.RemoveAt(waypoints.Count - 1);
+        }
+    }
+
+
 
 
     public void TriggerDelete() {
@@ -193,5 +251,15 @@ public class TrainAndTest : MonoBehaviour
     {
         TestMenu_ExecuteOnRealRobotButton.interactable = permission;
     }
+
+    public void ClearWaypoints()
+    {
+        foreach (var waypoint in waypoints)
+        {
+            Destroy(waypoint);
+        }
+        waypoints.Clear();
+    }
+
     
 }
