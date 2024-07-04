@@ -14,6 +14,7 @@ const _getByteLength = _ros_msg_utils.getByteLength;
 
 //-----------------------------------------------------------
 
+let trajectory_msgs = _finder('trajectory_msgs');
 
 //-----------------------------------------------------------
 
@@ -94,22 +95,26 @@ class ExecutionServiceResponse {
   constructor(initObj={}) {
     if (initObj === null) {
       // initObj === null is a special case for deserialization where we don't initialize fields
-      this.output_msg = null;
+      this.joint_states = null;
     }
     else {
-      if (initObj.hasOwnProperty('output_msg')) {
-        this.output_msg = initObj.output_msg
+      if (initObj.hasOwnProperty('joint_states')) {
+        this.joint_states = initObj.joint_states
       }
       else {
-        this.output_msg = '';
+        this.joint_states = [];
       }
     }
   }
 
   static serialize(obj, buffer, bufferOffset) {
     // Serializes a message object of type ExecutionServiceResponse
-    // Serialize message field [output_msg]
-    bufferOffset = _serializer.string(obj.output_msg, buffer, bufferOffset);
+    // Serialize message field [joint_states]
+    // Serialize the length for message field [joint_states]
+    bufferOffset = _serializer.uint32(obj.joint_states.length, buffer, bufferOffset);
+    obj.joint_states.forEach((val) => {
+      bufferOffset = trajectory_msgs.msg.JointTrajectoryPoint.serialize(val, buffer, bufferOffset);
+    });
     return bufferOffset;
   }
 
@@ -117,14 +122,21 @@ class ExecutionServiceResponse {
     //deserializes a message object of type ExecutionServiceResponse
     let len;
     let data = new ExecutionServiceResponse(null);
-    // Deserialize message field [output_msg]
-    data.output_msg = _deserializer.string(buffer, bufferOffset);
+    // Deserialize message field [joint_states]
+    // Deserialize array length for message field [joint_states]
+    len = _deserializer.uint32(buffer, bufferOffset);
+    data.joint_states = new Array(len);
+    for (let i = 0; i < len; ++i) {
+      data.joint_states[i] = trajectory_msgs.msg.JointTrajectoryPoint.deserialize(buffer, bufferOffset)
+    }
     return data;
   }
 
   static getMessageSize(object) {
     let length = 0;
-    length += _getByteLength(object.output_msg);
+    object.joint_states.forEach((val) => {
+      length += trajectory_msgs.msg.JointTrajectoryPoint.getMessageSize(val);
+    });
     return length + 4;
   }
 
@@ -135,13 +147,25 @@ class ExecutionServiceResponse {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return 'ef13bd7685401359f42466106b070713';
+    return 'd092cebb9e5caf3ba6f8e437310fac04';
   }
 
   static messageDefinition() {
     // Returns full string definition for message
     return `
-    string output_msg
+    trajectory_msgs/JointTrajectoryPoint[] joint_states
+    
+    ================================================================================
+    MSG: trajectory_msgs/JointTrajectoryPoint
+    # Each trajectory point specifies either positions[, velocities[, accelerations]]
+    # or positions[, effort] for the trajectory to be executed.
+    # All specified values are in the same order as the joint names in JointTrajectory.msg
+    
+    float64[] positions
+    float64[] velocities
+    float64[] accelerations
+    float64[] effort
+    duration time_from_start
     
     `;
   }
@@ -152,11 +176,14 @@ class ExecutionServiceResponse {
       msg = {};
     }
     const resolved = new ExecutionServiceResponse(null);
-    if (msg.output_msg !== undefined) {
-      resolved.output_msg = msg.output_msg;
+    if (msg.joint_states !== undefined) {
+      resolved.joint_states = new Array(msg.joint_states.length);
+      for (let i = 0; i < resolved.joint_states.length; ++i) {
+        resolved.joint_states[i] = trajectory_msgs.msg.JointTrajectoryPoint.Resolve(msg.joint_states[i]);
+      }
     }
     else {
-      resolved.output_msg = ''
+      resolved.joint_states = []
     }
 
     return resolved;
@@ -166,6 +193,6 @@ class ExecutionServiceResponse {
 module.exports = {
   Request: ExecutionServiceRequest,
   Response: ExecutionServiceResponse,
-  md5sum() { return 'b57e415505eb1ef8a5131e05d03cd81c'; },
+  md5sum() { return 'f8f3ec77ce7e0e05b9dfadb0a8e55bcc'; },
   datatype() { return 'ur10_mover/ExecutionService'; }
 };

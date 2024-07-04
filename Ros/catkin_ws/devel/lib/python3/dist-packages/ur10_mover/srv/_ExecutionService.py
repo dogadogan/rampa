@@ -133,15 +133,29 @@ python3 = True if sys.hexversion > 0x03000000 else False
 import genpy
 import struct
 
+import genpy
+import trajectory_msgs.msg
 
 class ExecutionServiceResponse(genpy.Message):
-  _md5sum = "ef13bd7685401359f42466106b070713"
+  _md5sum = "d092cebb9e5caf3ba6f8e437310fac04"
   _type = "ur10_mover/ExecutionServiceResponse"
   _has_header = False  # flag to mark the presence of a Header object
-  _full_text = """string output_msg
+  _full_text = """trajectory_msgs/JointTrajectoryPoint[] joint_states
+
+================================================================================
+MSG: trajectory_msgs/JointTrajectoryPoint
+# Each trajectory point specifies either positions[, velocities[, accelerations]]
+# or positions[, effort] for the trajectory to be executed.
+# All specified values are in the same order as the joint names in JointTrajectory.msg
+
+float64[] positions
+float64[] velocities
+float64[] accelerations
+float64[] effort
+duration time_from_start
 """
-  __slots__ = ['output_msg']
-  _slot_types = ['string']
+  __slots__ = ['joint_states']
+  _slot_types = ['trajectory_msgs/JointTrajectoryPoint[]']
 
   def __init__(self, *args, **kwds):
     """
@@ -151,7 +165,7 @@ class ExecutionServiceResponse(genpy.Message):
     changes.  You cannot mix in-order arguments and keyword arguments.
 
     The available fields are:
-       output_msg
+       joint_states
 
     :param args: complete set of field values, in .msg order
     :param kwds: use keyword arguments corresponding to message field names
@@ -160,10 +174,10 @@ class ExecutionServiceResponse(genpy.Message):
     if args or kwds:
       super(ExecutionServiceResponse, self).__init__(*args, **kwds)
       # message fields cannot be None, assign default values for those that are
-      if self.output_msg is None:
-        self.output_msg = ''
+      if self.joint_states is None:
+        self.joint_states = []
     else:
-      self.output_msg = ''
+      self.joint_states = []
 
   def _get_types(self):
     """
@@ -177,12 +191,28 @@ class ExecutionServiceResponse(genpy.Message):
     :param buff: buffer, ``StringIO``
     """
     try:
-      _x = self.output_msg
-      length = len(_x)
-      if python3 or type(_x) == unicode:
-        _x = _x.encode('utf-8')
-        length = len(_x)
-      buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
+      length = len(self.joint_states)
+      buff.write(_struct_I.pack(length))
+      for val1 in self.joint_states:
+        length = len(val1.positions)
+        buff.write(_struct_I.pack(length))
+        pattern = '<%sd'%length
+        buff.write(struct.Struct(pattern).pack(*val1.positions))
+        length = len(val1.velocities)
+        buff.write(_struct_I.pack(length))
+        pattern = '<%sd'%length
+        buff.write(struct.Struct(pattern).pack(*val1.velocities))
+        length = len(val1.accelerations)
+        buff.write(_struct_I.pack(length))
+        pattern = '<%sd'%length
+        buff.write(struct.Struct(pattern).pack(*val1.accelerations))
+        length = len(val1.effort)
+        buff.write(_struct_I.pack(length))
+        pattern = '<%sd'%length
+        buff.write(struct.Struct(pattern).pack(*val1.effort))
+        _v1 = val1.time_from_start
+        _x = _v1
+        buff.write(_get_struct_2i().pack(_x.secs, _x.nsecs))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -194,16 +224,53 @@ class ExecutionServiceResponse(genpy.Message):
     if python3:
       codecs.lookup_error("rosmsg").msg_type = self._type
     try:
+      if self.joint_states is None:
+        self.joint_states = None
       end = 0
       start = end
       end += 4
       (length,) = _struct_I.unpack(str[start:end])
-      start = end
-      end += length
-      if python3:
-        self.output_msg = str[start:end].decode('utf-8', 'rosmsg')
-      else:
-        self.output_msg = str[start:end]
+      self.joint_states = []
+      for i in range(0, length):
+        val1 = trajectory_msgs.msg.JointTrajectoryPoint()
+        start = end
+        end += 4
+        (length,) = _struct_I.unpack(str[start:end])
+        pattern = '<%sd'%length
+        start = end
+        s = struct.Struct(pattern)
+        end += s.size
+        val1.positions = s.unpack(str[start:end])
+        start = end
+        end += 4
+        (length,) = _struct_I.unpack(str[start:end])
+        pattern = '<%sd'%length
+        start = end
+        s = struct.Struct(pattern)
+        end += s.size
+        val1.velocities = s.unpack(str[start:end])
+        start = end
+        end += 4
+        (length,) = _struct_I.unpack(str[start:end])
+        pattern = '<%sd'%length
+        start = end
+        s = struct.Struct(pattern)
+        end += s.size
+        val1.accelerations = s.unpack(str[start:end])
+        start = end
+        end += 4
+        (length,) = _struct_I.unpack(str[start:end])
+        pattern = '<%sd'%length
+        start = end
+        s = struct.Struct(pattern)
+        end += s.size
+        val1.effort = s.unpack(str[start:end])
+        _v2 = val1.time_from_start
+        _x = _v2
+        start = end
+        end += 8
+        (_x.secs, _x.nsecs,) = _get_struct_2i().unpack(str[start:end])
+        self.joint_states.append(val1)
       return self
     except struct.error as e:
       raise genpy.DeserializationError(e)  # most likely buffer underfill
@@ -216,12 +283,28 @@ class ExecutionServiceResponse(genpy.Message):
     :param numpy: numpy python module
     """
     try:
-      _x = self.output_msg
-      length = len(_x)
-      if python3 or type(_x) == unicode:
-        _x = _x.encode('utf-8')
-        length = len(_x)
-      buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
+      length = len(self.joint_states)
+      buff.write(_struct_I.pack(length))
+      for val1 in self.joint_states:
+        length = len(val1.positions)
+        buff.write(_struct_I.pack(length))
+        pattern = '<%sd'%length
+        buff.write(val1.positions.tostring())
+        length = len(val1.velocities)
+        buff.write(_struct_I.pack(length))
+        pattern = '<%sd'%length
+        buff.write(val1.velocities.tostring())
+        length = len(val1.accelerations)
+        buff.write(_struct_I.pack(length))
+        pattern = '<%sd'%length
+        buff.write(val1.accelerations.tostring())
+        length = len(val1.effort)
+        buff.write(_struct_I.pack(length))
+        pattern = '<%sd'%length
+        buff.write(val1.effort.tostring())
+        _v3 = val1.time_from_start
+        _x = _v3
+        buff.write(_get_struct_2i().pack(_x.secs, _x.nsecs))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -234,16 +317,53 @@ class ExecutionServiceResponse(genpy.Message):
     if python3:
       codecs.lookup_error("rosmsg").msg_type = self._type
     try:
+      if self.joint_states is None:
+        self.joint_states = None
       end = 0
       start = end
       end += 4
       (length,) = _struct_I.unpack(str[start:end])
-      start = end
-      end += length
-      if python3:
-        self.output_msg = str[start:end].decode('utf-8', 'rosmsg')
-      else:
-        self.output_msg = str[start:end]
+      self.joint_states = []
+      for i in range(0, length):
+        val1 = trajectory_msgs.msg.JointTrajectoryPoint()
+        start = end
+        end += 4
+        (length,) = _struct_I.unpack(str[start:end])
+        pattern = '<%sd'%length
+        start = end
+        s = struct.Struct(pattern)
+        end += s.size
+        val1.positions = numpy.frombuffer(str[start:end], dtype=numpy.float64, count=length)
+        start = end
+        end += 4
+        (length,) = _struct_I.unpack(str[start:end])
+        pattern = '<%sd'%length
+        start = end
+        s = struct.Struct(pattern)
+        end += s.size
+        val1.velocities = numpy.frombuffer(str[start:end], dtype=numpy.float64, count=length)
+        start = end
+        end += 4
+        (length,) = _struct_I.unpack(str[start:end])
+        pattern = '<%sd'%length
+        start = end
+        s = struct.Struct(pattern)
+        end += s.size
+        val1.accelerations = numpy.frombuffer(str[start:end], dtype=numpy.float64, count=length)
+        start = end
+        end += 4
+        (length,) = _struct_I.unpack(str[start:end])
+        pattern = '<%sd'%length
+        start = end
+        s = struct.Struct(pattern)
+        end += s.size
+        val1.effort = numpy.frombuffer(str[start:end], dtype=numpy.float64, count=length)
+        _v4 = val1.time_from_start
+        _x = _v4
+        start = end
+        end += 8
+        (_x.secs, _x.nsecs,) = _get_struct_2i().unpack(str[start:end])
+        self.joint_states.append(val1)
       return self
     except struct.error as e:
       raise genpy.DeserializationError(e)  # most likely buffer underfill
@@ -252,8 +372,14 @@ _struct_I = genpy.struct_I
 def _get_struct_I():
     global _struct_I
     return _struct_I
+_struct_2i = None
+def _get_struct_2i():
+    global _struct_2i
+    if _struct_2i is None:
+        _struct_2i = struct.Struct("<2i")
+    return _struct_2i
 class ExecutionService(object):
   _type          = 'ur10_mover/ExecutionService'
-  _md5sum = 'b57e415505eb1ef8a5131e05d03cd81c'
+  _md5sum = 'f8f3ec77ce7e0e05b9dfadb0a8e55bcc'
   _request_class  = ExecutionServiceRequest
   _response_class = ExecutionServiceResponse

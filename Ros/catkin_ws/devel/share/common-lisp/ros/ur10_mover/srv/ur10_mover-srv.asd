@@ -4,6 +4,7 @@
 (defsystem "ur10_mover-srv"
   :depends-on (:roslisp-msg-protocol :roslisp-utils :geometry_msgs-msg
                :moveit_msgs-msg
+               :trajectory_msgs-msg
                :ur10_mover-msg
 )
   :components ((:file "_package")

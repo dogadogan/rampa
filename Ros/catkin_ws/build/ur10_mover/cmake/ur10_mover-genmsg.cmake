@@ -29,12 +29,12 @@ add_custom_target(_ur10_mover_generate_messages_check_deps_${_filename}
 
 get_filename_component(_filename "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/ExecutionService.srv" NAME_WE)
 add_custom_target(_ur10_mover_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "ur10_mover" "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/ExecutionService.srv" ""
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "ur10_mover" "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/ExecutionService.srv" "trajectory_msgs/JointTrajectoryPoint"
 )
 
 get_filename_component(_filename "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/GetTrainingDataService.srv" NAME_WE)
 add_custom_target(_ur10_mover_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "ur10_mover" "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/GetTrainingDataService.srv" "ur10_mover/ListOfPoses:geometry_msgs/Pose:geometry_msgs/Quaternion:geometry_msgs/Point"
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "ur10_mover" "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/GetTrainingDataService.srv" "geometry_msgs/Pose:geometry_msgs/Quaternion:geometry_msgs/Point:ur10_mover/ListOfPoses"
 )
 
 get_filename_component(_filename "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/GripperService.srv" NAME_WE)
@@ -44,7 +44,7 @@ add_custom_target(_ur10_mover_generate_messages_check_deps_${_filename}
 
 get_filename_component(_filename "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/PlannerService.srv" NAME_WE)
 add_custom_target(_ur10_mover_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "ur10_mover" "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/PlannerService.srv" "geometry_msgs/Quaternion:trajectory_msgs/MultiDOFJointTrajectory:geometry_msgs/Vector3:std_msgs/Header:geometry_msgs/Pose:moveit_msgs/RobotTrajectory:geometry_msgs/Transform:trajectory_msgs/JointTrajectoryPoint:geometry_msgs/Point:trajectory_msgs/JointTrajectory:geometry_msgs/Twist:trajectory_msgs/MultiDOFJointTrajectoryPoint"
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "ur10_mover" "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/PlannerService.srv" "geometry_msgs/Pose:trajectory_msgs/JointTrajectory:std_msgs/Header:geometry_msgs/Quaternion:geometry_msgs/Vector3:moveit_msgs/RobotTrajectory:geometry_msgs/Twist:trajectory_msgs/MultiDOFJointTrajectory:geometry_msgs/Point:trajectory_msgs/JointTrajectoryPoint:geometry_msgs/Transform:trajectory_msgs/MultiDOFJointTrajectoryPoint"
 )
 
 get_filename_component(_filename "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/SampleService.srv" NAME_WE)
@@ -90,13 +90,13 @@ _generate_srv_cpp(ur10_mover
 _generate_srv_cpp(ur10_mover
   "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/ExecutionService.srv"
   "${MSG_I_FLAGS}"
-  ""
+  "/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg"
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/ur10_mover
 )
 _generate_srv_cpp(ur10_mover
   "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/GetTrainingDataService.srv"
   "${MSG_I_FLAGS}"
-  "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/msg/ListOfPoses.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/msg/ListOfPoses.msg"
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/ur10_mover
 )
 _generate_srv_cpp(ur10_mover
@@ -108,7 +108,7 @@ _generate_srv_cpp(ur10_mover
 _generate_srv_cpp(ur10_mover
   "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/PlannerService.srv"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/MultiDOFJointTrajectory.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Vector3.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/home/user/ARobot/Ros/catkin_ws/src/moveit_msgs/msg/RobotTrajectory.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Transform.msg;/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/JointTrajectory.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Twist.msg;/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/MultiDOFJointTrajectoryPoint.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/JointTrajectory.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Vector3.msg;/home/user/ARobot/Ros/catkin_ws/src/moveit_msgs/msg/RobotTrajectory.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Twist.msg;/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/MultiDOFJointTrajectory.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Transform.msg;/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/MultiDOFJointTrajectoryPoint.msg"
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/ur10_mover
 )
 _generate_srv_cpp(ur10_mover
@@ -195,13 +195,13 @@ _generate_srv_eus(ur10_mover
 _generate_srv_eus(ur10_mover
   "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/ExecutionService.srv"
   "${MSG_I_FLAGS}"
-  ""
+  "/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg"
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/ur10_mover
 )
 _generate_srv_eus(ur10_mover
   "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/GetTrainingDataService.srv"
   "${MSG_I_FLAGS}"
-  "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/msg/ListOfPoses.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/msg/ListOfPoses.msg"
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/ur10_mover
 )
 _generate_srv_eus(ur10_mover
@@ -213,7 +213,7 @@ _generate_srv_eus(ur10_mover
 _generate_srv_eus(ur10_mover
   "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/PlannerService.srv"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/MultiDOFJointTrajectory.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Vector3.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/home/user/ARobot/Ros/catkin_ws/src/moveit_msgs/msg/RobotTrajectory.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Transform.msg;/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/JointTrajectory.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Twist.msg;/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/MultiDOFJointTrajectoryPoint.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/JointTrajectory.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Vector3.msg;/home/user/ARobot/Ros/catkin_ws/src/moveit_msgs/msg/RobotTrajectory.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Twist.msg;/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/MultiDOFJointTrajectory.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Transform.msg;/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/MultiDOFJointTrajectoryPoint.msg"
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/ur10_mover
 )
 _generate_srv_eus(ur10_mover
@@ -300,13 +300,13 @@ _generate_srv_lisp(ur10_mover
 _generate_srv_lisp(ur10_mover
   "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/ExecutionService.srv"
   "${MSG_I_FLAGS}"
-  ""
+  "/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg"
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/ur10_mover
 )
 _generate_srv_lisp(ur10_mover
   "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/GetTrainingDataService.srv"
   "${MSG_I_FLAGS}"
-  "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/msg/ListOfPoses.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/msg/ListOfPoses.msg"
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/ur10_mover
 )
 _generate_srv_lisp(ur10_mover
@@ -318,7 +318,7 @@ _generate_srv_lisp(ur10_mover
 _generate_srv_lisp(ur10_mover
   "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/PlannerService.srv"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/MultiDOFJointTrajectory.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Vector3.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/home/user/ARobot/Ros/catkin_ws/src/moveit_msgs/msg/RobotTrajectory.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Transform.msg;/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/JointTrajectory.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Twist.msg;/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/MultiDOFJointTrajectoryPoint.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/JointTrajectory.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Vector3.msg;/home/user/ARobot/Ros/catkin_ws/src/moveit_msgs/msg/RobotTrajectory.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Twist.msg;/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/MultiDOFJointTrajectory.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Transform.msg;/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/MultiDOFJointTrajectoryPoint.msg"
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/ur10_mover
 )
 _generate_srv_lisp(ur10_mover
@@ -405,13 +405,13 @@ _generate_srv_nodejs(ur10_mover
 _generate_srv_nodejs(ur10_mover
   "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/ExecutionService.srv"
   "${MSG_I_FLAGS}"
-  ""
+  "/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg"
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/ur10_mover
 )
 _generate_srv_nodejs(ur10_mover
   "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/GetTrainingDataService.srv"
   "${MSG_I_FLAGS}"
-  "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/msg/ListOfPoses.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/msg/ListOfPoses.msg"
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/ur10_mover
 )
 _generate_srv_nodejs(ur10_mover
@@ -423,7 +423,7 @@ _generate_srv_nodejs(ur10_mover
 _generate_srv_nodejs(ur10_mover
   "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/PlannerService.srv"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/MultiDOFJointTrajectory.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Vector3.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/home/user/ARobot/Ros/catkin_ws/src/moveit_msgs/msg/RobotTrajectory.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Transform.msg;/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/JointTrajectory.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Twist.msg;/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/MultiDOFJointTrajectoryPoint.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/JointTrajectory.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Vector3.msg;/home/user/ARobot/Ros/catkin_ws/src/moveit_msgs/msg/RobotTrajectory.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Twist.msg;/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/MultiDOFJointTrajectory.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Transform.msg;/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/MultiDOFJointTrajectoryPoint.msg"
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/ur10_mover
 )
 _generate_srv_nodejs(ur10_mover
@@ -510,13 +510,13 @@ _generate_srv_py(ur10_mover
 _generate_srv_py(ur10_mover
   "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/ExecutionService.srv"
   "${MSG_I_FLAGS}"
-  ""
+  "/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg"
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/ur10_mover
 )
 _generate_srv_py(ur10_mover
   "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/GetTrainingDataService.srv"
   "${MSG_I_FLAGS}"
-  "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/msg/ListOfPoses.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/msg/ListOfPoses.msg"
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/ur10_mover
 )
 _generate_srv_py(ur10_mover
@@ -528,7 +528,7 @@ _generate_srv_py(ur10_mover
 _generate_srv_py(ur10_mover
   "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/PlannerService.srv"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/MultiDOFJointTrajectory.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Vector3.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/home/user/ARobot/Ros/catkin_ws/src/moveit_msgs/msg/RobotTrajectory.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Transform.msg;/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/JointTrajectory.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Twist.msg;/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/MultiDOFJointTrajectoryPoint.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/JointTrajectory.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Vector3.msg;/home/user/ARobot/Ros/catkin_ws/src/moveit_msgs/msg/RobotTrajectory.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Twist.msg;/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/MultiDOFJointTrajectory.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/JointTrajectoryPoint.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Transform.msg;/opt/ros/noetic/share/trajectory_msgs/cmake/../msg/MultiDOFJointTrajectoryPoint.msg"
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/ur10_mover
 )
 _generate_srv_py(ur10_mover

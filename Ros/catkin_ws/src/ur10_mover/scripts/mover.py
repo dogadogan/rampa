@@ -14,6 +14,7 @@ import os
 from sensor_msgs.msg import JointState
 from moveit_msgs.msg import RobotState,RobotTrajectory
 from geometry_msgs.msg import Pose
+from trajectory_msgs.msg import JointTrajectoryPoint
 
 from ur10_mover.srv import PlannerService, PlannerServiceRequest, PlannerServiceResponse
 from ur10_mover.srv import StateService, StateServiceRequest, StateServiceResponse
@@ -79,14 +80,14 @@ def execute_joint_angles(joint_angles,group):
 
 def plan_pick_and_place(req):
 
-    ## set move_group's position to reset pose
-    #current_joint_state = JointState()
-    #current_joint_state.name = joint_names
-    #current_joint_state.position = [0, -1.57, 0, -1.57, 0, 0]
+    # set move_group's position to reset pose
+    current_joint_state = JointState()
+    current_joint_state.name = joint_names
+    current_joint_state.position = [0, -1.57, 0, -1.57, 0, 0]
 
-    #moveit_robot_state = RobotState()
-    #moveit_robot_state.joint_state = current_joint_state
-    #move_group.set_start_state(moveit_robot_state)
+    moveit_robot_state = RobotState()
+    moveit_robot_state.joint_state = current_joint_state
+    move_group.set_start_state(moveit_robot_state)
 
 
     rospy.loginfo(rospy.get_caller_id() + "Plan Requested:\n")
@@ -96,8 +97,8 @@ def plan_pick_and_place(req):
 
     rospy.loginfo(req.pose_list)
 
-    # if (req.request_type == "poses"):
-    #     return cartesian_path(response, req)
+    if (req.request_type == "poses" or req.request_type == "poses_training"):
+        return cartesian_path(response, req)
         
 
     rospy.loginfo("Recieved pose count is:")
@@ -271,7 +272,14 @@ def execute_on_real_robot(req):
     
     #rospy.loginfo("Trajectory execution request is sent to driver.")
     
-    robot.set_joint_positions(traj)
+    # robot.set_joint_positions(traj)
+
+
+    for i in range(len(traj)):
+        state = traj[i]
+        joint_state = JointTrajectoryPoint()
+        joint_state.positions = state
+        response.joint_states[i] = joint_state
 
     return response
 

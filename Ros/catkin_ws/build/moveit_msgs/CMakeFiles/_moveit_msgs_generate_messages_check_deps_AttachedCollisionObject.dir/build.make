@@ -54,7 +54,7 @@ CMAKE_BINARY_DIR = /home/user/ARobot/Ros/catkin_ws/build
 include moveit_msgs/CMakeFiles/_moveit_msgs_generate_messages_check_deps_AttachedCollisionObject.dir/progress.make
 
 moveit_msgs/CMakeFiles/_moveit_msgs_generate_messages_check_deps_AttachedCollisionObject:
-	cd /home/user/ARobot/Ros/catkin_ws/build/moveit_msgs && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py moveit_msgs /home/user/ARobot/Ros/catkin_ws/src/moveit_msgs/msg/AttachedCollisionObject.msg trajectory_msgs/JointTrajectory:trajectory_msgs/JointTrajectoryPoint:shape_msgs/Mesh:shape_msgs/Plane:geometry_msgs/Pose:moveit_msgs/CollisionObject:shape_msgs/SolidPrimitive:geometry_msgs/Quaternion:shape_msgs/MeshTriangle:geometry_msgs/Point:object_recognition_msgs/ObjectType:std_msgs/Header
+	cd /home/user/ARobot/Ros/catkin_ws/build/moveit_msgs && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py moveit_msgs /home/user/ARobot/Ros/catkin_ws/src/moveit_msgs/msg/AttachedCollisionObject.msg object_recognition_msgs/ObjectType:geometry_msgs/Point:trajectory_msgs/JointTrajectory:geometry_msgs/Quaternion:std_msgs/Header:trajectory_msgs/JointTrajectoryPoint:shape_msgs/Mesh:shape_msgs/Plane:shape_msgs/MeshTriangle:moveit_msgs/CollisionObject:shape_msgs/SolidPrimitive:geometry_msgs/Pose
 
 _moveit_msgs_generate_messages_check_deps_AttachedCollisionObject: moveit_msgs/CMakeFiles/_moveit_msgs_generate_messages_check_deps_AttachedCollisionObject
 _moveit_msgs_generate_messages_check_deps_AttachedCollisionObject: moveit_msgs/CMakeFiles/_moveit_msgs_generate_messages_check_deps_AttachedCollisionObject.dir/build.make
