@@ -7,6 +7,7 @@ using Matrix4x4 = UnityEngine.Matrix4x4;
 using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
 using Vector4 = UnityEngine.Vector4;
+using TMPro;
 
 public class HandOrientation : MonoBehaviour
 {
@@ -20,6 +21,9 @@ public class HandOrientation : MonoBehaviour
     public GameObject handOrientationIndicatorModel;
 
     public OVRInput.Controller controller;
+    public TMP_Dropdown orientationDropdown;
+
+    OneEuroFilter<Quaternion> quaternionFilter;
 
 
     void Start()
@@ -31,6 +35,8 @@ public class HandOrientation : MonoBehaviour
         );
         
         handOrientationIndicator.SetActive(false);
+
+        quaternionFilter = new OneEuroFilter<Quaternion>(120.0f);
 
 
     }
@@ -51,10 +57,22 @@ public class HandOrientation : MonoBehaviour
     public void UpdateHandOrientationIndicator(Vector3 point1, Vector3 point2)
     {
         
-        if (OVRInput.GetLocalControllerVelocity(controller).magnitude < 0.1)
+        if (orientationDropdown.value == 1) {
+            handOrientationIndicator.transform.position = hand.PointerPose.position;
+            
+            Quaternion rotationOfHand = quaternionFilter.Filter(OVRInput.GetLocalControllerRotation(OVRInput.Controller.RHand));
+
+            rotationOfHand = Quaternion.Inverse(rotationOfHand);
+
+            handOrientationIndicator.transform.rotation = Quaternion.Euler(rotationOfHand.eulerAngles.x + 180, 
+                                                rotationOfHand.eulerAngles.y, rotationOfHand.eulerAngles.z);
+            return;
+        }
+        
+        if (OVRInput.GetLocalControllerVelocity(OVRInput.Controller.RHand).magnitude < 0.1)
         {
             // don't touch the rotation if the controller is moving slowly
-            handOrientationIndicator.transform.position = OVRInput.GetLocalControllerPosition(controller);
+            handOrientationIndicator.transform.position = OVRInput.GetLocalControllerPosition(OVRInput.Controller.RHand);
             return;
         }
         
@@ -73,8 +91,8 @@ public class HandOrientation : MonoBehaviour
         
         planeNormal = planeNormal.normalized;
 
-        handOrientationIndicator.transform.rotation = GetMirroredQuaternion(OVRInput.GetLocalControllerRotation(controller), planeNormal);
-        handOrientationIndicator.transform.position = OVRInput.GetLocalControllerPosition(controller);
+        handOrientationIndicator.transform.rotation = GetMirroredQuaternion(OVRInput.GetLocalControllerRotation(OVRInput.Controller.RHand), planeNormal);
+        handOrientationIndicator.transform.position = OVRInput.GetLocalControllerPosition(OVRInput.Controller.RHand);
         
     }
     
@@ -110,7 +128,14 @@ public class HandOrientation : MonoBehaviour
     }
 
     public Quaternion GetRotation() {
-        return handOrientationIndicator.transform.rotation;
+
+        Vector3 euler = handOrientationIndicator.transform.rotation.eulerAngles;    
+        return Quaternion.Euler(euler.x, euler.y + 180, euler.z);
+
+    }
+
+    public void ResetFilter() {
+        quaternionFilter = new OneEuroFilter<Quaternion>(120.0f);
     }
     
     

@@ -12,8 +12,8 @@ public class DrawServiceRealTime: MonoBehaviour
     private float lineWidth = 0.015f;
     public PlanRequestGeneratorRealTime planRequestGeneratorRealTime;
     public HandOrientation HandOrientation;
-    public Toggle recordHandOrientationToggle;
-
+    public TMP_Dropdown recordOrientationDropdown;
+    public HandOrientation handOrientation;
     public TrainAndTest trainAndTest;
     public GameObject bar;
     public GameObject sliderPosition;
@@ -66,29 +66,67 @@ public class DrawServiceRealTime: MonoBehaviour
         while (true)
         {
 
-            if (hand.GetFingerIsPinching(OVRHand.HandFinger.Index))
-            {
-                isFirstPart = false;
-                loadingText.GetComponent<TMP_Text>().text = "drawing trajectory";
+            if (recordOrientationDropdown.value == 0) {
+                if (hand.GetFingerIsPinching(OVRHand.HandFinger.Index))
+                {
+                    isFirstPart = false;
+                    loadingText.GetComponent<TMP_Text>().text = "drawing trajectory";
+                }
             }
+            else {
+                if (OVRInput.Get(OVRInput.Button.One))
+                {
+                    isFirstPart = false;
+                    loadingText.GetComponent<TMP_Text>().text = "drawing trajectory";
+                    handOrientation.ShowIndicator(true);
+                }
+            }
+
             if (numberOfPoints % 5 == 0 && numberOfPoints != 0) 
             {
             
-                if (!hand.GetFingerIsPinching(OVRHand.HandFinger.Index) && !isFirstPart)
-                {
-                    
-                    if (!planRequestGeneratorRealTime.isWaitingForResponse()) {
-                        UpdateDrawingState();
-                        break;
+                if (recordOrientationDropdown.value == 0) {
+                    if (!hand.GetFingerIsPinching(OVRHand.HandFinger.Index) && !isFirstPart)
+                    {
+                        
+                        if (!planRequestGeneratorRealTime.isWaitingForResponse()) {
+                            UpdateDrawingState();
+                            break;
+                        }   
                     }
-                    
+                }
+                else {
+                    if (!OVRInput.Get(OVRInput.Button.One) && !isFirstPart)
+                    {
+                        if (!planRequestGeneratorRealTime.isWaitingForResponse()) {
+                            handOrientation.ShowIndicator(false);
+                            UpdateDrawingState();
+                            break;
+                        }
+                    }
                 }
 
             }
             // do not add points to the line renderer if isFirstPart is true
             if (numberOfPoints % WAY_POINT_FREQ == 0 && !isFirstPart)
             {
-                planRequestGeneratorRealTime.AddRequestToQueue(hand.PointerPose.position);
+
+                if (recordOrientationDropdown.value == 1) { // NO MIRROR
+                        // not important
+                        handOrientation.UpdateHandOrientationIndicator(hand.PointerPose.position, hand.PointerPose.position);
+                        Quaternion orientation = handOrientation.GetRotation();
+                        Vector3 position = hand.PointerPose.position;
+                        double[] poseInfo = {position.x, position.y, position.z, orientation.x, orientation.y, orientation.z, orientation.w};
+                        planRequestGeneratorRealTime.AddRequestToQueue(poseInfo);
+                }
+                else {
+                        debugText.text += "adding point with fixed orientation\n";
+                        Vector3 position = hand.PointerPose.position;
+                        Quaternion orientation = Quaternion.Euler(180,0,0);
+                        double[] poseInfo = {position.x, position.y, position.z, orientation.x, orientation.y, orientation.z, orientation.w};
+                        planRequestGeneratorRealTime.AddRequestToQueue(poseInfo);
+                }
+
             }
             
             if (!isFirstPart) {

@@ -16,7 +16,7 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
     public TrajectoryHelperFunctions HelperFunctions;
     public TrajectoryPlanner TrajectoryPlanner;
     public PrevRecordedTrajectories PrevRecordedTrajectories;
-    private Queue<Vector3> requestQueue = new Queue<Vector3>();
+    private Queue<double[]> requestQueue = new Queue<double[]>();
     private bool waitingForResponse = false;
     public List<double[]> previousPoints = new List<double[]>();
     public List<Vector3> previousPoses = new List<Vector3>();
@@ -52,10 +52,10 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
 
     }
 
-    public void AddRequestToQueue(Vector3 target)
+    public void AddRequestToQueue(double[] poseInfo)
     {
-        Debug.LogWarning("target added " + target);
-        requestQueue.Enqueue(target);
+        Debug.LogWarning("target added " + poseInfo);
+        requestQueue.Enqueue(poseInfo);
     } 
     private IEnumerator ProcessRequests()
     {
@@ -64,16 +64,18 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
             if (requestQueue.Count > 0 && !waitingForResponse)
             {
                 waitingForResponse = true;
-                Vector3 pose = requestQueue.Dequeue();
+                double[] poseInfo = requestQueue.Dequeue();
+                Vector3 pose = new Vector3((float)poseInfo[0], (float)poseInfo[1], (float)poseInfo[2]);
+                Quaternion orientation = new Quaternion((float)poseInfo[3], (float)poseInfo[4], (float)poseInfo[5], (float)poseInfo[6]);
                 Debug.LogWarning("target popped " + pose);
-                GenerateRequest(pose);
+                GenerateRequest(pose, orientation);
             }
             yield return new WaitForSeconds(0.1f);
         }
         
     }
 
-    private void GenerateRequest(Vector3 pose)
+    private void GenerateRequest(Vector3 pose, Quaternion orientation)
     {
         var request = new PlannerServiceRequest();
         request.request_type = "realTime";
@@ -81,7 +83,7 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
 
         previousPoses.Add(pose);
 
-        Quaternion orientation = Quaternion.Euler(90,0,0);
+        // orientation = Quaternion.Euler(180, 0,0);
         previousOrientations.Add(orientation);
         
         PoseMsg[] pose_list = new PoseMsg[1];

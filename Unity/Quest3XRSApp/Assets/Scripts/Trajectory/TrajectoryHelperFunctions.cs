@@ -39,11 +39,16 @@ public class TrajectoryHelperFunctions : MonoBehaviour
         Vector3 rotatedDirection = baseReverseRotation * direction;
 
         Quaternion rotatedOrientation = orientation * baseReverseRotation;
+
+        debugText.text += "\n" + orientation;
+        debugText.text += "\n" + orientation.To<FLU>();
+        debugText.text += "\n";
         
         return new PoseMsg
         {
             position = rotatedDirection.To<FLU>(),
-            orientation = rotatedOrientation.To<FLU>()
+            // orientation = orientation.To<FLU>()
+            orientation = orientation.To<FLU>()
         };
         
     }

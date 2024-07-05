@@ -19,10 +19,9 @@ public class DrawServiceWithInspect : MonoBehaviour
     private Vector3 trajectorySamplePoints_point2;
     private State state;
 
-
-    public Toggle recordOrientationToggle;
+    public TMP_Dropdown recordOrientationDropdown;
     public HandOrientation handOrientation;
-    public OVRInput.Controller controller;
+    public OVRInput.Controller controllerOrientation;
     public GameObject bar;
     public GameObject sliderPosition;
     public GameObject loadingText;
@@ -72,10 +71,9 @@ public class DrawServiceWithInspect : MonoBehaviour
         loadingText.GetComponent<TMP_Text>().text = "pinch to start drawing";
         while (true)
         {
-            if (!recordOrientationToggle.isOn) {
+            if (recordOrientationDropdown.value == 0) {
                 if (hand.GetFingerIsPinching(OVRHand.HandFinger.Index))
                 {
-        
                     isFirstPart = false;
                     loadingText.GetComponent<TMP_Text>().text = "drawing trajectory";
                 }
@@ -91,7 +89,7 @@ public class DrawServiceWithInspect : MonoBehaviour
             if (numberOfPoints % 5 == 0) // add new point to trajectory every 5 points
             {        
                 
-                if (!recordOrientationToggle.isOn) {
+                if (recordOrientationDropdown.value == 0) {
                     if (!hand.GetFingerIsPinching(OVRHand.HandFinger.Index) && !isFirstPart)
                     {
                         UpdateDrawingState();
@@ -109,12 +107,17 @@ public class DrawServiceWithInspect : MonoBehaviour
 
                 if (!isFirstPart) {
                     
-                    if (recordOrientationToggle.isOn) {
+                    if (recordOrientationDropdown.value != 0) {
+                        if (recordOrientationDropdown.value == 1) {
+                        // not important
+                        handOrientation.UpdateHandOrientationIndicator(hand.PointerPose.position, hand.PointerPose.position);
+                        }
                         targetOrientations.Add(handOrientation.GetRotation());
-                        targetPoints.Add(OVRInput.GetLocalControllerPosition(controller));
+                        targetPoints.Add(hand.PointerPose.position);
                     }
                     else {
-                        targetOrientations.Add(Quaternion.Euler(90,0,0));
+                        debugText.text += "adding point with fixed orientation\n";
+                        targetOrientations.Add(Quaternion.Euler(180,0,0));
                         targetPoints.Add(hand.PointerPose.position);
                     }
                 }
@@ -123,14 +126,10 @@ public class DrawServiceWithInspect : MonoBehaviour
             { 
                 numberOfPoints++;
                 lineRenderer.positionCount = numberOfPoints;
-                if (!recordOrientationToggle.isOn) {
-                    lineRenderer.SetPosition(numberOfPoints - 1,  hand.PointerPose.position);
-                }
-                else {
-                    lineRenderer.SetPosition(numberOfPoints - 1, OVRInput.GetLocalControllerPosition(controller));
-                }
-                if (recordOrientationToggle.isOn && numberOfPoints > 1) {
-                    if (Vector3.Distance(trajectorySamplePoints_point1, lineRenderer.GetPosition(numberOfPoints - 1)) > 0.007) {
+                lineRenderer.SetPosition(numberOfPoints - 1,  hand.PointerPose.position);
+                
+                if (recordOrientationDropdown.value == 2) {
+                    if (Vector3.Distance(trajectorySamplePoints_point1, lineRenderer.GetPosition(numberOfPoints - 1)) > 0.05 || numberOfPoints == 0) {
                         trajectorySamplePoints_point2 = trajectorySamplePoints_point1;
                         trajectorySamplePoints_point1 = lineRenderer.GetPosition(numberOfPoints - 1);
                         handOrientation.UpdateHandOrientationIndicator(trajectorySamplePoints_point1, trajectorySamplePoints_point2);
@@ -188,6 +187,8 @@ public class DrawServiceWithInspect : MonoBehaviour
                 }
                 else {
                     state = State.ExecuteTrajectory;
+                    loadingText.GetComponent<TMP_Text>().text = "executing trajectory";
+
                 }
                 break;
 
@@ -214,9 +215,13 @@ public class DrawServiceWithInspect : MonoBehaviour
                     redrawButton.interactable = false;
 
                     // update line renderer
-                    double remainingPointsRate = (double) PlanRequestGeneratorWithPoses.currentIndexPointer  / PlanRequestGeneratorWithPoses.previousPoints.Count;
-                    int remainingPoints = (int)Math.Floor(lineRenderer.positionCount * remainingPointsRate);
+                
+                    double rate = ((double) PlanRequestGeneratorWithPoses.currentIndexPointer) / (double)PlanRequestGeneratorWithPoses.previousPoints.Count;
+                    int remainingPoints = Convert.ToInt32(rate * lineRenderer.positionCount);
                     Vector3[] newPositions = new Vector3[remainingPoints];
+                    debugText.text += "currentIndexPointer: " + PlanRequestGeneratorWithPoses.currentIndexPointer + "\n";
+                    debugText.text += "rate: " + rate + "\n";
+                    debugText.text += "remaining points: " + remainingPoints + "\n";
                     for (int i = 0; i < remainingPoints; i++)
                     {
                         newPositions[i] = lineRenderer.GetPosition(i);
@@ -242,6 +247,8 @@ public class DrawServiceWithInspect : MonoBehaviour
     public void ResetDrawingState(bool anotherTrajectory = false)
     {
         state = State.Initial;
+
+        handOrientation.ResetFilter();
         
         PlanRequestGeneratorWithPoses.ResetGenerator();
 
