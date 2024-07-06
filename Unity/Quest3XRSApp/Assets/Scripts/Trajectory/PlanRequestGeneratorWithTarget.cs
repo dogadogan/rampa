@@ -31,12 +31,9 @@ public class PlanRequestGeneratorWithTarget : MonoBehaviour
     
     IEnumerator ExecuteTrajectories(PlannerServiceResponse response)
     {
-
-
         // For every trajectory plan returned
         for (var poseIndex = 0; poseIndex < response.trajectories.Length; poseIndex++)
-            
-        { 
+        {
             // For every robot pose in trajectory plan
             foreach (var t in response.trajectories[poseIndex].joint_trajectory.points)
             {

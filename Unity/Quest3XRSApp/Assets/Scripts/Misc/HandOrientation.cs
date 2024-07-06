@@ -130,7 +130,7 @@ public class HandOrientation : MonoBehaviour
     public Quaternion GetRotation() {
 
         Vector3 euler = handOrientationIndicator.transform.rotation.eulerAngles;    
-        return Quaternion.Euler(euler.x, euler.y + 180, euler.z);
+        return Quaternion.Euler(euler.x, euler.y, euler.z);
 
     }
 

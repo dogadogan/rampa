@@ -15,6 +15,8 @@ public class TrajectoryHelperFunctions : MonoBehaviour
     private const float k_JointAssignmentWait = 0.1f;
 
     public TMP_Text debugText;
+
+    int OFFSET = 1.0f;
     public double[] CurrentJointConfig()
     {
         double[] joints = new double[Sliders.Length] ;
@@ -40,19 +42,29 @@ public class TrajectoryHelperFunctions : MonoBehaviour
 
         Quaternion rotatedOrientation = orientation * baseReverseRotation;
 
-        debugText.text += "\n" + orientation;
-        debugText.text += "\n" + orientation.To<FLU>();
-        debugText.text += "\n";
-        
+        Vector3 rotatedDirectionWithOffset = TranslatePointInReverseDirection(rotatedDirection, rotatedOrientation, OFFSET);
+
         return new PoseMsg
         {
-            position = rotatedDirection.To<FLU>(),
+            position = rotatedDirectionWithOffset.To<FLU>(),
             // orientation = orientation.To<FLU>()
-            orientation = orientation.To<FLU>()
+            orientation = rotatedOrientation.To<FLU>()
         };
         
     }
  
+    public Vector3 TranslatePointInReverseDirection(Vector3 point, Quaternion orientation, float distance)
+    {
+        // reverse the direction of orientation relative to origin
+        
+        Quaternion normalizedOrientation = orientation.normalized;
+        Vector3 unitDirectionVector = new Vector3(normalizedOrientation.x, normalizedOrientation.y, normalizedOrientation.z);
+        Vector3 reversedUnitDirectionVector = -unitDirectionVector;
+        Vector3 reversedDirection = reversedUnitDirectionVector * distance;
+        return point + reversedDirection;
+     
+    }
+
 
     public void SetJointAngles(JointTrajectoryPointMsg t)
     {
