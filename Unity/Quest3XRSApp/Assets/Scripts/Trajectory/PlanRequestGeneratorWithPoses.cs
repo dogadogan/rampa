@@ -5,6 +5,9 @@ using RosMessageTypes.Geometry;
 using RosMessageTypes.Ur10Mover;
 using UnityEngine;
 using UnityEngine.UI;
+using Unity.Robotics.ROSTCPConnector.ROSGeometry;
+using TMPro;
+
 
 public class PlanRequestGeneratorWithPoses : MonoBehaviour
 {
@@ -36,6 +39,8 @@ public class PlanRequestGeneratorWithPoses : MonoBehaviour
     public GameObject pauseButton;
 
     public GameObject executeOnRealRobotButton;
+
+    public TMP_Text debugText;
     
     
     public void GenerateRequest(List<Vector3> poseList, List<Quaternion> orientationList)
@@ -90,25 +95,24 @@ public class PlanRequestGeneratorWithPoses : MonoBehaviour
             // For every trajectory plan returned
             for (var poseIndex = 0; poseIndex < response.trajectories.Length; poseIndex++)
             { 
-
-                var lastPoint = response.trajectories[poseIndex].joint_trajectory.points.Last();
-
                 // For every robot pose in trajectory plan
-                foreach (var t in response.trajectories[poseIndex].joint_trajectory.points)
+                var t = response.trajectories[poseIndex].joint_trajectory.points.Last();
+                foreach (var positions in response.trajectories[poseIndex].joint_trajectory.points)
                 {
-
-                    if (t == lastPoint)
-                    {   
-                        previousPoints.Add( HelperFunctions.GetJointAngles(t));
+                    if (t == positions) {
+                        previousPoints.Add(HelperFunctions.GetJointAngles(positions));
                     }
-
-                    HelperFunctions.SetJointAngles(t);
+                    HelperFunctions.SetJointAngles(positions);
                     yield return new WaitForSeconds(k_JointAssignmentWait);
+
                 }
-            }
-            
-            
+            } 
         }
+
+        foreach (var pose in previousPoses) {
+            debugText.text += pose.ToString();
+        }
+
         if (fromTraining) {
             drawService.trainAndTest.SetAllButtonsInteractable(true);
         }
@@ -212,7 +216,7 @@ public class PlanRequestGeneratorWithPoses : MonoBehaviour
 
 
 
-        public void ResetGenerator(bool addToTrainingSet = false)
+    public void ResetGenerator(bool addToTrainingSet = false)
     {
 
         if (addToTrainingSet) {

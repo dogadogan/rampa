@@ -13,34 +13,35 @@ namespace RosMessageTypes.Ur10Mover
         public const string k_RosMessageName = "ur10_mover/ExecutionService";
         public override string RosMessageName => k_RosMessageName;
 
-        public string output_msg;
+        public Trajectory.JointTrajectoryPointMsg[] joint_states;
 
         public ExecutionServiceResponse()
         {
-            this.output_msg = "";
+            this.joint_states = new Trajectory.JointTrajectoryPointMsg[0];
         }
 
-        public ExecutionServiceResponse(string output_msg)
+        public ExecutionServiceResponse(Trajectory.JointTrajectoryPointMsg[] joint_states)
         {
-            this.output_msg = output_msg;
+            this.joint_states = joint_states;
         }
 
         public static ExecutionServiceResponse Deserialize(MessageDeserializer deserializer) => new ExecutionServiceResponse(deserializer);
 
         private ExecutionServiceResponse(MessageDeserializer deserializer)
         {
-            deserializer.Read(out this.output_msg);
+            deserializer.Read(out this.joint_states, Trajectory.JointTrajectoryPointMsg.Deserialize, deserializer.ReadLength());
         }
 
         public override void SerializeTo(MessageSerializer serializer)
         {
-            serializer.Write(this.output_msg);
+            serializer.WriteLength(this.joint_states);
+            serializer.Write(this.joint_states);
         }
 
         public override string ToString()
         {
             return "ExecutionServiceResponse: " +
-            "\noutput_msg: " + output_msg.ToString();
+            "\njoint_states: " + System.String.Join(", ", joint_states.ToList());
         }
 
 #if UNITY_EDITOR
