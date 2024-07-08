@@ -8,7 +8,7 @@ import math
 from movement_primitives.promp import ProMP
 from movement_primitives.dmp import DMP
 from gmr import GMM
-
+from scipy.spatial.transform import Rotation as R
 
 from geometry_msgs.msg import Pose
 from ur10_mover.msg import ListOfPoses
@@ -64,6 +64,7 @@ def save_trajectory_to_data(req):
     rospy.loginfo("Opening file")
     trajectory = []
     for pose in req.pose_list:
+
         pose_list = [pose.position.x, pose.position.y, pose.position.z,
                          pose.orientation.x, pose.orientation.y, pose.orientation.z, pose.orientation.w]
         
@@ -185,8 +186,8 @@ def start_training(req):
         g_pos_z.from_samples(Ypos_z)
         g_or_x.from_samples(Yor_x)
         g_or_y.from_samples(Yor_y)
-        g_or_x.from_samples(Yor_z)
-        g_or_x.from_samples(Yor_w)
+        g_or_z.from_samples(Yor_z)
+        g_or_w.from_samples(Yor_w)
         rospy.loginfo("Finished training")
 
         last_training = "gmm" 
@@ -230,7 +231,8 @@ def sample_trajectory(req):
 
         for i in range(len(condition_orientations)):
             orientation = condition_orientations[i]
-            p_or.condition_position([orientation.x,orientation.y,orientation.z, orientation.w],t=T[i])
+
+            p_or.condition_position([orientation.x, orientation.y, orientation.z, orientation.w],t=T[i])
 
         #sampling
         trajectory_or = p_or.sample_trajectories(T=np.linspace(0,1,sample_length).reshape(sample_length), n_samples=1, random_state=np.random.RandomState(seed=1234))
@@ -265,6 +267,9 @@ def sample_trajectory(req):
             orientation = condition_orientations[i]
             index = (i / (len(condition_orientations))) * sample_length
             index = math.floor(index)
+
+            orientation = condition_orientations[i]
+
             g_or_x.condition([index], orientation.x)
             g_or_y.condition([index], orientation.y)
             g_or_z.condition([index], orientation.z)
@@ -279,8 +284,12 @@ def sample_trajectory(req):
         trajectory_or_z = g_or_z.sample(1)
         trajectory_or_w = g_or_w.sample(1)
 
-        trajectory_pos = np.stack((trajectory_pos_x, trajectory_pos_y, trajectory_pos_z), 1)
-        trajectory_or = np.stack((trajectory_or_x, trajectory_or_y, trajectory_or_z, trajectory_or_w), 1)
+        rospy.loginfo(trajectory_or_x.shape)
+
+        trajectory_pos = np.column_stack((trajectory_pos_x[0], trajectory_pos_y[0], trajectory_pos_z[0]))
+        trajectory_or = np.column_stack((trajectory_or_x[0], trajectory_or_y[0], trajectory_or_z[0], trajectory_or_w[0]))
+
+        rospy.loginfo(trajectory_or.shape)
 
     rospy.loginfo("SAMPLED TRAJECTORY")
     
@@ -290,6 +299,7 @@ def sample_trajectory(req):
         sample = np.concatenate((trajectory_pos[0],trajectory_or[0]), axis=-1)
     else:
         sample = np.concatenate((trajectory_pos,trajectory_or), axis=-1)
+        rospy.loginfo(sample.shape)
 
     response_trajectory = []
     for point in sample: 
