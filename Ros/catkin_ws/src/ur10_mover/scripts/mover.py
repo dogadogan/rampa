@@ -147,24 +147,14 @@ def plan_pick_and_place(req):
 
     # i = 0
     for pose in req.pose_list:
-        # pose.orientation = down_orientation
-
-        # pose.orientation.x = f_x(pose.orientation.x, i)
-        # pose.orientation.y = f_y(pose.orientation.y, i)
-        # pose.orientation.z = f_z(pose.orientation.z, i)
-        # pose.orientation.w = (1 - pose.orientation.x**2 - pose.orientation.y**2 - pose.orientation.z**2)**0.5
         
-        # i = i + 1
+        norm = (pose.orientation.x**2 + pose.orientation.y**2 + pose.orientation.z**2 + pose.orientation.w**2)**0.5
 
-        pose.orientation.x = round(pose.orientation.x, 4)
-        pose.orientation.y = round(pose.orientation.y, 4)
-        pose.orientation.z = round(pose.orientation.z, 4)
-        if pose.orientation.w > 0:
-            pose.orientation.w = (1 - pose.orientation.x**2 - pose.orientation.y**2 - pose.orientation.z**2)**0.5
-        else:
-            pose.orientation.w = -1 * (1 - pose.orientation.x**2 - pose.orientation.y**2 - pose.orientation.z**2)**0.5
-     
-        pose.orientation.w = pose.orientation.w.real
+        pose.orientation.x /= norm
+        pose.orientation.y /= norm
+        pose.orientation.z /= norm
+        pose.orientation.w /= norm
+
         
         rospy.loginfo(pose)
 

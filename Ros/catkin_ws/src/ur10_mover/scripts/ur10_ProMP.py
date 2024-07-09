@@ -65,6 +65,12 @@ def save_trajectory_to_data(req):
     trajectory = []
     for pose in req.pose_list:
 
+        if pose.orientation.w < 0:
+            pose.orientation.x *= -1
+            pose.orientation.y *= -1
+            pose.orientation.z *= -1
+            pose.orientation.w *= -1
+
         pose_list = [pose.position.x, pose.position.y, pose.position.z,
                          pose.orientation.x, pose.orientation.y, pose.orientation.z, pose.orientation.w]
         
@@ -79,6 +85,7 @@ def read_data_files():
     trajectory_list= []
     for filename in filenames:
         trajectory = np.load(filename)
+        print(trajectory)
         trajectory_list.append(trajectory)
     return trajectory_list
 
