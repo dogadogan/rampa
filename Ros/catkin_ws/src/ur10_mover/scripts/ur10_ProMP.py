@@ -46,6 +46,33 @@ g_or_y = GMM(n_components=priors, random_state=1234)
 g_or_z = GMM(n_components=priors, random_state=1234)
 g_or_w = GMM(n_components=priors, random_state=1234)
 
+
+def slerp(q1,q2,t):
+    dot = np.dot(q1,q2)
+
+    if dot < 0.0:
+        q1 = -q1
+        dot = -dot
+    
+    dot = np.clip(dot, -1.0, 1.0)
+
+    theta_0 = np.arccos(dot)
+    sin_theta_0 = np.sin(theta_0)
+
+    if sin_theta_0 > 0.001:
+        theta = theta_0 * t
+        sin_theta = np.sin(theta)
+
+        s1 = np.cos(theta) - dot * sin_theta / sin_theta_0
+        s2 = sin_theta / sin_theta_0
+    else:
+        s1 = 1.0 - t
+        s2 = t
+    
+    q_interp = s1*q1 + s2*q2
+
+    return q_interp / np.linalg.norm(q_interp)
+
 def save_trajectory_to_data(req):
 
     global filenames
@@ -85,7 +112,8 @@ def read_data_files():
     trajectory_list= []
     for filename in filenames:
         trajectory = np.load(filename)
-        print(trajectory)
+        print(f'{trajectory[:,-4:]}')
+        print("---")
         trajectory_list.append(trajectory)
     return trajectory_list
 
@@ -107,6 +135,31 @@ def interpolate_points(points, total_points):
             interpolated_points.append(interpolated_point)
     return np.array(interpolated_points)
 
+def interpolate_quaternions(quaternions, total_points):
+    num_segments = len(quaternions) - 1
+    points_per_segment = (total_points - len(quaternions)) // num_segments
+    remaining_points = (total_points - len(quaternions)) % num_segments
+
+    interpolated_points = []
+    for i in range(num_segments):
+        q1 = quaternions[i]
+        q2 = quaternions[i+1]
+        num_points = points_per_segment + (1 if i < remaining_points else 0)
+
+        interpolated_points.append(q1)
+
+        for j in range(num_points):
+            t = (j+1) / (num_points + 1)
+            q = slerp(q1,q2,t)
+            interpolated_points.append(q)
+    
+    interpolated_points.append(quaternions[-1])
+
+    interpolated_points = np.array(interpolated_points)
+    rospy.loginfo(interpolated_points.shape)
+
+    return interpolated_points
+
 def start_training(req):
     
     global last_training
@@ -124,10 +177,12 @@ def start_training(req):
     number_of_demonstrations = len(trajectories)
     all_demonstrations = []
     for trajectory in trajectories:
-        interpolated_points = interpolate_points(trajectory,sample_length)
-        #interpolated_points_reshaped = interpolated_points.reshape(-1, 3)
-        #rospy.loginfo(interpolated_points)
-        all_demonstrations.append(interpolated_points)
+        interpolated_points = interpolate_points(trajectory[:,:3],sample_length)
+        interpolated_quaternions = interpolate_quaternions(trajectory[:,-4:], sample_length)
+
+        interpolated_data = np.concatenate((interpolated_points, interpolated_quaternions), axis = -1)
+
+        all_demonstrations.append(interpolated_data)
     #rospy.loginfo(all_demonstrations)
     demo_data = np.array(all_demonstrations)
     demo_data = demo_data.reshape((number_of_demonstrations, sample_length, n_dims_pos + n_dims_or))
