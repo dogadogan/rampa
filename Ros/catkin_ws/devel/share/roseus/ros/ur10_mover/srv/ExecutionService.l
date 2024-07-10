@@ -14,54 +14,17 @@
 
 (in-package "ROS")
 
-
-
 (if (not (find-package "TRAJECTORY_MSGS"))
   (ros::roseus-add-msgs "trajectory_msgs"))
 
 
+
+
 (defclass ur10_mover::ExecutionServiceRequest
-  :super ros::object
-  :slots (_input_msg ))
-
-(defmethod ur10_mover::ExecutionServiceRequest
-  (:init
-   (&key
-    ((:input_msg __input_msg) "")
-    )
-   (send-super :init)
-   (setq _input_msg (string __input_msg))
-   self)
-  (:input_msg
-   (&optional __input_msg)
-   (if __input_msg (setq _input_msg __input_msg)) _input_msg)
-  (:serialization-length
-   ()
-   (+
-    ;; string _input_msg
-    4 (length _input_msg)
-    ))
-  (:serialize
-   (&optional strm)
-   (let ((s (if strm strm
-              (make-string-output-stream (send self :serialization-length)))))
-     ;; string _input_msg
-       (write-long (length _input_msg) s) (princ _input_msg s)
-     ;;
-     (if (null strm) (get-output-stream-string s))))
-  (:deserialize
-   (buf &optional (ptr- 0))
-   ;; string _input_msg
-     (let (n) (setq n (sys::peek buf ptr- :integer)) (incf ptr- 4) (setq _input_msg (subseq buf ptr- (+ ptr- n))) (incf ptr- n))
-   ;;
-   self)
-  )
-
-(defclass ur10_mover::ExecutionServiceResponse
   :super ros::object
   :slots (_joint_states ))
 
-(defmethod ur10_mover::ExecutionServiceResponse
+(defmethod ur10_mover::ExecutionServiceRequest
   (:init
    (&key
     ((:joint_states __joint_states) ())
@@ -106,11 +69,48 @@
    self)
   )
 
+(defclass ur10_mover::ExecutionServiceResponse
+  :super ros::object
+  :slots (_output_msg ))
+
+(defmethod ur10_mover::ExecutionServiceResponse
+  (:init
+   (&key
+    ((:output_msg __output_msg) "")
+    )
+   (send-super :init)
+   (setq _output_msg (string __output_msg))
+   self)
+  (:output_msg
+   (&optional __output_msg)
+   (if __output_msg (setq _output_msg __output_msg)) _output_msg)
+  (:serialization-length
+   ()
+   (+
+    ;; string _output_msg
+    4 (length _output_msg)
+    ))
+  (:serialize
+   (&optional strm)
+   (let ((s (if strm strm
+              (make-string-output-stream (send self :serialization-length)))))
+     ;; string _output_msg
+       (write-long (length _output_msg) s) (princ _output_msg s)
+     ;;
+     (if (null strm) (get-output-stream-string s))))
+  (:deserialize
+   (buf &optional (ptr- 0))
+   ;; string _output_msg
+     (let (n) (setq n (sys::peek buf ptr- :integer)) (incf ptr- 4) (setq _output_msg (subseq buf ptr- (+ ptr- n))) (incf ptr- n))
+   ;;
+   self)
+  )
+
 (defclass ur10_mover::ExecutionService
   :super ros::object
   :slots ())
 
-(setf (get ur10_mover::ExecutionService :md5sum-) "f8f3ec77ce7e0e05b9dfadb0a8e55bcc")
+(setf (get ur10_mover::ExecutionService :md5sum-) "202ce02eb9e959e211537d866699141c")
 (setf (get ur10_mover::ExecutionService :datatype-) "ur10_mover/ExecutionService")
 (setf (get ur10_mover::ExecutionService :request) ur10_mover::ExecutionServiceRequest)
 (setf (get ur10_mover::ExecutionService :response) ur10_mover::ExecutionServiceResponse)
@@ -118,12 +118,10 @@
 (defmethod ur10_mover::ExecutionServiceRequest
   (:response () (instance ur10_mover::ExecutionServiceResponse :init)))
 
-(setf (get ur10_mover::ExecutionServiceRequest :md5sum-) "f8f3ec77ce7e0e05b9dfadb0a8e55bcc")
+(setf (get ur10_mover::ExecutionServiceRequest :md5sum-) "202ce02eb9e959e211537d866699141c")
 (setf (get ur10_mover::ExecutionServiceRequest :datatype-) "ur10_mover/ExecutionServiceRequest")
 (setf (get ur10_mover::ExecutionServiceRequest :definition-)
-      "string input_msg
----
-trajectory_msgs/JointTrajectoryPoint[] joint_states
+      "trajectory_msgs/JointTrajectoryPoint[] joint_states
 
 ================================================================================
 MSG: trajectory_msgs/JointTrajectoryPoint
@@ -136,14 +134,15 @@ float64[] velocities
 float64[] accelerations
 float64[] effort
 duration time_from_start
+---
+string output_msg
+
 ")
 
-(setf (get ur10_mover::ExecutionServiceResponse :md5sum-) "f8f3ec77ce7e0e05b9dfadb0a8e55bcc")
+(setf (get ur10_mover::ExecutionServiceResponse :md5sum-) "202ce02eb9e959e211537d866699141c")
 (setf (get ur10_mover::ExecutionServiceResponse :datatype-) "ur10_mover/ExecutionServiceResponse")
 (setf (get ur10_mover::ExecutionServiceResponse :definition-)
-      "string input_msg
----
-trajectory_msgs/JointTrajectoryPoint[] joint_states
+      "trajectory_msgs/JointTrajectoryPoint[] joint_states
 
 ================================================================================
 MSG: trajectory_msgs/JointTrajectoryPoint
@@ -156,10 +155,13 @@ float64[] velocities
 float64[] accelerations
 float64[] effort
 duration time_from_start
+---
+string output_msg
+
 ")
 
 
 
-(provide :ur10_mover/ExecutionService "f8f3ec77ce7e0e05b9dfadb0a8e55bcc")
+(provide :ur10_mover/ExecutionService "202ce02eb9e959e211537d866699141c")
 
 

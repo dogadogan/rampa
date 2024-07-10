@@ -15,6 +15,7 @@
 #include <ros/builtin_message_traits.h>
 #include <ros/message_operations.h>
 
+#include <trajectory_msgs/JointTrajectoryPoint.h>
 
 namespace ur10_mover
 {
@@ -24,17 +25,17 @@ struct ExecutionServiceRequest_
   typedef ExecutionServiceRequest_<ContainerAllocator> Type;
 
   ExecutionServiceRequest_()
-    : input_msg()  {
+    : joint_states()  {
     }
   ExecutionServiceRequest_(const ContainerAllocator& _alloc)
-    : input_msg(_alloc)  {
+    : joint_states(_alloc)  {
   (void)_alloc;
     }
 
 
 
-   typedef std::basic_string<char, std::char_traits<char>, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<char>> _input_msg_type;
-  _input_msg_type input_msg;
+   typedef std::vector< ::trajectory_msgs::JointTrajectoryPoint_<ContainerAllocator> , typename std::allocator_traits<ContainerAllocator>::template rebind_alloc< ::trajectory_msgs::JointTrajectoryPoint_<ContainerAllocator> >> _joint_states_type;
+  _joint_states_type joint_states;
 
 
 
@@ -65,7 +66,7 @@ return s;
 template<typename ContainerAllocator1, typename ContainerAllocator2>
 bool operator==(const ::ur10_mover::ExecutionServiceRequest_<ContainerAllocator1> & lhs, const ::ur10_mover::ExecutionServiceRequest_<ContainerAllocator2> & rhs)
 {
-  return lhs.input_msg == rhs.input_msg;
+  return lhs.joint_states == rhs.joint_states;
 }
 
 template<typename ContainerAllocator1, typename ContainerAllocator2>
@@ -122,12 +123,12 @@ struct MD5Sum< ::ur10_mover::ExecutionServiceRequest_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "2beecd7d8a70aad2184c84345d0cd8d3";
+    return "d092cebb9e5caf3ba6f8e437310fac04";
   }
 
   static const char* value(const ::ur10_mover::ExecutionServiceRequest_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0x2beecd7d8a70aad2ULL;
-  static const uint64_t static_value2 = 0x184c84345d0cd8d3ULL;
+  static const uint64_t static_value1 = 0xd092cebb9e5caf3bULL;
+  static const uint64_t static_value2 = 0xa6f8e437310fac04ULL;
 };
 
 template<class ContainerAllocator>
@@ -146,7 +147,19 @@ struct Definition< ::ur10_mover::ExecutionServiceRequest_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "string input_msg\n"
+    return "trajectory_msgs/JointTrajectoryPoint[] joint_states\n"
+"\n"
+"================================================================================\n"
+"MSG: trajectory_msgs/JointTrajectoryPoint\n"
+"# Each trajectory point specifies either positions[, velocities[, accelerations]]\n"
+"# or positions[, effort] for the trajectory to be executed.\n"
+"# All specified values are in the same order as the joint names in JointTrajectory.msg\n"
+"\n"
+"float64[] positions\n"
+"float64[] velocities\n"
+"float64[] accelerations\n"
+"float64[] effort\n"
+"duration time_from_start\n"
 ;
   }
 
@@ -165,7 +178,7 @@ namespace serialization
   {
     template<typename Stream, typename T> inline static void allInOne(Stream& stream, T m)
     {
-      stream.next(m.input_msg);
+      stream.next(m.joint_states);
     }
 
     ROS_DECLARE_ALLINONE_SERIALIZER
@@ -184,8 +197,14 @@ struct Printer< ::ur10_mover::ExecutionServiceRequest_<ContainerAllocator> >
 {
   template<typename Stream> static void stream(Stream& s, const std::string& indent, const ::ur10_mover::ExecutionServiceRequest_<ContainerAllocator>& v)
   {
-    s << indent << "input_msg: ";
-    Printer<std::basic_string<char, std::char_traits<char>, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<char>>>::stream(s, indent + "  ", v.input_msg);
+    s << indent << "joint_states[]" << std::endl;
+    for (size_t i = 0; i < v.joint_states.size(); ++i)
+    {
+      s << indent << "  joint_states[" << i << "]: ";
+      s << std::endl;
+      s << indent;
+      Printer< ::trajectory_msgs::JointTrajectoryPoint_<ContainerAllocator> >::stream(s, indent + "    ", v.joint_states[i]);
+    }
   }
 };
 
