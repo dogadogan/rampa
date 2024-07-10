@@ -12,8 +12,8 @@ const _arrayDeserializer = _deserializer.Array;
 const _finder = _ros_msg_utils.Find;
 const _getByteLength = _ros_msg_utils.getByteLength;
 let CartesianTrajectory = require('./CartesianTrajectory.js');
-let trajectory_msgs = _finder('trajectory_msgs');
 let std_msgs = _finder('std_msgs');
+let trajectory_msgs = _finder('trajectory_msgs');
 
 //-----------------------------------------------------------
 

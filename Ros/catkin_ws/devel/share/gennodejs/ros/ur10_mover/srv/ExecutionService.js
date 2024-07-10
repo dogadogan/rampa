@@ -11,7 +11,6 @@ const _deserializer = _ros_msg_utils.Deserialize;
 const _arrayDeserializer = _deserializer.Array;
 const _finder = _ros_msg_utils.Find;
 const _getByteLength = _ros_msg_utils.getByteLength;
-let trajectory_msgs = _finder('trajectory_msgs');
 
 //-----------------------------------------------------------
 
@@ -37,11 +36,7 @@ class ExecutionServiceRequest {
   static serialize(obj, buffer, bufferOffset) {
     // Serializes a message object of type ExecutionServiceRequest
     // Serialize message field [joint_states]
-    // Serialize the length for message field [joint_states]
-    bufferOffset = _serializer.uint32(obj.joint_states.length, buffer, bufferOffset);
-    obj.joint_states.forEach((val) => {
-      bufferOffset = trajectory_msgs.msg.JointTrajectoryPoint.serialize(val, buffer, bufferOffset);
-    });
+    bufferOffset = _arraySerializer.float64(obj.joint_states, buffer, bufferOffset, null);
     return bufferOffset;
   }
 
@@ -50,20 +45,13 @@ class ExecutionServiceRequest {
     let len;
     let data = new ExecutionServiceRequest(null);
     // Deserialize message field [joint_states]
-    // Deserialize array length for message field [joint_states]
-    len = _deserializer.uint32(buffer, bufferOffset);
-    data.joint_states = new Array(len);
-    for (let i = 0; i < len; ++i) {
-      data.joint_states[i] = trajectory_msgs.msg.JointTrajectoryPoint.deserialize(buffer, bufferOffset)
-    }
+    data.joint_states = _arrayDeserializer.float64(buffer, bufferOffset, null)
     return data;
   }
 
   static getMessageSize(object) {
     let length = 0;
-    object.joint_states.forEach((val) => {
-      length += trajectory_msgs.msg.JointTrajectoryPoint.getMessageSize(val);
-    });
+    length += 8 * object.joint_states.length;
     return length + 4;
   }
 
@@ -74,25 +62,13 @@ class ExecutionServiceRequest {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return 'd092cebb9e5caf3ba6f8e437310fac04';
+    return '18daa018b134e4579f9295193c5b21fc';
   }
 
   static messageDefinition() {
     // Returns full string definition for message
     return `
-    trajectory_msgs/JointTrajectoryPoint[] joint_states
-    
-    ================================================================================
-    MSG: trajectory_msgs/JointTrajectoryPoint
-    # Each trajectory point specifies either positions[, velocities[, accelerations]]
-    # or positions[, effort] for the trajectory to be executed.
-    # All specified values are in the same order as the joint names in JointTrajectory.msg
-    
-    float64[] positions
-    float64[] velocities
-    float64[] accelerations
-    float64[] effort
-    duration time_from_start
+    float64[] joint_states
     
     `;
   }
@@ -104,10 +80,7 @@ class ExecutionServiceRequest {
     }
     const resolved = new ExecutionServiceRequest(null);
     if (msg.joint_states !== undefined) {
-      resolved.joint_states = new Array(msg.joint_states.length);
-      for (let i = 0; i < resolved.joint_states.length; ++i) {
-        resolved.joint_states[i] = trajectory_msgs.msg.JointTrajectoryPoint.Resolve(msg.joint_states[i]);
-      }
+      resolved.joint_states = msg.joint_states;
     }
     else {
       resolved.joint_states = []
@@ -194,6 +167,6 @@ class ExecutionServiceResponse {
 module.exports = {
   Request: ExecutionServiceRequest,
   Response: ExecutionServiceResponse,
-  md5sum() { return '202ce02eb9e959e211537d866699141c'; },
+  md5sum() { return '5c9003936ef71c09a5e049f44ee8dd53'; },
   datatype() { return 'ur10_mover/ExecutionService'; }
 };

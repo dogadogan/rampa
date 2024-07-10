@@ -15,7 +15,6 @@
 #include <ros/builtin_message_traits.h>
 #include <ros/message_operations.h>
 
-#include <trajectory_msgs/JointTrajectoryPoint.h>
 
 namespace ur10_mover
 {
@@ -34,7 +33,7 @@ struct ExecutionServiceRequest_
 
 
 
-   typedef std::vector< ::trajectory_msgs::JointTrajectoryPoint_<ContainerAllocator> , typename std::allocator_traits<ContainerAllocator>::template rebind_alloc< ::trajectory_msgs::JointTrajectoryPoint_<ContainerAllocator> >> _joint_states_type;
+   typedef std::vector<double, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<double>> _joint_states_type;
   _joint_states_type joint_states;
 
 
@@ -123,12 +122,12 @@ struct MD5Sum< ::ur10_mover::ExecutionServiceRequest_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "d092cebb9e5caf3ba6f8e437310fac04";
+    return "18daa018b134e4579f9295193c5b21fc";
   }
 
   static const char* value(const ::ur10_mover::ExecutionServiceRequest_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0xd092cebb9e5caf3bULL;
-  static const uint64_t static_value2 = 0xa6f8e437310fac04ULL;
+  static const uint64_t static_value1 = 0x18daa018b134e457ULL;
+  static const uint64_t static_value2 = 0x9f9295193c5b21fcULL;
 };
 
 template<class ContainerAllocator>
@@ -147,19 +146,7 @@ struct Definition< ::ur10_mover::ExecutionServiceRequest_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "trajectory_msgs/JointTrajectoryPoint[] joint_states\n"
-"\n"
-"================================================================================\n"
-"MSG: trajectory_msgs/JointTrajectoryPoint\n"
-"# Each trajectory point specifies either positions[, velocities[, accelerations]]\n"
-"# or positions[, effort] for the trajectory to be executed.\n"
-"# All specified values are in the same order as the joint names in JointTrajectory.msg\n"
-"\n"
-"float64[] positions\n"
-"float64[] velocities\n"
-"float64[] accelerations\n"
-"float64[] effort\n"
-"duration time_from_start\n"
+    return "float64[] joint_states\n"
 ;
   }
 
@@ -201,9 +188,7 @@ struct Printer< ::ur10_mover::ExecutionServiceRequest_<ContainerAllocator> >
     for (size_t i = 0; i < v.joint_states.size(); ++i)
     {
       s << indent << "  joint_states[" << i << "]: ";
-      s << std::endl;
-      s << indent;
-      Printer< ::trajectory_msgs::JointTrajectoryPoint_<ContainerAllocator> >::stream(s, indent + "    ", v.joint_states[i]);
+      Printer<double>::stream(s, indent + "  ", v.joint_states[i]);
     }
   }
 };
