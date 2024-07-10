@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "/home/user/ARobot/Ros/catkin_ws/devel/share/roseus/ros/ur10_mover/manifest.l"
+  "/home/user/ARobot/Ros/catkin_ws/devel/share/roseus/ros/ur10_mover/msg/ListOfFloats.l"
   "/home/user/ARobot/Ros/catkin_ws/devel/share/roseus/ros/ur10_mover/msg/ListOfPoses.l"
   "/home/user/ARobot/Ros/catkin_ws/devel/share/roseus/ros/ur10_mover/srv/DiscardService.l"
   "/home/user/ARobot/Ros/catkin_ws/devel/share/roseus/ros/ur10_mover/srv/ExecutionService.l"

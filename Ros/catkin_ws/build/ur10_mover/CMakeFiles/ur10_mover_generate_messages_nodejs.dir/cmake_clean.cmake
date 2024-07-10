@@ -1,4 +1,5 @@
 file(REMOVE_RECURSE
+  "/home/user/ARobot/Ros/catkin_ws/devel/share/gennodejs/ros/ur10_mover/msg/ListOfFloats.js"
   "/home/user/ARobot/Ros/catkin_ws/devel/share/gennodejs/ros/ur10_mover/msg/ListOfPoses.js"
   "/home/user/ARobot/Ros/catkin_ws/devel/share/gennodejs/ros/ur10_mover/srv/DiscardService.js"
   "/home/user/ARobot/Ros/catkin_ws/devel/share/gennodejs/ros/ur10_mover/srv/ExecutionService.js"

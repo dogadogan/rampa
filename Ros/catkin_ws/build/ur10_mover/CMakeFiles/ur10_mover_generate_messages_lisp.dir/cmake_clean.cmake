@@ -1,4 +1,5 @@
 file(REMOVE_RECURSE
+  "/home/user/ARobot/Ros/catkin_ws/devel/share/common-lisp/ros/ur10_mover/msg/ListOfFloats.lisp"
   "/home/user/ARobot/Ros/catkin_ws/devel/share/common-lisp/ros/ur10_mover/msg/ListOfPoses.lisp"
   "/home/user/ARobot/Ros/catkin_ws/devel/share/common-lisp/ros/ur10_mover/srv/DiscardService.lisp"
   "/home/user/ARobot/Ros/catkin_ws/devel/share/common-lisp/ros/ur10_mover/srv/ExecutionService.lisp"

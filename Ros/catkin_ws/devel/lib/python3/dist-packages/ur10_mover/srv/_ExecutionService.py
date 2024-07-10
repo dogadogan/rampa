@@ -6,15 +6,19 @@ python3 = True if sys.hexversion > 0x03000000 else False
 import genpy
 import struct
 
+import ur10_mover.msg
 
 class ExecutionServiceRequest(genpy.Message):
-  _md5sum = "18daa018b134e4579f9295193c5b21fc"
+  _md5sum = "ad64a8c77c8e0058db48fb69961d2443"
   _type = "ur10_mover/ExecutionServiceRequest"
   _has_header = False  # flag to mark the presence of a Header object
-  _full_text = """float64[] joint_states
-"""
+  _full_text = """ur10_mover/ListOfFloats[] joint_states
+
+================================================================================
+MSG: ur10_mover/ListOfFloats
+float64[] list"""
   __slots__ = ['joint_states']
-  _slot_types = ['float64[]']
+  _slot_types = ['ur10_mover/ListOfFloats[]']
 
   def __init__(self, *args, **kwds):
     """
@@ -52,8 +56,11 @@ class ExecutionServiceRequest(genpy.Message):
     try:
       length = len(self.joint_states)
       buff.write(_struct_I.pack(length))
-      pattern = '<%sd'%length
-      buff.write(struct.Struct(pattern).pack(*self.joint_states))
+      for val1 in self.joint_states:
+        length = len(val1.list)
+        buff.write(_struct_I.pack(length))
+        pattern = '<%sd'%length
+        buff.write(struct.Struct(pattern).pack(*val1.list))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -65,15 +72,24 @@ class ExecutionServiceRequest(genpy.Message):
     if python3:
       codecs.lookup_error("rosmsg").msg_type = self._type
     try:
+      if self.joint_states is None:
+        self.joint_states = None
       end = 0
       start = end
       end += 4
       (length,) = _struct_I.unpack(str[start:end])
-      pattern = '<%sd'%length
-      start = end
-      s = struct.Struct(pattern)
-      end += s.size
-      self.joint_states = s.unpack(str[start:end])
+      self.joint_states = []
+      for i in range(0, length):
+        val1 = ur10_mover.msg.ListOfFloats()
+        start = end
+        end += 4
+        (length,) = _struct_I.unpack(str[start:end])
+        pattern = '<%sd'%length
+        start = end
+        s = struct.Struct(pattern)
+        end += s.size
+        val1.list = s.unpack(str[start:end])
+        self.joint_states.append(val1)
       return self
     except struct.error as e:
       raise genpy.DeserializationError(e)  # most likely buffer underfill
@@ -88,8 +104,11 @@ class ExecutionServiceRequest(genpy.Message):
     try:
       length = len(self.joint_states)
       buff.write(_struct_I.pack(length))
-      pattern = '<%sd'%length
-      buff.write(self.joint_states.tostring())
+      for val1 in self.joint_states:
+        length = len(val1.list)
+        buff.write(_struct_I.pack(length))
+        pattern = '<%sd'%length
+        buff.write(val1.list.tostring())
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -102,15 +121,24 @@ class ExecutionServiceRequest(genpy.Message):
     if python3:
       codecs.lookup_error("rosmsg").msg_type = self._type
     try:
+      if self.joint_states is None:
+        self.joint_states = None
       end = 0
       start = end
       end += 4
       (length,) = _struct_I.unpack(str[start:end])
-      pattern = '<%sd'%length
-      start = end
-      s = struct.Struct(pattern)
-      end += s.size
-      self.joint_states = numpy.frombuffer(str[start:end], dtype=numpy.float64, count=length)
+      self.joint_states = []
+      for i in range(0, length):
+        val1 = ur10_mover.msg.ListOfFloats()
+        start = end
+        end += 4
+        (length,) = _struct_I.unpack(str[start:end])
+        pattern = '<%sd'%length
+        start = end
+        s = struct.Struct(pattern)
+        end += s.size
+        val1.list = numpy.frombuffer(str[start:end], dtype=numpy.float64, count=length)
+        self.joint_states.append(val1)
       return self
     except struct.error as e:
       raise genpy.DeserializationError(e)  # most likely buffer underfill
@@ -249,6 +277,6 @@ def _get_struct_I():
     return _struct_I
 class ExecutionService(object):
   _type          = 'ur10_mover/ExecutionService'
-  _md5sum = '5c9003936ef71c09a5e049f44ee8dd53'
+  _md5sum = '200ed2e45e29d7b67fa3d65a61af734d'
   _request_class  = ExecutionServiceRequest
   _response_class = ExecutionServiceResponse

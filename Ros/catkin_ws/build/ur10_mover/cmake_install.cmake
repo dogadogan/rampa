@@ -42,7 +42,10 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/ur10_mover/msg" TYPE FILE FILES "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/msg/ListOfPoses.msg")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/ur10_mover/msg" TYPE FILE FILES
+    "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/msg/ListOfFloats.msg"
+    "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/msg/ListOfPoses.msg"
+    )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)

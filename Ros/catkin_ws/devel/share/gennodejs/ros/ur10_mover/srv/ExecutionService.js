@@ -11,6 +11,7 @@ const _deserializer = _ros_msg_utils.Deserialize;
 const _arrayDeserializer = _deserializer.Array;
 const _finder = _ros_msg_utils.Find;
 const _getByteLength = _ros_msg_utils.getByteLength;
+let ListOfFloats = require('../msg/ListOfFloats.js');
 
 //-----------------------------------------------------------
 
@@ -36,7 +37,11 @@ class ExecutionServiceRequest {
   static serialize(obj, buffer, bufferOffset) {
     // Serializes a message object of type ExecutionServiceRequest
     // Serialize message field [joint_states]
-    bufferOffset = _arraySerializer.float64(obj.joint_states, buffer, bufferOffset, null);
+    // Serialize the length for message field [joint_states]
+    bufferOffset = _serializer.uint32(obj.joint_states.length, buffer, bufferOffset);
+    obj.joint_states.forEach((val) => {
+      bufferOffset = ListOfFloats.serialize(val, buffer, bufferOffset);
+    });
     return bufferOffset;
   }
 
@@ -45,13 +50,20 @@ class ExecutionServiceRequest {
     let len;
     let data = new ExecutionServiceRequest(null);
     // Deserialize message field [joint_states]
-    data.joint_states = _arrayDeserializer.float64(buffer, bufferOffset, null)
+    // Deserialize array length for message field [joint_states]
+    len = _deserializer.uint32(buffer, bufferOffset);
+    data.joint_states = new Array(len);
+    for (let i = 0; i < len; ++i) {
+      data.joint_states[i] = ListOfFloats.deserialize(buffer, bufferOffset)
+    }
     return data;
   }
 
   static getMessageSize(object) {
     let length = 0;
-    length += 8 * object.joint_states.length;
+    object.joint_states.forEach((val) => {
+      length += ListOfFloats.getMessageSize(val);
+    });
     return length + 4;
   }
 
@@ -62,14 +74,17 @@ class ExecutionServiceRequest {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return '18daa018b134e4579f9295193c5b21fc';
+    return 'ad64a8c77c8e0058db48fb69961d2443';
   }
 
   static messageDefinition() {
     // Returns full string definition for message
     return `
-    float64[] joint_states
+    ur10_mover/ListOfFloats[] joint_states
     
+    ================================================================================
+    MSG: ur10_mover/ListOfFloats
+    float64[] list
     `;
   }
 
@@ -80,7 +95,10 @@ class ExecutionServiceRequest {
     }
     const resolved = new ExecutionServiceRequest(null);
     if (msg.joint_states !== undefined) {
-      resolved.joint_states = msg.joint_states;
+      resolved.joint_states = new Array(msg.joint_states.length);
+      for (let i = 0; i < resolved.joint_states.length; ++i) {
+        resolved.joint_states[i] = ListOfFloats.Resolve(msg.joint_states[i]);
+      }
     }
     else {
       resolved.joint_states = []
@@ -167,6 +185,6 @@ class ExecutionServiceResponse {
 module.exports = {
   Request: ExecutionServiceRequest,
   Response: ExecutionServiceResponse,
-  md5sum() { return '5c9003936ef71c09a5e049f44ee8dd53'; },
+  md5sum() { return '200ed2e45e29d7b67fa3d65a61af734d'; },
   datatype() { return 'ur10_mover/ExecutionService'; }
 };

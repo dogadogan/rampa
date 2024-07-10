@@ -15,6 +15,7 @@
 #include <ros/builtin_message_traits.h>
 #include <ros/message_operations.h>
 
+#include <ur10_mover/ListOfFloats.h>
 
 namespace ur10_mover
 {
@@ -33,7 +34,7 @@ struct ExecutionServiceRequest_
 
 
 
-   typedef std::vector<double, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<double>> _joint_states_type;
+   typedef std::vector< ::ur10_mover::ListOfFloats_<ContainerAllocator> , typename std::allocator_traits<ContainerAllocator>::template rebind_alloc< ::ur10_mover::ListOfFloats_<ContainerAllocator> >> _joint_states_type;
   _joint_states_type joint_states;
 
 
@@ -122,12 +123,12 @@ struct MD5Sum< ::ur10_mover::ExecutionServiceRequest_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "18daa018b134e4579f9295193c5b21fc";
+    return "ad64a8c77c8e0058db48fb69961d2443";
   }
 
   static const char* value(const ::ur10_mover::ExecutionServiceRequest_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0x18daa018b134e457ULL;
-  static const uint64_t static_value2 = 0x9f9295193c5b21fcULL;
+  static const uint64_t static_value1 = 0xad64a8c77c8e0058ULL;
+  static const uint64_t static_value2 = 0xdb48fb69961d2443ULL;
 };
 
 template<class ContainerAllocator>
@@ -146,7 +147,11 @@ struct Definition< ::ur10_mover::ExecutionServiceRequest_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "float64[] joint_states\n"
+    return "ur10_mover/ListOfFloats[] joint_states\n"
+"\n"
+"================================================================================\n"
+"MSG: ur10_mover/ListOfFloats\n"
+"float64[] list\n"
 ;
   }
 
@@ -188,7 +193,9 @@ struct Printer< ::ur10_mover::ExecutionServiceRequest_<ContainerAllocator> >
     for (size_t i = 0; i < v.joint_states.size(); ++i)
     {
       s << indent << "  joint_states[" << i << "]: ";
-      Printer<double>::stream(s, indent + "  ", v.joint_states[i]);
+      s << std::endl;
+      s << indent;
+      Printer< ::ur10_mover::ListOfFloats_<ContainerAllocator> >::stream(s, indent + "    ", v.joint_states[i]);
     }
   }
 };

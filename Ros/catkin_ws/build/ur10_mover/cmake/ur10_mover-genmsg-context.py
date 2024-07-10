@@ -1,6 +1,6 @@
 # generated from genmsg/cmake/pkg-genmsg.context.in
 
-messages_str = "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/msg/ListOfPoses.msg"
+messages_str = "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/msg/ListOfFloats.msg;/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/msg/ListOfPoses.msg"
 services_str = "/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/DiscardService.srv;/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/ExecutionService.srv;/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/GetTrainingDataService.srv;/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/GripperService.srv;/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/PlannerService.srv;/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/SampleService.srv;/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/StateService.srv;/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/TrainingDataService.srv;/home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/TrainingService.srv"
 pkg_name = "ur10_mover"
 dependencies_str = "geometry_msgs;std_msgs;moveit_msgs;sensor_msgs"
