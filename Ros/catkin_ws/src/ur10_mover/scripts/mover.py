@@ -254,9 +254,10 @@ def execute_on_real_robot(req):
 
     
     traj = np.array(traj)
-    
+
     rospy.loginfo(traj.shape)
-    rospy.loginfo(traj)
+    for joint_state in traj:
+        print(f'{joint_state * 180 / 3.14}')
     
     # TODO move_group needs another format input to run on simulation
     

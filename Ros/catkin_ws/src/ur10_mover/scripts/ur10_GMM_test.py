@@ -3,43 +3,88 @@
 import numpy as np
 import os
 import time
+import math
+import matplotlib.pyplot as plt
 from movement_primitives.promp import ProMP
 from movement_primitives.dmp import DMP
 from gmr import GMM
+from scipy.spatial.transform import Rotation as R
 
 
-from geometry_msgs.msg import Pose
-from ur10_mover.msg import ListOfPoses
-
+_demo_data = []
 isTraining = False
+last_training = ""
 sample_length = 100
-n_dims = 3
+n_dims_pos = 3
+n_dims_or = 4
 
-priors = 20 # number of GMM components  ?
+## fill this!!
+filenames = []
 
-gmm_x = GMM(n_components=priors, random_state=1234)
-gmm_y = GMM(n_components=priors, random_state=1234)
-gmm_z = GMM(n_components=priors, random_state=1234)
+priors = 20 # number of GMM components
 
+p_pos = ProMP(n_dims=n_dims_pos,n_weights_per_dim=20)
+p_or = ProMP(n_dims=n_dims_or, n_weights_per_dim=20)
+
+d_pos = DMP(n_dims=n_dims_pos, n_weights_per_dim=20)
+d_or = DMP(n_dims=n_dims_or, n_weights_per_dim=20)
+
+g_pos_x = GMM(n_components=priors, random_state=1234)
+g_pos_y = GMM(n_components=priors, random_state=1234)
+g_pos_z = GMM(n_components=priors, random_state=1234)
+g_or_x = GMM(n_components=priors, random_state=1234)
+g_or_y = GMM(n_components=priors, random_state=1234)
+g_or_z = GMM(n_components=priors, random_state=1234)
+g_or_w = GMM(n_components=priors, random_state=1234)
+
+
+def slerp(q1,q2,t):
+    dot = np.dot(q1,q2)
+
+    if dot < 0.0:
+        q1 = -q1
+        dot = -dot
+    
+    dot = np.clip(dot, -1.0, 1.0)
+
+    theta_0 = np.arccos(dot)
+    sin_theta_0 = np.sin(theta_0)
+
+    if sin_theta_0 > 0.001:
+        theta = theta_0 * t
+        sin_theta = np.sin(theta)
+
+        s1 = np.cos(theta) - dot * sin_theta / sin_theta_0
+        s2 = sin_theta / sin_theta_0
+    else:
+        s1 = 1.0 - t
+        s2 = t
+    
+    q_interp = s1*q1 + s2*q2
+
+    return q_interp / np.linalg.norm(q_interp)
+
+
+### LOADING DATA!!! you must fill the filenames list
 def read_data_files():
-    data_folder_path = os.path.join(os.path.dirname(__file__), 'data')
     trajectory_list= []
-    for filename in os.listdir(data_folder_path):
-        if filename.startswith("data_"):
-            file_path = os.path.join(data_folder_path, filename)
-            with open(file_path, 'r') as input_file:
-                traj = convert_data_file_to_list(input_file)
-                trajectory_list.append(traj)
+    for filename in filenames:
+        trajectory = np.load(filename)
+        trajectory = make_quaternions_continuous(trajectory)
+        trajectory_list.append(trajectory)
     return trajectory_list
 
-def convert_data_file_to_list(input_file):
-    traj = []
-    saved_trajectory = input_file.readlines()
-    input_file.close()
-    for point in saved_trajectory:
-        point= [float(i) for i in point[1:-2].split(',')]
-        traj.append(point)
-    return traj
+def make_quaternions_continuous(trajectory):
+    for i in range(1, len(trajectory)):
+        prev_q = trajectory[i-1][3:7]
+        curr_q = trajectory[i][3:7]
+
+        dot_product = np.dot(prev_q, curr_q)
+
+        if dot_product < 0:
+            trajectory[i][3:7] = -1 * curr_q
+    
+    return trajectory
 
 def interpolate_points(points, total_points):
     num_segments = len(points) - 1
@@ -59,76 +104,262 @@ def interpolate_points(points, total_points):
             interpolated_points.append(interpolated_point)
     return np.array(interpolated_points)
 
-def start_training():
+def interpolate_quaternions(quaternions, total_points):
+    num_segments = len(quaternions) - 1
+    points_per_segment = (total_points - len(quaternions)) // num_segments
+    remaining_points = (total_points - len(quaternions)) % num_segments
 
+    interpolated_points = []
+    for i in range(num_segments):
+        q1 = quaternions[i]
+        q2 = quaternions[i+1]
+        num_points = points_per_segment + (1 if i < remaining_points else 0)
+
+        interpolated_points.append(q1)
+
+        for j in range(num_points):
+            t = (j+1) / (num_points + 1)
+            q = slerp(q1,q2,t)
+            interpolated_points.append(q)
+    
+    interpolated_points.append(quaternions[-1])
+
+    interpolated_points = np.array(interpolated_points)
+
+    return interpolated_points
+
+def start_training(input):
+    
+    global last_training
+    global _demo_data
+    
     trajectories = read_data_files()
     number_of_demonstrations = len(trajectories)
     all_demonstrations = []
     for trajectory in trajectories:
-        interpolated_points = interpolate_points(trajectory,sample_length)
-        #interpolated_points_reshaped = interpolated_points.reshape(-1, 3)
-        #rospy.loginfo(interpolated_points)
-        all_demonstrations.append(interpolated_points)
+        interpolated_points = interpolate_points(trajectory[:,:3],sample_length)
+        interpolated_quaternions = interpolate_quaternions(trajectory[:,-4:], sample_length)
+
+        interpolated_data = np.concatenate((interpolated_points, interpolated_quaternions), axis = -1)
+
+        all_demonstrations.append(interpolated_data)
     #rospy.loginfo(all_demonstrations)
     demo_data = np.array(all_demonstrations)
+    demo_data = demo_data.reshape((number_of_demonstrations, sample_length, n_dims_pos + n_dims_or))
 
-    demo_data = demo_data.reshape((number_of_demonstrations, sample_length, -1))
+    demo_data_pos = demo_data[:,:,:3]
+    demo_data_or = demo_data[:,:,-4:]
 
-    demo_data = demo_data[:,:,:3]
+    _demo_data = demo_data_or
 
-    Yx = demo_data[:,:,0]
-    Yy = demo_data[:,:,1]
-    Yz = demo_data[:,:,2]
+    
+    if ( input == "promp"):
+        Ts = np.linspace(0, 1, sample_length).reshape((1, sample_length))  # Generate Ts for one demonstration
+        Ts = np.tile(Ts, (number_of_demonstrations, 1))
+        #Ts = np.linspace(0,1,sample_length).reshape((number_of_demonstrations,sample_length)) 
+        Ypos = demo_data_pos
+        Yor = demo_data_or
 
-    print(f"demo_data.shape: {demo_data.shape}")
-    print(f"Y.shape: {Yx.shape}")
+        # Training
+        p_pos.imitate(Ts,Ypos)
+        p_or.imitate(Ts,Yor)
+
+        last_training = "promp"
+
+    elif (input == "dmp"):
+
+        Ypos = demo_data_pos
+        Yor = demo_data_or
+        Ts = np.linspace(0,1,sample_length).reshape(sample_length)
+
+        # Training
+        for i, traj in enumerate(Ypos):
+            d_pos.imitate(T=Ts, Y = traj)
         
-    gmm_x.from_samples(Yx)
-    gmm_y.from_samples(Yy)
-    gmm_z.from_samples(Yz)
+        for i, traj in enumerate(Yor):
+            d_or.imitate(T=Ts, Y = traj)
 
-def sample_trajectory(waypoints):
-
-    trajectory = ""
-
-    start = waypoints[0]
-    end = waypoints[-1]
+        last_training = "dmp"
     
-    _gmm_x = gmm_x.condition([0,-1], [start[0], end[0]])
-    _gmm_y = gmm_y.condition([0,-1], [start[1], end[1]])
-    _gmm_z = gmm_z.condition([0,-1], [start[2], end[2]])
-
-    trajectory_x = _gmm_x.sample(1)
-    trajectory_x = np.insert(trajectory_x, 0, start[0])
-    trajectory_x = np.append(trajectory_x, end[0])
-
-    trajectory_y = _gmm_y.sample(1)
-    trajectory_y = np.insert(trajectory_y, 0, start[1])
-    trajectory_y = np.append(trajectory_y, end[1])
-
-    trajectory_z = _gmm_z.sample(1)
-    trajectory_z = np.insert(trajectory_z, 0, start[2])
-    trajectory_z = np.append(trajectory_z, end[2])
-
-    trajectory = np.stack((trajectory_x, trajectory_y, trajectory_z), axis=1)
-
-    file_path = os.path.join(os.path.dirname(__file__), 'sample.txt')
-    with open(file_path, 'w+') as file:
-        for point in trajectory:
-            file.write(str(point) + '\n')
     
+    elif (input == "gmm"):
+
+        Ypos_x = demo_data_pos[:,:,0]
+        Ypos_y = demo_data_pos[:,:,1]
+        Ypos_z = demo_data_pos[:,:,2]
+
+        Yor_x = demo_data_or[:,:,0]
+        Yor_y = demo_data_or[:,:,1]
+        Yor_z = demo_data_or[:,:,2]
+        Yor_w = demo_data_or[:,:,3]
+
+        # Training
+        g_pos_x.from_samples(Ypos_x)
+        g_pos_y.from_samples(Ypos_y)
+        g_pos_z.from_samples(Ypos_z)
+        g_or_x.from_samples(Yor_x)
+        g_or_y.from_samples(Yor_y)
+        g_or_z.from_samples(Yor_z)
+        g_or_w.from_samples(Yor_w)
+
+        last_training = "gmm" 
+
+    isTraining = False
+
+def sample_trajectory(poses):
+
+    global last_training
+    condition_poses = []
+    condition_orientations = []
+    for pose in poses:
+        condition_poses.append([pose[0], pose[1], pose[2]])
+        condition_orientations.append([pose[3], pose[4], pose[5], pose[6]])
+        
+    T = np.linspace(0,1,len(condition_poses)) # generate time steps
+
+    trajectory_pos = []
+    trajectory_or = []
+
+    if (last_training == "promp"):
+        # conditioning model
+        for i in range(len(condition_poses)):
+            pose = condition_poses[i]
+            p_pos.condition_position([pose[0], pose[1], pose[2]],t=T[i])
+
+        #sampling
+        trajectory_pos = p_pos.sample_trajectories(T=np.linspace(0,1,sample_length).reshape(sample_length), n_samples=1, random_state=np.random.RandomState(seed=1234))
+
+        for i in range(len(condition_orientations)):
+            orientation = condition_orientations[i]
+            p_or.condition_position([orientation[0], orientation[1], orientation[2], orientation[3]],t=T[i])
+
+        #sampling
+        trajectory_or = p_or.sample_trajectories(T=np.linspace(0,1,sample_length).reshape(sample_length), n_samples=1, random_state=np.random.RandomState(seed=1234))
+
+    elif (last_training == "dmp"):
+
+        for i in range(0, len(condition_poses)):
+            pose = condition_poses[i]
+            d_pos.configure(t = T[i], goal_y = np.array([pose[0], pose[1], pose[2]]))
+
+        t, trajectory_pos = d_pos.open_loop()
+        trajectory_pos = trajectory_pos[:sample_length]
+
+        for i in range(0, len(condition_orientations)):
+            orientation = condition_orientations[i]
+            d_or.configure(t = T[i], goal_y = np.array([orientation[0], orientation[1], orientation[2], orientation[3]]))
+
+        t, trajectory_or = d_or.open_loop()
+        trajectory_or = trajectory_or[:sample_length]
+    
+    elif (last_training == "gmm"):
+        
+        for i in range(len(condition_poses)):
+            pos = condition_poses[i]
+            index = (i / (len(condition_poses))) * sample_length
+            index = math.floor(index)
+            g_pos_x.condition([index], pos[0])
+            g_pos_y.condition([index], pos[1])
+            g_pos_z.condition([index], pos[2])
+        
+        for i in range(len(condition_orientations)):
+            orientation = condition_orientations[i]
+            index = (i / (len(condition_orientations))) * sample_length
+            index = math.floor(index)
+
+            orientation = condition_orientations[i]
+
+            g_or_x.condition([index], orientation[0])
+            g_or_y.condition([index], orientation[1])
+            g_or_z.condition([index], orientation[2])
+            g_or_w.condition([index], orientation[3])
+
+        #sampling
+        trajectory_pos_x = g_pos_x.sample(1)
+        trajectory_pos_y = g_pos_y.sample(1)
+        trajectory_pos_z = g_pos_z.sample(1)
+        trajectory_or_x = g_or_x.sample(1)
+        trajectory_or_y = g_or_y.sample(1)
+        trajectory_or_z = g_or_z.sample(1)
+        trajectory_or_w = g_or_w.sample(1)
+
+        trajectory_pos = np.column_stack((trajectory_pos_x[0], trajectory_pos_y[0], trajectory_pos_z[0]))
+        trajectory_or = np.column_stack((trajectory_or_x[0], trajectory_or_y[0], trajectory_or_z[0], trajectory_or_w[0]))
+    
+    sample = []
+    if (last_training == "promp"):
+        sample = np.concatenate((trajectory_pos[0],trajectory_or[0]), axis=-1)
+    else:
+        sample = np.concatenate((trajectory_pos,trajectory_or), axis=-1)
+
+    # only plots orientations at the moment
+    plot(_demo_data, sample, poses)
+
+    ### SAMPLE COMPLETED
+
+
+
+def plot(demo_data, sample, waypoints):
+    # (100,4)
+
+    T = np.linspace(0,100,100)
+    
+    for j in range(4):
+        plt.figure()
+        plt.grid(alpha=0.2)
+        plt.xlabel('Timestamp', fontsize=14)
+
+        lbl = 'x' if j==0 else ('y' if j==1 else ('z' if j==2 else 'w'))
+
+        plt.ylabel(f'Quaternion {lbl}', fontsize=14)
+
+        
+        
+        plt.plot(T, sample[:,3+j], linewidth=3, label="generated", c="blue", alpha=1)
+        for i in range (len(demo_data)):
+            data = demo_data[i]
+            if (i == 0):
+                plt.plot(T, data[:,j], label="data", c="black", alpha=0.3)
+            else:
+                plt.plot(T, data[:,j], c="black", alpha=0.3)
+        for i in range(len(waypoints)):
+            waypoint = waypoints[i]
+            if (i == 0):
+                plt.scatter(i*len(T)/(len(waypoints)-1), waypoint[3+j], label="condition points", c="green")
+            else:
+                plt.scatter(i*len(T)/(len(waypoints)-1), waypoint[3+j], c="green")
+        
+        plt.title(f'Quaternion {lbl} vs. time', fontsize=16)
+        plt.ylim(-1,1)
+        plt.legend(loc = 'lower left')
+        if (j==1):
+            plt.legend(loc = 'center left')
+        plt.show()
+
+
+
+
 
 if __name__ == "__main__":
-    start_training()
-    
-    waypoints = []
-    waypoints.append(np.array([0.26, 0.575, 1.0]))
-    waypoints.append(np.array([-0.15, 0.525, 0.91]))
 
+    ### EDIT THESE
+    os.chdir('/home/user/.ros')
+    prev_files = os.listdir('/home/user/.ros')
+    for file in prev_files:
+        if file.endswith('.npy') & file.startswith('data'):
+            filenames.append(file)
+
+
+    
+    start_training("promp")
+    # waypoints = [[posx, posy, posz, orx, ory, orz, orw], ...] (2D array)
+    waypoints = [[0,0,0,0,0,0,0],[0,0,0,0,0,0,0]]
     sample_trajectory(waypoints)
 
 
 
+
+    
 
 
     

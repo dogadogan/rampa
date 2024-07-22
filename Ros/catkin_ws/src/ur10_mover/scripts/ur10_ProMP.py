@@ -5,6 +5,7 @@ import numpy as np
 import os
 import time
 import math
+import matplotlib.pyplot as plt
 from movement_primitives.promp import ProMP
 from movement_primitives.dmp import DMP
 from gmr import GMM
@@ -22,6 +23,7 @@ from ur10_mover.srv import GetTrainingDataService, GetTrainingDataServiceRequest
 rospy.init_node('ur10_ProMP_server')
 rospy.sleep(2)
 
+_demo_data = []
 isTraining = False
 last_training = ""
 sample_length = 100
@@ -30,7 +32,7 @@ n_dims_or = 4
 
 filenames = []
 
-priors = 20 # number of GMM components
+num_comp = 20 # number of GMM components
 
 p_pos = ProMP(n_dims=n_dims_pos,n_weights_per_dim=20)
 p_or = ProMP(n_dims=n_dims_or, n_weights_per_dim=20)
@@ -38,13 +40,13 @@ p_or = ProMP(n_dims=n_dims_or, n_weights_per_dim=20)
 d_pos = DMP(n_dims=n_dims_pos, n_weights_per_dim=20)
 d_or = DMP(n_dims=n_dims_or, n_weights_per_dim=20)
 
-g_pos_x = GMM(n_components=priors, random_state=1234)
-g_pos_y = GMM(n_components=priors, random_state=1234)
-g_pos_z = GMM(n_components=priors, random_state=1234)
-g_or_x = GMM(n_components=priors, random_state=1234)
-g_or_y = GMM(n_components=priors, random_state=1234)
-g_or_z = GMM(n_components=priors, random_state=1234)
-g_or_w = GMM(n_components=priors, random_state=1234)
+g_pos_x = GMM(n_components=num_comp, random_state=1234)
+g_pos_y = GMM(n_components=num_comp, random_state=1234)
+g_pos_z = GMM(n_components=num_comp, random_state=1234)
+g_or_x = GMM(n_components=num_comp, random_state=1234)
+g_or_y = GMM(n_components=num_comp, random_state=1234)
+g_or_z = GMM(n_components=num_comp, random_state=1234)
+g_or_w = GMM(n_components=num_comp, random_state=1234)
 
 
 def slerp(q1,q2,t):
@@ -112,10 +114,24 @@ def read_data_files():
     trajectory_list= []
     for filename in filenames:
         trajectory = np.load(filename)
-        print(f'{trajectory[:,-4:]}')
-        print("---")
+
+        trajectory = make_quaternions_continuous(trajectory)
+            
         trajectory_list.append(trajectory)
     return trajectory_list
+
+def make_quaternions_continuous(trajectory):
+    for i in range(1, len(trajectory)):
+        prev_q = trajectory[i-1][3:7]
+        curr_q = trajectory[i][3:7]
+
+        dot_product = np.dot(prev_q, curr_q)
+
+        if dot_product < 0:
+            trajectory[i][3:7] = -1 * curr_q
+    
+    return trajectory
+
 
 def interpolate_points(points, total_points):
     num_segments = len(points) - 1
@@ -163,6 +179,7 @@ def interpolate_quaternions(quaternions, total_points):
 def start_training(req):
     
     global last_training
+    global _demo_data
     
     rospy.loginfo("Recived training request")
     response = TrainingServiceResponse()
@@ -189,6 +206,9 @@ def start_training(req):
 
     demo_data_pos = demo_data[:,:,:3]
     demo_data_or = demo_data[:,:,-4:]
+
+    _demo_data = demo_data_or
+
 
     rospy.loginfo(demo_data_pos.shape)
     rospy.loginfo(demo_data_or.shape)
@@ -363,6 +383,8 @@ def sample_trajectory(req):
         sample = np.concatenate((trajectory_pos,trajectory_or), axis=-1)
         rospy.loginfo(sample.shape)
 
+    # plot(_demo_data, sample)
+
     response_trajectory = []
     for point in sample: 
         pose = Pose()
@@ -376,6 +398,22 @@ def sample_trajectory(req):
     np.save('sample.npy', sample)
 
     return response
+
+
+def plot(demo_data, sample):
+    # (100,4)
+
+    T = np.linspace(0,100,100)
+    for i in range(4):
+        plt.figure()
+        plt.scatter(T, sample[:,i], c="blue")
+        for data in demo_data:
+            plt.scatter(T, data[:,i])
+        plt.title(f'{i} vs. time')
+        plt.show()
+
+
+
 
 def delete_training_data(req):
 
@@ -420,9 +458,13 @@ def send_training_data(req):
         for pose in trajectory:
             currPose = Pose()
             #ros to unity conversion
-            currPose.position.x = -1 * pose[1]
-            currPose.position.y = pose[2]
-            currPose.position.z = pose[0]
+            currPose.position.x = pose[0]
+            currPose.position.y = pose[1]
+            currPose.position.z = pose[2]
+            currPose.orientation.x = pose[3]
+            currPose.orientation.y = pose[4]
+            currPose.orientation.z = pose[5]
+            currPose.orientation.w = pose[6]
             listOfPoses.pose_list.append(currPose)
         response.trajectoryList.append(listOfPoses)
     
