@@ -7,7 +7,7 @@ using TMPro;
 public class CollisionManager : MonoBehaviour
 {
 
-    public GameObject collisionObject;
+    public CapsuleCollider[] robotColliders;
     public TMP_Text debugText;
 
     void Update() {
@@ -19,12 +19,16 @@ public class CollisionManager : MonoBehaviour
 
         foreach (var anchor in room.GetRoomAnchors())
         {
-            if (anchor.IsPositionInVolume(collisionObject.transform.position, false))
+            // check collision of base_link with anchor
+            foreach (var collider in robotColliders)
             {
-                debugText.text += "\nCollision Detected";
-            }
-                
+                if (collider.bounds.Intersects(anchor.VolumeBounds.Value))
+                {
+                    debugText.text = "Collision Detected";
+                    return;
+                }
+                debugText.text = "No Collision";
+            }    
         }
-            
     }
 }
