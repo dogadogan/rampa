@@ -4,6 +4,7 @@ using UnityEngine;
 using RosMessageTypes.Ur10Mover;
 using Unity.Robotics.ROSTCPConnector;
 using RosMessageTypes.Geometry;
+using Unity.Robotics.ROSTCPConnector.ROSGeometry;
 using System.Collections;
 using JetBrains.Annotations;
 using TMPro;
@@ -206,11 +207,15 @@ public class TrainAndTest : MonoBehaviour
         //trajectory_list should be a list of lists of poses
         foreach (var trajectory in response.trajectoryList) {
             List<Vector3> poses = new List<Vector3>();
+            List<Quaternion> orientations = new List<Quaternion>();
             
             foreach (var pose in trajectory.pose_list) {
-                poses.Add(new Vector3((float) pose.position.x, (float) pose.position.y, (float) pose.position.z));
+                Vector3 position = pose.position.From<FLU>();
+                Quaternion quaternion = pose.orientation.From<FLU>();
+                poses.Add(position);
+                orientations.Add(quaternion);
             }
-            prevRecordedTrajectories.AddTrajectory(poses, false);
+            prevRecordedTrajectories.AddTrajectory(poses, orientations, false);
         }
 
         prevRecordedTrajectories.HandleButtons();

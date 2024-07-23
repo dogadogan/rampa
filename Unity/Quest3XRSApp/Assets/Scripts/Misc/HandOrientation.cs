@@ -60,7 +60,9 @@ public class HandOrientation : MonoBehaviour
         if (orientationDropdown.value == 1) {
             handOrientationIndicator.transform.position = hand.PointerPose.position;
             
-            Quaternion rotationOfHand = quaternionFilter.Filter(OVRInput.GetLocalControllerRotation(OVRInput.Controller.RHand));
+            Quaternion rotationOfHand = OVRInput.GetLocalControllerRotation(OVRInput.Controller.RHand);
+            
+            rotationOfHand = quaternionFilter.Filter(rotationOfHand);
 
             rotationOfHand = Quaternion.Inverse(rotationOfHand);
 

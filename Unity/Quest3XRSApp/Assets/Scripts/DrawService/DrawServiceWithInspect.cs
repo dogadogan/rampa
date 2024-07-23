@@ -113,6 +113,7 @@ public class DrawServiceWithInspect : MonoBehaviour
                         handOrientation.UpdateHandOrientationIndicator(hand.PointerPose.position, hand.PointerPose.position);
                         }
                         targetOrientations.Add(handOrientation.GetRotation());
+                        debugText.text += "targetOrientation: " + handOrientation.GetRotation().eulerAngles + "\n";
                         targetPoints.Add(hand.PointerPose.position);
                     }
                     else {
@@ -197,6 +198,7 @@ public class DrawServiceWithInspect : MonoBehaviour
 
                 PlanRequestGeneratorWithPoses.SetCurrentIndexPointer();
                 targetPoints.Clear();
+                targetOrientations.Clear();
                 handleMenu(false);
                 redrawButton.interactable = true;
                 break;
@@ -256,6 +258,7 @@ public class DrawServiceWithInspect : MonoBehaviour
 
         StopAllCoroutines();
         targetPoints.Clear();
+        targetOrientations.Clear();
 
 
         // set the buttons to be non-interactable in the initial state
