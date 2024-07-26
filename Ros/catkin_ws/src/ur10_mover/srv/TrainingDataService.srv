@@ -1,4 +1,5 @@
 string input_msg
 geometry_msgs/Pose[] pose_list
+float64 context
 ---
 string output_msg
