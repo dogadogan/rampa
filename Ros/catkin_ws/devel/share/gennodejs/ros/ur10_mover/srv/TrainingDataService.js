@@ -24,6 +24,7 @@ class TrainingDataServiceRequest {
       // initObj === null is a special case for deserialization where we don't initialize fields
       this.input_msg = null;
       this.pose_list = null;
+      this.context = null;
     }
     else {
       if (initObj.hasOwnProperty('input_msg')) {
@@ -38,6 +39,12 @@ class TrainingDataServiceRequest {
       else {
         this.pose_list = [];
       }
+      if (initObj.hasOwnProperty('context')) {
+        this.context = initObj.context
+      }
+      else {
+        this.context = 0.0;
+      }
     }
   }
 
@@ -51,6 +58,8 @@ class TrainingDataServiceRequest {
     obj.pose_list.forEach((val) => {
       bufferOffset = geometry_msgs.msg.Pose.serialize(val, buffer, bufferOffset);
     });
+    // Serialize message field [context]
+    bufferOffset = _serializer.float64(obj.context, buffer, bufferOffset);
     return bufferOffset;
   }
 
@@ -67,6 +76,8 @@ class TrainingDataServiceRequest {
     for (let i = 0; i < len; ++i) {
       data.pose_list[i] = geometry_msgs.msg.Pose.deserialize(buffer, bufferOffset)
     }
+    // Deserialize message field [context]
+    data.context = _deserializer.float64(buffer, bufferOffset);
     return data;
   }
 
@@ -74,7 +85,7 @@ class TrainingDataServiceRequest {
     let length = 0;
     length += _getByteLength(object.input_msg);
     length += 56 * object.pose_list.length;
-    return length + 8;
+    return length + 16;
   }
 
   static datatype() {
@@ -84,7 +95,7 @@ class TrainingDataServiceRequest {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return 'e1a4e4a3e77d5e172b06d85631a3559d';
+    return 'c820c0231f8a2ec34277ee196f97f4c1';
   }
 
   static messageDefinition() {
@@ -92,6 +103,7 @@ class TrainingDataServiceRequest {
     return `
     string input_msg
     geometry_msgs/Pose[] pose_list
+    float64 context
     
     ================================================================================
     MSG: geometry_msgs/Pose
@@ -139,6 +151,13 @@ class TrainingDataServiceRequest {
     }
     else {
       resolved.pose_list = []
+    }
+
+    if (msg.context !== undefined) {
+      resolved.context = msg.context;
+    }
+    else {
+      resolved.context = 0.0
     }
 
     return resolved;
@@ -221,6 +240,6 @@ class TrainingDataServiceResponse {
 module.exports = {
   Request: TrainingDataServiceRequest,
   Response: TrainingDataServiceResponse,
-  md5sum() { return 'd24035a0969177e24e232ba7f543229c'; },
+  md5sum() { return '2553c089c44939195fc3dab519dd2853'; },
   datatype() { return 'ur10_mover/TrainingDataService'; }
 };
