@@ -21,6 +21,7 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
     public List<double[]> previousPoints = new List<double[]>();
     public List<Vector3> previousPoses = new List<Vector3>();
     public List<Quaternion> previousOrientations = new List<Quaternion>();
+    public RealRobotCommunication realRobotCommunication;
     
     private double[] jointConfig;
     public int currentIndexPointer = 0;
@@ -150,7 +151,8 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
         if (addToTrainingSet) {
             // store the current trajectory
             if (previousPoints.Count > 0) {
-                PrevRecordedTrajectories.AddTrajectory(previousPoses);
+                realRobotCommunication.setJointAngles(previousPoints);
+                PrevRecordedTrajectories.AddTrajectory(previousPoses, previousOrientations);
                 executeOnRealRobotButton.SetActive(true);
             }
 

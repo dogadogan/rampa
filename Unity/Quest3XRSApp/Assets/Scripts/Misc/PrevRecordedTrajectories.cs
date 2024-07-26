@@ -22,16 +22,18 @@ public class PrevRecordedTrajectories : MonoBehaviour
 
     private int buttonState;
 
-    
+    public GameObject orientationArrowPrefab;
+
     // public List<List< (Vector3 position, double[] jointAngles)>> previousTrajectories 
     //    = new List<List<(Vector3 position, double[] jointAngles)>>();
 
     // private List<GameObject> lines = new List<GameObject>();
 
     // stores the points of trajectories relative to the baseLink
-    private List<List<Vector3>> trajectories = new List<List<Vector3>>();
+    private List<List<(Vector3, Quaternion)>> trajectories = new List<List<(Vector3, Quaternion)>>();
     // stores the points of trajectories relative to absolute world coordinates
     private List<GameObject> lines = new List<GameObject>();
+    private List<GameObject> orientationArrows = new List<GameObject>();
 
     
 
@@ -91,19 +93,20 @@ public class PrevRecordedTrajectories : MonoBehaviour
     }
 
     // isPosesAbsolute = true implies that the poses are in absolute world coordinates, otherwise they are relative to the baseLink
-    public void AddTrajectory(List<Vector3> poses, bool isPosesAbsolute = true) {
+    public void AddTrajectory(List<Vector3> poses, List<Quaternion> orientations, bool isPosesAbsolute = true) {
         // previousTrajectories.Add(trajectory);
 
-        List<Vector3> trajectory = new List<Vector3>();
+        List<(Vector3, Quaternion)> trajectory = new List<(Vector3, Quaternion)>();
 
         debugText.text += "\n adding trajectory";
 
-        foreach (var point in poses) {
+        for (int i = 0; i < poses.Count; i++) {
 
+            var point = poses[i];
             // storing the point relative to the baseLink assuming the baseLink's y rotation is 0
             
             if (!isPosesAbsolute) {
-                trajectory.Add(point);
+                trajectory.Add((poses[i], orientations[i]));
                 continue;
             }
 
@@ -111,12 +114,16 @@ public class PrevRecordedTrajectories : MonoBehaviour
                                             (float) point.y - baseLink.transform.position.y, 
                                             (float) point.z - baseLink.transform.position.z);
 
+            Quaternion orientation = new Quaternion((float) orientations[i].x, (float) orientations[i].y, 
+                                            (float) orientations[i].z, (float) orientations[i].w);
             
             // rotating the point so that the baseLink's y rotation is 0
             Quaternion rotation = Quaternion.Euler(0, -baseLink.transform.eulerAngles.y, 0); // Create a rotation quaternion around the pivotPoint
             Vector3 rotatedDirection = rotation * direction; // Rotate the direction vector
 
-            trajectory.Add(rotatedDirection);
+            Quaternion rotatedOrientation = rotation * orientation;
+
+            trajectory.Add((rotatedDirection, rotatedOrientation));
         }
 
         trajectories.Add(trajectory);
@@ -127,13 +134,10 @@ public class PrevRecordedTrajectories : MonoBehaviour
 
         if (buttonState == 1)
             ShowLine(trajectory);
-
-        
-
     }
 
 
-    public void ShowLine(List<Vector3> trajectory) {
+    public void ShowLine(List<(Vector3, Quaternion)> trajectory) {
         GameObject line = new GameObject();
         line.AddComponent<LineRenderer>();
         LineRenderer lr = line.GetComponent<LineRenderer>();
@@ -148,9 +152,20 @@ public class PrevRecordedTrajectories : MonoBehaviour
             lr.positionCount = i + 1;
 
             Quaternion rotation = Quaternion.Euler(0, baseLink.transform.eulerAngles.y, 0);
-            Vector3 rotatedPoint = baseLink.transform.position + rotation * trajectory[i];
+            Vector3 rotatedPoint = baseLink.transform.position + rotation * trajectory[i].Item1;
 
             lr.SetPosition(i, rotatedPoint);
+
+            Quaternion rotatedOrientation = rotation * trajectory[i].Item2;
+            
+                // create an arrow
+            if (i % 3 == 0) {
+                GameObject arrow = Instantiate(orientationArrowPrefab);
+                arrow.transform.position = rotatedPoint;
+                arrow.transform.rotation = rotatedOrientation;
+                arrow.transform.parent = line.transform;
+                orientationArrows.Add(arrow);
+            }
         }
 
 
@@ -181,8 +196,12 @@ public class PrevRecordedTrajectories : MonoBehaviour
             Destroy(line);
         }
         lines.Clear();
-        
 
+        foreach (var arrow in orientationArrows) {
+            Destroy(arrow);
+        }
+        orientationArrows.Clear();
+        
         showTrajectoriesTextinTrajCaptureMenu.text = "show training set (" + trajectories.Count + ")";
         showTrajectoriesTextinMainMenu.text = "show training set (" + trajectories.Count + ")";
         buttonState = 0;

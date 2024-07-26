@@ -62,6 +62,7 @@ public class PlanRequestGeneratorWithPoses : MonoBehaviour
         PoseMsg[] pose_list = new PoseMsg[poses.Length];
         for (int i = 0; i < poses.Length; i++)
         {
+            debugText.text += "orientation: " + orientations[i].eulerAngles + "\n";
             pose_list[i] = HelperFunctions.GeneratePoseMsg(poses[i], orientations[i]);
         }
         request.pose_list = pose_list;
@@ -110,10 +111,11 @@ public class PlanRequestGeneratorWithPoses : MonoBehaviour
         }
 
         foreach (var pose in previousPoses) {
-            debugText.text += pose.ToString();
+            // debugText.text += pose.ToString();
         }
 
         if (fromTraining) {
+            realRobotCommunication.setJointAngles(previousPoints);
             drawService.trainAndTest.SetAllButtonsInteractable(true);
         }
         else {
@@ -218,11 +220,11 @@ public class PlanRequestGeneratorWithPoses : MonoBehaviour
 
     public void ResetGenerator(bool addToTrainingSet = false)
     {
-
         if (addToTrainingSet) {
             // store the current trajectory
             if (previousPoints.Count > 0) {
-                PrevRecordedTrajectories.AddTrajectory(previousPoses);
+                realRobotCommunication.setJointAngles(previousPoints);
+                PrevRecordedTrajectories.AddTrajectory(previousPoses, previousOrientations);
                 executeOnRealRobotButton.SetActive(true);
             }
 
