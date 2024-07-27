@@ -60,6 +60,7 @@ public class ResetandReturn : MonoBehaviour
 
                 TrainAndTest.SetExecutionPermissionOnRealRobot(false); // disable the button for future menu uses
                 TrainAndTest.ClearWaypoints();
+                TrainAndTest.CloseWarning();
                 goToMainMenuFunc();
                 break;
                 

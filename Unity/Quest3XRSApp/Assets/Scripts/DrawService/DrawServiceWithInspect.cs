@@ -35,16 +35,20 @@ public class DrawServiceWithInspect : MonoBehaviour
     public GameObject anotherTrajectoryButton;
     public GameObject executeOnRealRobotButton;
 
-    
-
-
+    public GameObject collisionWarning;
+    private bool collisionDetectedinTrajectory = false;
     public TMP_Text debugText;
-    
     public PlanRequestGeneratorWithPoses PlanRequestGeneratorWithPoses;
 
     public TrainAndTest trainAndTest;
 
-
+    public Button addContextButton;
+    public GameObject contextPrefab;
+    private GameObject obstacle;
+    public Button[] contextMenu;
+    private bool isContextual = false;
+    public GameObject collisionIndicatorPrefab;
+    public List<GameObject> collisionIndicators = new List<GameObject>();
 
     // Start is called before the first frame update
     void Start()
@@ -64,6 +68,49 @@ public class DrawServiceWithInspect : MonoBehaviour
 
         ResetDrawingState();
     }
+
+    public void HandleAddContextButton() {
+        if (!isContextual) {
+            isContextual = true;
+            foreach (Button button in contextMenu) {
+                button.interactable = true;
+            }  
+            obstacle = Instantiate(contextPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+            addContextButton.GetComponentInChildren<TMP_Text>().text = "remove context";
+        }
+        else {
+            isContextual = false;
+            Destroy(obstacle);
+            foreach (Button button in contextMenu) {
+                button.interactable = false;
+            }
+            addContextButton.GetComponentInChildren<TMP_Text>().text = "add context";
+        }
+    }
+
+    public void IncXScale() {
+        obstacle.transform.localScale += new Vector3(0.1f, 0, 0);
+    }
+    public void DecXScale() {
+        if (obstacle.transform.localScale.x > 0.1f)
+            obstacle.transform.localScale -= new Vector3(0.1f, 0, 0);
+        
+    }
+    public void IncYScale() {
+        obstacle.transform.localScale += new Vector3(0, 0.1f, 0);
+    }
+    public void DecYScale() {
+        if (obstacle.transform.localScale.y > 0.1f)
+            obstacle.transform.localScale -= new Vector3(0, 0.1f, 0);
+    }
+    public void IncZScale() {
+        obstacle.transform.localScale += new Vector3(0, 0, 0.1f);
+    }
+    public void DecZScale() {
+        if (obstacle.transform.localScale.z > 0.1f)
+            obstacle.transform.localScale -= new Vector3(0, 0, 0.1f);
+    }
+
     IEnumerator DrawTrajectory(float interval)
     {
         int numberOfPoints = lineRenderer.positionCount;
@@ -75,6 +122,7 @@ public class DrawServiceWithInspect : MonoBehaviour
                 if (hand.GetFingerIsPinching(OVRHand.HandFinger.Index))
                 {
                     isFirstPart = false;
+                    addContextButton.interactable = false;
                     loadingText.GetComponent<TMP_Text>().text = "drawing trajectory";
                 }
             }
@@ -82,6 +130,7 @@ public class DrawServiceWithInspect : MonoBehaviour
                 if (OVRInput.Get(OVRInput.Button.One))
                 {
                     isFirstPart = false;
+                    addContextButton.interactable = false;
                     loadingText.GetComponent<TMP_Text>().text = "drawing trajectory";
                     handOrientation.ShowIndicator(true);
                 }
@@ -156,6 +205,9 @@ public class DrawServiceWithInspect : MonoBehaviour
 
                 lineRenderer.positionCount = 0;
                 handleMenu(true);
+                foreach (Button button in contextMenu) {
+                    button.interactable = false;
+                }
 
                 anotherTrajectoryButton.SetActive(false);
                 executeOnRealRobotButton.SetActive(false);
@@ -248,7 +300,20 @@ public class DrawServiceWithInspect : MonoBehaviour
 
     public void ResetDrawingState(bool anotherTrajectory = false)
     {
+
+        ClearCollisionIndicators();
+        
+        if (isContextual) {
+            Destroy(obstacle);
+        }
+        foreach (Button button in contextMenu) {
+                button.interactable = false;
+        }
+
         state = State.Initial;
+
+        collisionDetectedinTrajectory = false;
+        collisionWarning.SetActive(false);
 
         handOrientation.ResetFilter();
         
@@ -271,6 +336,7 @@ public class DrawServiceWithInspect : MonoBehaviour
         addToTrainingButton.interactable = false;
         PlanRequestGeneratorWithPoses.PrevRecordedTrajectories.SetInteractable(true);
 
+        addContextButton.interactable = true;
         anotherTrajectoryButton.SetActive(anotherTrajectory);
 
         // do not set active if no solution found 
@@ -286,8 +352,11 @@ public class DrawServiceWithInspect : MonoBehaviour
         sliderPosition.GetComponent<RectTransform>().anchoredPosition = currRectTransform;
     }
 
-    private void handleMenu(bool loading)
-    {
+    private void handleMenu(bool loading) {
+    
+        if (collisionDetectedinTrajectory)
+            collisionWarning.SetActive(true);
+        
         bar.SetActive(!loading);
 
         backButton.interactable = !loading;
@@ -307,6 +376,24 @@ public class DrawServiceWithInspect : MonoBehaviour
     
     }
 
+    public void SetCollisionDetected(Collision collision)
+    {
+        if (state == State.ExecuteTrajectory) {
+            collisionDetectedinTrajectory = true;
+        }
+        // show collision indicator at collision contact point
+        Vector3 contactPoint = collision.GetContact(0).point;
+        GameObject collisionIndicator = Instantiate(collisionIndicatorPrefab, contactPoint, Quaternion.identity);
+        collisionIndicators.Add(collisionIndicator);
+    }
+
+    private void ClearCollisionIndicators() {
+        foreach (GameObject collisionIndicator in collisionIndicators) {
+            Destroy(collisionIndicator);
+        }
+        collisionIndicators.Clear();
+    }
+
     private enum State
     {
         Initial,
@@ -319,7 +406,10 @@ public class DrawServiceWithInspect : MonoBehaviour
 
     public void SendTrainingData()
     {
-        trainAndTest.SendTrainingData(PlanRequestGeneratorWithPoses.previousPoses, PlanRequestGeneratorWithPoses.previousOrientations);
+        if (isContextual) 
+            trainAndTest.SendTrainingData(PlanRequestGeneratorWithPoses.previousPoses, PlanRequestGeneratorWithPoses.previousOrientations, obstacle.transform.localScale.y);
+        else 
+            trainAndTest.SendTrainingData(PlanRequestGeneratorWithPoses.previousPoses, PlanRequestGeneratorWithPoses.previousOrientations);
         PlanRequestGeneratorWithPoses.ResetGenerator(true);
         UpdateDrawingState(true);
     }
