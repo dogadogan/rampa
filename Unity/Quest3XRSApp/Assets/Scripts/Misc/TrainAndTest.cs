@@ -210,6 +210,7 @@ public class TrainAndTest : MonoBehaviour
             req_waypoints[i + 1] = HelperFunctions.GeneratePoseMsg(waypoints[i].transform.position, waypoints[i].transform.rotation);
         }
         request.condition_poses = req_waypoints;
+        request.context = obstacle.transform.localScale;
         m_Ros.SendServiceMessage<SampleServiceResponse>(testService, request, TestModelResponse);
     }
     
@@ -339,13 +340,11 @@ public class TrainAndTest : MonoBehaviour
         waypoints.Clear();
     }
 
-    public void SetCollisionDetected(Collision collision) {
+    public void SetCollisionDetected(Vector3 contactPoint) {
         if (state == State.Testing)
         {
             collisionDetectedinTrajectory = true;
         }
-
-        Vector3 contactPoint = collision.GetContact(0).point;
         GameObject collisionIndicator = Instantiate(collisionIndicatorPrefab, contactPoint, Quaternion.identity);
         collisionIndicators.Add(collisionIndicator);
     }

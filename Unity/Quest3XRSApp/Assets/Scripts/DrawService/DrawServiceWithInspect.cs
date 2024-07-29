@@ -89,26 +89,26 @@ public class DrawServiceWithInspect : MonoBehaviour
     }
 
     public void IncXScale() {
-        obstacle.transform.localScale += new Vector3(0.1f, 0, 0);
+        obstacle.transform.localScale += new Vector3(0.02f, 0, 0);
     }
     public void DecXScale() {
-        if (obstacle.transform.localScale.x > 0.1f)
-            obstacle.transform.localScale -= new Vector3(0.1f, 0, 0);
+        if (obstacle.transform.localScale.x > 0.03f)
+            obstacle.transform.localScale -= new Vector3(0.02f, 0, 0);
         
     }
     public void IncYScale() {
-        obstacle.transform.localScale += new Vector3(0, 0.1f, 0);
+        obstacle.transform.localScale += new Vector3(0, 0.02f, 0);
     }
     public void DecYScale() {
-        if (obstacle.transform.localScale.y > 0.1f)
-            obstacle.transform.localScale -= new Vector3(0, 0.1f, 0);
+        if (obstacle.transform.localScale.y > 0.03f)
+            obstacle.transform.localScale -= new Vector3(0, 0.02f, 0);
     }
     public void IncZScale() {
-        obstacle.transform.localScale += new Vector3(0, 0, 0.1f);
+        obstacle.transform.localScale += new Vector3(0, 0, 0.02f);
     }
     public void DecZScale() {
-        if (obstacle.transform.localScale.z > 0.1f)
-            obstacle.transform.localScale -= new Vector3(0, 0, 0.1f);
+        if (obstacle.transform.localScale.z > 0.03f)
+            obstacle.transform.localScale -= new Vector3(0, 0, 0.02f);
     }
 
     IEnumerator DrawTrajectory(float interval)
@@ -302,7 +302,7 @@ public class DrawServiceWithInspect : MonoBehaviour
     {
 
         ClearCollisionIndicators();
-        
+
         if (isContextual) {
             Destroy(obstacle);
         }
@@ -376,13 +376,11 @@ public class DrawServiceWithInspect : MonoBehaviour
     
     }
 
-    public void SetCollisionDetected(Collision collision)
+    public void SetCollisionDetected(Vector3 contactPoint)
     {
         if (state == State.ExecuteTrajectory) {
             collisionDetectedinTrajectory = true;
         }
-        // show collision indicator at collision contact point
-        Vector3 contactPoint = collision.GetContact(0).point;
         GameObject collisionIndicator = Instantiate(collisionIndicatorPrefab, contactPoint, Quaternion.identity);
         collisionIndicators.Add(collisionIndicator);
     }

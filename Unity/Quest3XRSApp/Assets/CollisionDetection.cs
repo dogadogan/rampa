@@ -10,34 +10,28 @@ public class CollisionDetection : MonoBehaviour
     public DrawServiceWithInspect drawServiceWithInspect;
     public DrawServiceRealTime drawServiceRealTime;
     public TrainAndTest trainAndTest;
-
     public Toggle isRealTime;  
 
     public TMP_Text debugText;
 
     void OnCollisionEnter(Collision collision)
     {
-        debugText.text += "\n Collision detected";
 
-        debugText.text += "\n" + collision.body.name;
-        debugText.text += "\n" + collision.collider.name;
+        debugText.text += "Collision detected\n";
 
-        debugText.text += "\n";
+        Vector3 collisionPoint = collision.contacts[0].point;
 
-        
-        if (trainAndTest.isTesting()) {
-            trainAndTest.SetCollisionDetected(collision);
+        if (trainAndTest.isTesting())
+        {
+            trainAndTest.SetCollisionDetected(collisionPoint);
         }
         else if (isRealTime.isOn)
         {
-            drawServiceRealTime.SetCollisionDetected(collision);
+            drawServiceRealTime.SetCollisionDetected(collisionPoint);
         }
         else
         {
-            drawServiceWithInspect.SetCollisionDetected(collision);
+            drawServiceWithInspect.SetCollisionDetected(collisionPoint);
         }
-        
-        
-
     }
 }
