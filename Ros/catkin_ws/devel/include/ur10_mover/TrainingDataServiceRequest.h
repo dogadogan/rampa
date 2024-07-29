@@ -26,11 +26,13 @@ struct TrainingDataServiceRequest_
 
   TrainingDataServiceRequest_()
     : input_msg()
-    , pose_list()  {
+    , pose_list()
+    , context(0.0)  {
     }
   TrainingDataServiceRequest_(const ContainerAllocator& _alloc)
     : input_msg(_alloc)
-    , pose_list(_alloc)  {
+    , pose_list(_alloc)
+    , context(0.0)  {
   (void)_alloc;
     }
 
@@ -41,6 +43,9 @@ struct TrainingDataServiceRequest_
 
    typedef std::vector< ::geometry_msgs::Pose_<ContainerAllocator> , typename std::allocator_traits<ContainerAllocator>::template rebind_alloc< ::geometry_msgs::Pose_<ContainerAllocator> >> _pose_list_type;
   _pose_list_type pose_list;
+
+   typedef double _context_type;
+  _context_type context;
 
 
 
@@ -72,7 +77,8 @@ template<typename ContainerAllocator1, typename ContainerAllocator2>
 bool operator==(const ::ur10_mover::TrainingDataServiceRequest_<ContainerAllocator1> & lhs, const ::ur10_mover::TrainingDataServiceRequest_<ContainerAllocator2> & rhs)
 {
   return lhs.input_msg == rhs.input_msg &&
-    lhs.pose_list == rhs.pose_list;
+    lhs.pose_list == rhs.pose_list &&
+    lhs.context == rhs.context;
 }
 
 template<typename ContainerAllocator1, typename ContainerAllocator2>
@@ -129,12 +135,12 @@ struct MD5Sum< ::ur10_mover::TrainingDataServiceRequest_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "e1a4e4a3e77d5e172b06d85631a3559d";
+    return "c820c0231f8a2ec34277ee196f97f4c1";
   }
 
   static const char* value(const ::ur10_mover::TrainingDataServiceRequest_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0xe1a4e4a3e77d5e17ULL;
-  static const uint64_t static_value2 = 0x2b06d85631a3559dULL;
+  static const uint64_t static_value1 = 0xc820c0231f8a2ec3ULL;
+  static const uint64_t static_value2 = 0x4277ee196f97f4c1ULL;
 };
 
 template<class ContainerAllocator>
@@ -155,6 +161,7 @@ struct Definition< ::ur10_mover::TrainingDataServiceRequest_<ContainerAllocator>
   {
     return "string input_msg\n"
 "geometry_msgs/Pose[] pose_list\n"
+"float64 context\n"
 "\n"
 "================================================================================\n"
 "MSG: geometry_msgs/Pose\n"
@@ -197,6 +204,7 @@ namespace serialization
     {
       stream.next(m.input_msg);
       stream.next(m.pose_list);
+      stream.next(m.context);
     }
 
     ROS_DECLARE_ALLINONE_SERIALIZER
@@ -225,6 +233,8 @@ struct Printer< ::ur10_mover::TrainingDataServiceRequest_<ContainerAllocator> >
       s << indent;
       Printer< ::geometry_msgs::Pose_<ContainerAllocator> >::stream(s, indent + "    ", v.pose_list[i]);
     }
+    s << indent << "context: ";
+    Printer<double>::stream(s, indent + "  ", v.context);
   }
 };
 

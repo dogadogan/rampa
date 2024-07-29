@@ -29,6 +29,7 @@ last_training = ""
 sample_length = 100
 n_dims_pos = 3
 n_dims_or = 4
+num_demo = 0
 
 filenames = []
 
@@ -48,6 +49,7 @@ g_or_y = GMM(n_components=num_comp, random_state=1234)
 g_or_z = GMM(n_components=num_comp, random_state=1234)
 g_or_w = GMM(n_components=num_comp, random_state=1234)
 
+gmm_context = ""
 
 def slerp(q1,q2,t):
     dot = np.dot(q1,q2)
@@ -101,7 +103,7 @@ def save_trajectory_to_data(req):
             pose.orientation.w *= -1
 
         pose_list = [pose.position.x, pose.position.y, pose.position.z,
-                         pose.orientation.x, pose.orientation.y, pose.orientation.z, pose.orientation.w]
+                         pose.orientation.x, pose.orientation.y, pose.orientation.z, pose.orientation.w, req.context]
         
         trajectory.append(pose_list)
     trajectory = np.array(trajectory)
@@ -191,6 +193,15 @@ def start_training(req):
 
     rospy.loginfo("Reading data files")
     trajectories = read_data_files()
+    trajectories = np.array(trajectories)
+    rospy.loginfo(trajectories.shape)
+    contexts = trajectories[:,:,7]
+    context = []
+    for ctxt in contexts:
+        context.append(ctxt[0])
+    context = np.array(context)
+    rospy.loginfo(contexts)
+    trajectories = trajectories[:,:,:7]
     number_of_demonstrations = len(trajectories)
     all_demonstrations = []
     for trajectory in trajectories:
@@ -209,6 +220,8 @@ def start_training(req):
 
     _demo_data = demo_data_or
 
+    global num_demo
+    num_demo = number_of_demonstrations
 
     rospy.loginfo(demo_data_pos.shape)
     rospy.loginfo(demo_data_or.shape)
@@ -229,26 +242,6 @@ def start_training(req):
         rospy.loginfo("Finished training")
 
         last_training = "promp"
-
-    elif (req.input_msg == "dmp"):
-
-        Ypos = demo_data_pos
-        Yor = demo_data_or
-        Ts = np.linspace(0,1,sample_length).reshape(sample_length)
-
-        rospy.loginfo("Starting to train")
-
-        # Training
-        for i, traj in enumerate(Ypos):
-            d_pos.imitate(T=Ts, Y = traj)
-        
-        for i, traj in enumerate(Yor):
-            d_or.imitate(T=Ts, Y = traj)
-
-        rospy.loginfo("Finished training")
-
-        last_training = "dmp"
-    
     
     elif (req.input_msg == "gmm"):
 
@@ -274,11 +267,46 @@ def start_training(req):
 
         last_training = "gmm" 
 
+    elif (req.input_msg == "contextual_promp"):
+
+        timesteps = np.linspace(0, 1, sample_length)
+        timesteps = np.tile(timesteps, (number_of_demonstrations, 1))
+        weights_pos = np.empty((number_of_demonstrations, n_dims_pos * num_comp))
+        weights_or = np.empty((number_of_demonstrations, n_dims_or * num_comp))
+
+        p_pos.imitate(timesteps, demo_data_pos)
+        p_or.imitate(timesteps, demo_data_or)
+
+        for demo_idx in range(number_of_demonstrations):
+            weights_pos[demo_idx] = p_pos.weights(timesteps[demo_idx], demo_data_pos[demo_idx]).flatten()
+            weights_or[demo_idx] = p_or.weights(timesteps[demo_idx], demo_data_or[demo_idx]).flatten()
+            
+        weights = np.concatenate((weights_pos, weights_or), axis=-1)
+
+        context_features = context.reshape(-1, 1)   # Reshape to column vector so it can be concatenated
+        X = np.hstack((context_features, weights))
+
+        global gmm_context
+        gmm_context = GMM(n_components=3, random_state=0)
+        gmm_context.from_samples(X)
+    
     isTraining = False
     response.output_msg = "success"
     return response
 
+def get_promp_from_context(gmm_, context_feature):
+    pmp = ProMP(n_dims=n_dims_or + n_dims_pos, n_weights_per_dim=num_comp)
+    context_feature = np.array([context_feature]).reshape(1, -1)
+
+    conditional_weight_distribution = gmm_.condition(np.arange(context_feature.shape[1]), context_feature).to_mvn()
+    conditional_mean = conditional_weight_distribution.mean[-(n_dims_or + n_dims_pos) * num_comp:]
+    conditional_covariance = conditional_weight_distribution.covariance[-(n_dims_or + n_dims_pos) * num_comp:, -(n_dims_or + n_dims_pos) * num_comp:]
+    pmp.from_weight_distribution(conditional_mean, conditional_covariance)
+    return pmp
+
 def sample_trajectory(req):
+
+    global gmm_context
 
     global last_training
 
@@ -318,22 +346,6 @@ def sample_trajectory(req):
 
         #sampling
         trajectory_or = p_or.sample_trajectories(T=np.linspace(0,1,sample_length).reshape(sample_length), n_samples=1, random_state=np.random.RandomState(seed=1234))
-
-    elif (last_training == "dmp"):
-
-        for i in range(0, len(condition_poses)):
-            pose = condition_poses[i]
-            d_pos.configure(t = T[i], goal_y = np.array([pose.x, pose.y, pose.z]))
-
-        t, trajectory_pos = d_pos.open_loop()
-        trajectory_pos = trajectory_pos[:sample_length]
-
-        for i in range(0, len(condition_orientations)):
-            orientation = condition_orientations[i]
-            d_or.configure(t = T[i], goal_y = np.array([orientation.x, orientation.y, orientation.z, orientation.w]))
-
-        t, trajectory_or = d_or.open_loop()
-        trajectory_or = trajectory_or[:sample_length]
     
     elif (last_training == "gmm"):
         
@@ -373,15 +385,36 @@ def sample_trajectory(req):
 
         rospy.loginfo(trajectory_or.shape)
 
+    elif (last_training == "contextual_promp"):
+        
+        timesteps = np.linspace(0, 1, sample_length)
+        timesteps = np.tile(timesteps, (num_demo, 1))
+
+        new_context_feature = 0.15  # Novel context
+        pmp = get_promp_from_context(gmm_context, new_context_feature)
+
+        # Generate trajectory based on the adapted ProMP
+        mean_trajectory = pmp.mean_trajectory(timesteps[0])
+        trajectory_pos = mean_trajectory
+
+
+
     rospy.loginfo("SAMPLED TRAJECTORY")
+
+    
+
+        
     
     sample = []
     if (last_training == "promp"):
         rospy.loginfo("Taking the first trajectory")
         sample = np.concatenate((trajectory_pos[0],trajectory_or[0]), axis=-1)
-    else:
+    elif last_training == "gmm":
         sample = np.concatenate((trajectory_pos,trajectory_or), axis=-1)
         rospy.loginfo(sample.shape)
+    else:
+        sample = trajectory_pos
+
 
     # plot(_demo_data, sample)
 

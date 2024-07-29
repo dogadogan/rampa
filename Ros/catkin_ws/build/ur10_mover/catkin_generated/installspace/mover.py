@@ -246,27 +246,24 @@ def return_joint_state(req):
 def execute_on_real_robot(req):
     response = ExecutionServiceResponse()
     
-    traj = np.load('trajectory.npy')
+    traj = []
+    for joint_state in req.joint_states:
+        traj.append([])
+        for joint in joint_state.list:
+            traj[-1].append(joint)
 
-    rospy.loginfo("Executing trajectory with " + str(len(traj)) +" intermediate states.")
     
+    traj = np.array(traj)
+
     rospy.loginfo(traj.shape)
-    rospy.loginfo(traj)
+    for joint_state in traj:
+        print(f'{joint_state * 180 / 3.14}')
     
     # TODO move_group needs another format input to run on simulation
     
     #rospy.loginfo("Trajectory execution request is sent to driver.")
     
     # robot.set_joint_positions(traj)
-
-    response.joint_states = []
-    for i in range(len(traj)):
-        state = traj[i]
-        joint_state = JointTrajectoryPoint()
-        joint_state.positions = state
-        response.joint_states.append(joint_state)
-
-    rospy.loginfo(response)
 
     return response
 

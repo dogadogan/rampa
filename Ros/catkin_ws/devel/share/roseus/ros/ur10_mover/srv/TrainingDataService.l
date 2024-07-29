@@ -22,17 +22,19 @@
 
 (defclass ur10_mover::TrainingDataServiceRequest
   :super ros::object
-  :slots (_input_msg _pose_list ))
+  :slots (_input_msg _pose_list _context ))
 
 (defmethod ur10_mover::TrainingDataServiceRequest
   (:init
    (&key
     ((:input_msg __input_msg) "")
     ((:pose_list __pose_list) ())
+    ((:context __context) 0.0)
     )
    (send-super :init)
    (setq _input_msg (string __input_msg))
    (setq _pose_list __pose_list)
+   (setq _context (float __context))
    self)
   (:input_msg
    (&optional __input_msg)
@@ -44,6 +46,9 @@
      (progn
        (if __pose_list (setq _pose_list (car __pose_list)))
        _pose_list)))
+  (:context
+   (&optional __context)
+   (if __context (setq _context __context)) _context)
   (:serialization-length
    ()
    (+
@@ -51,6 +56,8 @@
     4 (length _input_msg)
     ;; geometry_msgs/Pose[] _pose_list
     (apply #'+ (send-all _pose_list :serialization-length)) 4
+    ;; float64 _context
+    8
     ))
   (:serialize
    (&optional strm)
@@ -63,6 +70,8 @@
      (dolist (elem _pose_list)
        (send elem :serialize s)
        )
+     ;; float64 _context
+       (sys::poke _context (send s :buffer) (send s :count) :double) (incf (stream-count s) 8)
      ;;
      (if (null strm) (get-output-stream-string s))))
   (:deserialize
@@ -76,6 +85,8 @@
      (dolist (elem- _pose_list)
      (send elem- :deserialize buf ptr-) (incf ptr- (send elem- :serialization-length))
      ))
+   ;; float64 _context
+     (setq _context (sys::peek buf ptr- :double)) (incf ptr- 8)
    ;;
    self)
   )
@@ -121,7 +132,7 @@
   :super ros::object
   :slots ())
 
-(setf (get ur10_mover::TrainingDataService :md5sum-) "d24035a0969177e24e232ba7f543229c")
+(setf (get ur10_mover::TrainingDataService :md5sum-) "2553c089c44939195fc3dab519dd2853")
 (setf (get ur10_mover::TrainingDataService :datatype-) "ur10_mover/TrainingDataService")
 (setf (get ur10_mover::TrainingDataService :request) ur10_mover::TrainingDataServiceRequest)
 (setf (get ur10_mover::TrainingDataService :response) ur10_mover::TrainingDataServiceResponse)
@@ -129,11 +140,12 @@
 (defmethod ur10_mover::TrainingDataServiceRequest
   (:response () (instance ur10_mover::TrainingDataServiceResponse :init)))
 
-(setf (get ur10_mover::TrainingDataServiceRequest :md5sum-) "d24035a0969177e24e232ba7f543229c")
+(setf (get ur10_mover::TrainingDataServiceRequest :md5sum-) "2553c089c44939195fc3dab519dd2853")
 (setf (get ur10_mover::TrainingDataServiceRequest :datatype-) "ur10_mover/TrainingDataServiceRequest")
 (setf (get ur10_mover::TrainingDataServiceRequest :definition-)
       "string input_msg
 geometry_msgs/Pose[] pose_list
+float64 context
 
 ================================================================================
 MSG: geometry_msgs/Pose
@@ -160,11 +172,12 @@ float64 w
 string output_msg
 ")
 
-(setf (get ur10_mover::TrainingDataServiceResponse :md5sum-) "d24035a0969177e24e232ba7f543229c")
+(setf (get ur10_mover::TrainingDataServiceResponse :md5sum-) "2553c089c44939195fc3dab519dd2853")
 (setf (get ur10_mover::TrainingDataServiceResponse :datatype-) "ur10_mover/TrainingDataServiceResponse")
 (setf (get ur10_mover::TrainingDataServiceResponse :definition-)
       "string input_msg
 geometry_msgs/Pose[] pose_list
+float64 context
 
 ================================================================================
 MSG: geometry_msgs/Pose
@@ -193,6 +206,6 @@ string output_msg
 
 
 
-(provide :ur10_mover/TrainingDataService "d24035a0969177e24e232ba7f543229c")
+(provide :ur10_mover/TrainingDataService "2553c089c44939195fc3dab519dd2853")
 
 

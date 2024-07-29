@@ -54,7 +54,7 @@ CMAKE_BINARY_DIR = /home/user/ARobot/Ros/catkin_ws/build
 include ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/progress.make
 
 ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService:
-	cd /home/user/ARobot/Ros/catkin_ws/build/ur10_mover && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py ur10_mover /home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/SampleService.srv geometry_msgs/Quaternion:geometry_msgs/Pose:geometry_msgs/Point
+	cd /home/user/ARobot/Ros/catkin_ws/build/ur10_mover && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py ur10_mover /home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/SampleService.srv geometry_msgs/Pose:geometry_msgs/Quaternion:geometry_msgs/Point
 
 _ur10_mover_generate_messages_check_deps_SampleService: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService
 _ur10_mover_generate_messages_check_deps_SampleService: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_SampleService.dir/build.make
