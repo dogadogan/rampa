@@ -3,6 +3,8 @@
           INPUT_MSG
           CONDITION_POSES-VAL
           CONDITION_POSES
+          CONTEXT-VAL
+          CONTEXT
           OUTPUT_MSG-VAL
           OUTPUT_MSG
           SAMPLED_TRAJECTORY-VAL

@@ -200,7 +200,7 @@ def start_training(req):
     for ctxt in contexts:
         context.append(ctxt[0])
     context = np.array(context)
-    rospy.loginfo(contexts)
+    rospy.loginfo(context)
     trajectories = trajectories[:,:,:7]
     number_of_demonstrations = len(trajectories)
     all_demonstrations = []
@@ -390,7 +390,7 @@ def sample_trajectory(req):
         timesteps = np.linspace(0, 1, sample_length)
         timesteps = np.tile(timesteps, (num_demo, 1))
 
-        new_context_feature = 0.15  # Novel context
+        new_context_feature = req.context # Novel context
         pmp = get_promp_from_context(gmm_context, new_context_feature)
 
         # Generate trajectory based on the adapted ProMP

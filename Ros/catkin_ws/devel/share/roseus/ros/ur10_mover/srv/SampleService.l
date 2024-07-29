@@ -24,17 +24,19 @@
 
 (defclass ur10_mover::SampleServiceRequest
   :super ros::object
-  :slots (_input_msg _condition_poses ))
+  :slots (_input_msg _condition_poses _context ))
 
 (defmethod ur10_mover::SampleServiceRequest
   (:init
    (&key
     ((:input_msg __input_msg) "")
     ((:condition_poses __condition_poses) ())
+    ((:context __context) 0.0)
     )
    (send-super :init)
    (setq _input_msg (string __input_msg))
    (setq _condition_poses __condition_poses)
+   (setq _context (float __context))
    self)
   (:input_msg
    (&optional __input_msg)
@@ -46,6 +48,9 @@
      (progn
        (if __condition_poses (setq _condition_poses (car __condition_poses)))
        _condition_poses)))
+  (:context
+   (&optional __context)
+   (if __context (setq _context __context)) _context)
   (:serialization-length
    ()
    (+
@@ -53,6 +58,8 @@
     4 (length _input_msg)
     ;; geometry_msgs/Pose[] _condition_poses
     (apply #'+ (send-all _condition_poses :serialization-length)) 4
+    ;; float64 _context
+    8
     ))
   (:serialize
    (&optional strm)
@@ -65,6 +72,8 @@
      (dolist (elem _condition_poses)
        (send elem :serialize s)
        )
+     ;; float64 _context
+       (sys::poke _context (send s :buffer) (send s :count) :double) (incf (stream-count s) 8)
      ;;
      (if (null strm) (get-output-stream-string s))))
   (:deserialize
@@ -78,6 +87,8 @@
      (dolist (elem- _condition_poses)
      (send elem- :deserialize buf ptr-) (incf ptr- (send elem- :serialization-length))
      ))
+   ;; float64 _context
+     (setq _context (sys::peek buf ptr- :double)) (incf ptr- 8)
    ;;
    self)
   )
@@ -146,7 +157,7 @@
   :super ros::object
   :slots ())
 
-(setf (get ur10_mover::SampleService :md5sum-) "122912d5b5e242242626c58ddc8030aa")
+(setf (get ur10_mover::SampleService :md5sum-) "1d1a2b8ec8f0aacf9f57d31767f2b42d")
 (setf (get ur10_mover::SampleService :datatype-) "ur10_mover/SampleService")
 (setf (get ur10_mover::SampleService :request) ur10_mover::SampleServiceRequest)
 (setf (get ur10_mover::SampleService :response) ur10_mover::SampleServiceResponse)
@@ -154,11 +165,12 @@
 (defmethod ur10_mover::SampleServiceRequest
   (:response () (instance ur10_mover::SampleServiceResponse :init)))
 
-(setf (get ur10_mover::SampleServiceRequest :md5sum-) "122912d5b5e242242626c58ddc8030aa")
+(setf (get ur10_mover::SampleServiceRequest :md5sum-) "1d1a2b8ec8f0aacf9f57d31767f2b42d")
 (setf (get ur10_mover::SampleServiceRequest :datatype-) "ur10_mover/SampleServiceRequest")
 (setf (get ur10_mover::SampleServiceRequest :definition-)
       "string input_msg
 geometry_msgs/Pose[] condition_poses
+float64 context
 
 ================================================================================
 MSG: geometry_msgs/Pose
@@ -208,11 +220,12 @@ float64 z
 float64 w
 ")
 
-(setf (get ur10_mover::SampleServiceResponse :md5sum-) "122912d5b5e242242626c58ddc8030aa")
+(setf (get ur10_mover::SampleServiceResponse :md5sum-) "1d1a2b8ec8f0aacf9f57d31767f2b42d")
 (setf (get ur10_mover::SampleServiceResponse :datatype-) "ur10_mover/SampleServiceResponse")
 (setf (get ur10_mover::SampleServiceResponse :definition-)
       "string input_msg
 geometry_msgs/Pose[] condition_poses
+float64 context
 
 ================================================================================
 MSG: geometry_msgs/Pose
@@ -264,6 +277,6 @@ float64 w
 
 
 
-(provide :ur10_mover/SampleService "122912d5b5e242242626c58ddc8030aa")
+(provide :ur10_mover/SampleService "1d1a2b8ec8f0aacf9f57d31767f2b42d")
 
 

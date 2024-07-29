@@ -26,11 +26,13 @@ struct SampleServiceRequest_
 
   SampleServiceRequest_()
     : input_msg()
-    , condition_poses()  {
+    , condition_poses()
+    , context(0.0)  {
     }
   SampleServiceRequest_(const ContainerAllocator& _alloc)
     : input_msg(_alloc)
-    , condition_poses(_alloc)  {
+    , condition_poses(_alloc)
+    , context(0.0)  {
   (void)_alloc;
     }
 
@@ -41,6 +43,9 @@ struct SampleServiceRequest_
 
    typedef std::vector< ::geometry_msgs::Pose_<ContainerAllocator> , typename std::allocator_traits<ContainerAllocator>::template rebind_alloc< ::geometry_msgs::Pose_<ContainerAllocator> >> _condition_poses_type;
   _condition_poses_type condition_poses;
+
+   typedef double _context_type;
+  _context_type context;
 
 
 
@@ -72,7 +77,8 @@ template<typename ContainerAllocator1, typename ContainerAllocator2>
 bool operator==(const ::ur10_mover::SampleServiceRequest_<ContainerAllocator1> & lhs, const ::ur10_mover::SampleServiceRequest_<ContainerAllocator2> & rhs)
 {
   return lhs.input_msg == rhs.input_msg &&
-    lhs.condition_poses == rhs.condition_poses;
+    lhs.condition_poses == rhs.condition_poses &&
+    lhs.context == rhs.context;
 }
 
 template<typename ContainerAllocator1, typename ContainerAllocator2>
@@ -129,12 +135,12 @@ struct MD5Sum< ::ur10_mover::SampleServiceRequest_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "993774274d001bbccdbd64f2063ef909";
+    return "80b48f9c302347801e022f4750bf5612";
   }
 
   static const char* value(const ::ur10_mover::SampleServiceRequest_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0x993774274d001bbcULL;
-  static const uint64_t static_value2 = 0xcdbd64f2063ef909ULL;
+  static const uint64_t static_value1 = 0x80b48f9c30234780ULL;
+  static const uint64_t static_value2 = 0x1e022f4750bf5612ULL;
 };
 
 template<class ContainerAllocator>
@@ -155,6 +161,7 @@ struct Definition< ::ur10_mover::SampleServiceRequest_<ContainerAllocator> >
   {
     return "string input_msg\n"
 "geometry_msgs/Pose[] condition_poses\n"
+"float64 context\n"
 "\n"
 "================================================================================\n"
 "MSG: geometry_msgs/Pose\n"
@@ -197,6 +204,7 @@ namespace serialization
     {
       stream.next(m.input_msg);
       stream.next(m.condition_poses);
+      stream.next(m.context);
     }
 
     ROS_DECLARE_ALLINONE_SERIALIZER
@@ -225,6 +233,8 @@ struct Printer< ::ur10_mover::SampleServiceRequest_<ContainerAllocator> >
       s << indent;
       Printer< ::geometry_msgs::Pose_<ContainerAllocator> >::stream(s, indent + "    ", v.condition_poses[i]);
     }
+    s << indent << "context: ";
+    Printer<double>::stream(s, indent + "  ", v.context);
   }
 };
 

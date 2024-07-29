@@ -16,7 +16,12 @@
     :reader condition_poses
     :initarg :condition_poses
     :type (cl:vector geometry_msgs-msg:Pose)
-   :initform (cl:make-array 0 :element-type 'geometry_msgs-msg:Pose :initial-element (cl:make-instance 'geometry_msgs-msg:Pose))))
+   :initform (cl:make-array 0 :element-type 'geometry_msgs-msg:Pose :initial-element (cl:make-instance 'geometry_msgs-msg:Pose)))
+   (context
+    :reader context
+    :initarg :context
+    :type cl:float
+    :initform 0.0))
 )
 
 (cl:defclass SampleService-request (<SampleService-request>)
@@ -36,6 +41,11 @@
 (cl:defmethod condition_poses-val ((m <SampleService-request>))
   (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader ur10_mover-srv:condition_poses-val is deprecated.  Use ur10_mover-srv:condition_poses instead.")
   (condition_poses m))
+
+(cl:ensure-generic-function 'context-val :lambda-list '(m))
+(cl:defmethod context-val ((m <SampleService-request>))
+  (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader ur10_mover-srv:context-val is deprecated.  Use ur10_mover-srv:context instead.")
+  (context m))
 (cl:defmethod roslisp-msg-protocol:serialize ((msg <SampleService-request>) ostream)
   "Serializes a message object of type '<SampleService-request>"
   (cl:let ((__ros_str_len (cl:length (cl:slot-value msg 'input_msg))))
@@ -51,6 +61,15 @@
     (cl:write-byte (cl:ldb (cl:byte 8 24) __ros_arr_len) ostream))
   (cl:map cl:nil #'(cl:lambda (ele) (roslisp-msg-protocol:serialize ele ostream))
    (cl:slot-value msg 'condition_poses))
+  (cl:let ((bits (roslisp-utils:encode-double-float-bits (cl:slot-value msg 'context))))
+    (cl:write-byte (cl:ldb (cl:byte 8 0) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 8) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 16) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 24) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 32) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 40) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 48) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 56) bits) ostream))
 )
 (cl:defmethod roslisp-msg-protocol:deserialize ((msg <SampleService-request>) istream)
   "Deserializes a message object of type '<SampleService-request>"
@@ -72,6 +91,16 @@
     (cl:dotimes (i __ros_arr_len)
     (cl:setf (cl:aref vals i) (cl:make-instance 'geometry_msgs-msg:Pose))
   (roslisp-msg-protocol:deserialize (cl:aref vals i) istream))))
+    (cl:let ((bits 0))
+      (cl:setf (cl:ldb (cl:byte 8 0) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 8) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 16) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 24) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 32) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 40) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 48) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 56) bits) (cl:read-byte istream))
+    (cl:setf (cl:slot-value msg 'context) (roslisp-utils:decode-double-float-bits bits)))
   msg
 )
 (cl:defmethod roslisp-msg-protocol:ros-datatype ((msg (cl:eql '<SampleService-request>)))
@@ -82,26 +111,28 @@
   "ur10_mover/SampleServiceRequest")
 (cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql '<SampleService-request>)))
   "Returns md5sum for a message object of type '<SampleService-request>"
-  "122912d5b5e242242626c58ddc8030aa")
+  "1d1a2b8ec8f0aacf9f57d31767f2b42d")
 (cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql 'SampleService-request)))
   "Returns md5sum for a message object of type 'SampleService-request"
-  "122912d5b5e242242626c58ddc8030aa")
+  "1d1a2b8ec8f0aacf9f57d31767f2b42d")
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql '<SampleService-request>)))
   "Returns full string definition for message of type '<SampleService-request>"
-  (cl:format cl:nil "string input_msg~%geometry_msgs/Pose[] condition_poses~%~%================================================================================~%MSG: geometry_msgs/Pose~%# A representation of pose in free space, composed of position and orientation. ~%Point position~%Quaternion orientation~%~%================================================================================~%MSG: geometry_msgs/Point~%# This contains the position of a point in free space~%float64 x~%float64 y~%float64 z~%~%================================================================================~%MSG: geometry_msgs/Quaternion~%# This represents an orientation in free space in quaternion form.~%~%float64 x~%float64 y~%float64 z~%float64 w~%~%~%"))
+  (cl:format cl:nil "string input_msg~%geometry_msgs/Pose[] condition_poses~%float64 context~%~%================================================================================~%MSG: geometry_msgs/Pose~%# A representation of pose in free space, composed of position and orientation. ~%Point position~%Quaternion orientation~%~%================================================================================~%MSG: geometry_msgs/Point~%# This contains the position of a point in free space~%float64 x~%float64 y~%float64 z~%~%================================================================================~%MSG: geometry_msgs/Quaternion~%# This represents an orientation in free space in quaternion form.~%~%float64 x~%float64 y~%float64 z~%float64 w~%~%~%"))
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql 'SampleService-request)))
   "Returns full string definition for message of type 'SampleService-request"
-  (cl:format cl:nil "string input_msg~%geometry_msgs/Pose[] condition_poses~%~%================================================================================~%MSG: geometry_msgs/Pose~%# A representation of pose in free space, composed of position and orientation. ~%Point position~%Quaternion orientation~%~%================================================================================~%MSG: geometry_msgs/Point~%# This contains the position of a point in free space~%float64 x~%float64 y~%float64 z~%~%================================================================================~%MSG: geometry_msgs/Quaternion~%# This represents an orientation in free space in quaternion form.~%~%float64 x~%float64 y~%float64 z~%float64 w~%~%~%"))
+  (cl:format cl:nil "string input_msg~%geometry_msgs/Pose[] condition_poses~%float64 context~%~%================================================================================~%MSG: geometry_msgs/Pose~%# A representation of pose in free space, composed of position and orientation. ~%Point position~%Quaternion orientation~%~%================================================================================~%MSG: geometry_msgs/Point~%# This contains the position of a point in free space~%float64 x~%float64 y~%float64 z~%~%================================================================================~%MSG: geometry_msgs/Quaternion~%# This represents an orientation in free space in quaternion form.~%~%float64 x~%float64 y~%float64 z~%float64 w~%~%~%"))
 (cl:defmethod roslisp-msg-protocol:serialization-length ((msg <SampleService-request>))
   (cl:+ 0
      4 (cl:length (cl:slot-value msg 'input_msg))
      4 (cl:reduce #'cl:+ (cl:slot-value msg 'condition_poses) :key #'(cl:lambda (ele) (cl:declare (cl:ignorable ele)) (cl:+ (roslisp-msg-protocol:serialization-length ele))))
+     8
 ))
 (cl:defmethod roslisp-msg-protocol:ros-message-to-list ((msg <SampleService-request>))
   "Converts a ROS message object to a list"
   (cl:list 'SampleService-request
     (cl:cons ':input_msg (input_msg msg))
     (cl:cons ':condition_poses (condition_poses msg))
+    (cl:cons ':context (context msg))
 ))
 ;//! \htmlinclude SampleService-response.msg.html
 
@@ -181,10 +212,10 @@
   "ur10_mover/SampleServiceResponse")
 (cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql '<SampleService-response>)))
   "Returns md5sum for a message object of type '<SampleService-response>"
-  "122912d5b5e242242626c58ddc8030aa")
+  "1d1a2b8ec8f0aacf9f57d31767f2b42d")
 (cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql 'SampleService-response)))
   "Returns md5sum for a message object of type 'SampleService-response"
-  "122912d5b5e242242626c58ddc8030aa")
+  "1d1a2b8ec8f0aacf9f57d31767f2b42d")
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql '<SampleService-response>)))
   "Returns full string definition for message of type '<SampleService-response>"
   (cl:format cl:nil "string output_msg~%geometry_msgs/Pose[] sampled_trajectory~%~%================================================================================~%MSG: geometry_msgs/Pose~%# A representation of pose in free space, composed of position and orientation. ~%Point position~%Quaternion orientation~%~%================================================================================~%MSG: geometry_msgs/Point~%# This contains the position of a point in free space~%float64 x~%float64 y~%float64 z~%~%================================================================================~%MSG: geometry_msgs/Quaternion~%# This represents an orientation in free space in quaternion form.~%~%float64 x~%float64 y~%float64 z~%float64 w~%~%~%"))

@@ -24,6 +24,7 @@ class SampleServiceRequest {
       // initObj === null is a special case for deserialization where we don't initialize fields
       this.input_msg = null;
       this.condition_poses = null;
+      this.context = null;
     }
     else {
       if (initObj.hasOwnProperty('input_msg')) {
@@ -38,6 +39,12 @@ class SampleServiceRequest {
       else {
         this.condition_poses = [];
       }
+      if (initObj.hasOwnProperty('context')) {
+        this.context = initObj.context
+      }
+      else {
+        this.context = 0.0;
+      }
     }
   }
 
@@ -51,6 +58,8 @@ class SampleServiceRequest {
     obj.condition_poses.forEach((val) => {
       bufferOffset = geometry_msgs.msg.Pose.serialize(val, buffer, bufferOffset);
     });
+    // Serialize message field [context]
+    bufferOffset = _serializer.float64(obj.context, buffer, bufferOffset);
     return bufferOffset;
   }
 
@@ -67,6 +76,8 @@ class SampleServiceRequest {
     for (let i = 0; i < len; ++i) {
       data.condition_poses[i] = geometry_msgs.msg.Pose.deserialize(buffer, bufferOffset)
     }
+    // Deserialize message field [context]
+    data.context = _deserializer.float64(buffer, bufferOffset);
     return data;
   }
 
@@ -74,7 +85,7 @@ class SampleServiceRequest {
     let length = 0;
     length += _getByteLength(object.input_msg);
     length += 56 * object.condition_poses.length;
-    return length + 8;
+    return length + 16;
   }
 
   static datatype() {
@@ -84,7 +95,7 @@ class SampleServiceRequest {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return '993774274d001bbccdbd64f2063ef909';
+    return '80b48f9c302347801e022f4750bf5612';
   }
 
   static messageDefinition() {
@@ -92,6 +103,7 @@ class SampleServiceRequest {
     return `
     string input_msg
     geometry_msgs/Pose[] condition_poses
+    float64 context
     
     ================================================================================
     MSG: geometry_msgs/Pose
@@ -139,6 +151,13 @@ class SampleServiceRequest {
     }
     else {
       resolved.condition_poses = []
+    }
+
+    if (msg.context !== undefined) {
+      resolved.context = msg.context;
+    }
+    else {
+      resolved.context = 0.0
     }
 
     return resolved;
@@ -275,6 +294,6 @@ class SampleServiceResponse {
 module.exports = {
   Request: SampleServiceRequest,
   Response: SampleServiceResponse,
-  md5sum() { return '122912d5b5e242242626c58ddc8030aa'; },
+  md5sum() { return '1d1a2b8ec8f0aacf9f57d31767f2b42d'; },
   datatype() { return 'ur10_mover/SampleService'; }
 };
