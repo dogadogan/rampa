@@ -3,6 +3,7 @@ using UnityEngine;
 using System;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
 
 public class DrawServiceRealTime: MonoBehaviour
 {
@@ -27,6 +28,13 @@ public class DrawServiceRealTime: MonoBehaviour
     public GameObject anotherTrajectoryButton;
     public GameObject executeOnRealRobotButton;
 
+
+    public Button addContextButton;
+    public GameObject contextPrefab;
+    private GameObject obstacle;
+    public Button[] contextMenu;
+    private bool isContextual = false;
+
     public TMP_Text debugText;
 
     private State state;
@@ -34,7 +42,13 @@ public class DrawServiceRealTime: MonoBehaviour
 
     private int WAY_POINT_FREQ = 10;
 
+    public GameObject collisionWarning;
+    private bool collisionDetectedinTrajectory = false;
 
+    public GameObject collisionIndicatorPrefab;
+    private List<GameObject> collisionIndicators = new List<GameObject>();
+
+    
 
 // TODO - record hand orientation as well
 
@@ -56,6 +70,47 @@ public class DrawServiceRealTime: MonoBehaviour
         ResetDrawingState();
     }
 
+    public void HandleAddContextButton() {
+        if (!isContextual) {
+            isContextual = true;
+            foreach (Button button in contextMenu) {
+                button.interactable = true;
+            }
+            obstacle = Instantiate(contextPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+            addContextButton.GetComponentInChildren<TMP_Text>().text = "remove context";
+        }
+        else {
+            isContextual = false;
+            Destroy(obstacle);
+            foreach (Button button in contextMenu) {
+            button.interactable = false;
+            }
+            addContextButton.GetComponentInChildren<TMP_Text>().text = "add context";
+        }
+    }
+
+    public void IncXScale() {
+        obstacle.transform.localScale += new Vector3(0.02f, 0, 0);
+    }
+    public void DecXScale() {
+        if (obstacle.transform.localScale.x > 0.03f)
+            obstacle.transform.localScale -= new Vector3(0.02f, 0, 0);
+        
+    }
+    public void IncYScale() {
+        obstacle.transform.localScale += new Vector3(0, 0.02f, 0);
+    }
+    public void DecYScale() {
+        if (obstacle.transform.localScale.y > 0.03f)
+            obstacle.transform.localScale -= new Vector3(0, 0.02f, 0);
+    }
+    public void IncZScale() {
+        obstacle.transform.localScale += new Vector3(0, 0, 0.02f);
+    }
+    public void DecZScale() {
+        if (obstacle.transform.localScale.z > 0.03f)
+            obstacle.transform.localScale -= new Vector3(0, 0, 0.02f);
+    }
 
     IEnumerator DrawTrajectory(float interval)
     {
@@ -70,6 +125,7 @@ public class DrawServiceRealTime: MonoBehaviour
                 if (hand.GetFingerIsPinching(OVRHand.HandFinger.Index))
                 {
                     isFirstPart = false;
+                    addContextButton.interactable = false;
                     loadingText.GetComponent<TMP_Text>().text = "drawing trajectory";
                 }
             }
@@ -77,6 +133,7 @@ public class DrawServiceRealTime: MonoBehaviour
                 if (OVRInput.Get(OVRInput.Button.One))
                 {
                     isFirstPart = false;
+                    addContextButton.interactable = false;
                     loadingText.GetComponent<TMP_Text>().text = "drawing trajectory";
                     handOrientation.ShowIndicator(true);
                 }
@@ -148,6 +205,9 @@ public class DrawServiceRealTime: MonoBehaviour
                 lineRenderer.positionCount = 0;
                 
                 handleMenu(true);
+                foreach (Button button in contextMenu) {
+                    button.interactable = false;
+                }
                 anotherTrajectoryButton.SetActive(false);
                 executeOnRealRobotButton.SetActive(false);
             
@@ -221,6 +281,16 @@ public class DrawServiceRealTime: MonoBehaviour
 
         planRequestGeneratorRealTime.ResetGenerator();
         lineRenderer.positionCount = 0;
+
+        collisionDetectedinTrajectory = false;
+        collisionWarning.SetActive(false);
+        
+        if (isContextual) {
+            Destroy(obstacle);
+        }
+        foreach (Button button in contextMenu) {
+            button.interactable = false;
+        }
         
 
         StopAllCoroutines();
@@ -233,6 +303,7 @@ public class DrawServiceRealTime: MonoBehaviour
         redrawButton.interactable = false;
         addToTrainingButton.interactable = false;
         planRequestGeneratorRealTime.PrevRecordedTrajectories.SetInteractable(true);
+        addContextButton.interactable = true;
         
         anotherTrajectoryButton.SetActive(anotherTrajectory);
         
@@ -246,7 +317,10 @@ public class DrawServiceRealTime: MonoBehaviour
 
     public void SendTrainingData()
     {
-        trainAndTest.SendTrainingData(planRequestGeneratorRealTime.previousPoses, planRequestGeneratorRealTime.previousOrientations);
+        if (isContextual)
+            trainAndTest.SendTrainingData(planRequestGeneratorRealTime.previousPoses, planRequestGeneratorRealTime.previousOrientations, obstacle.transform.localScale.y);
+        else 
+            trainAndTest.SendTrainingData(planRequestGeneratorRealTime.previousPoses, planRequestGeneratorRealTime.previousOrientations);
         planRequestGeneratorRealTime.ResetGenerator(true);
         UpdateDrawingState(true);
     }
@@ -261,6 +335,10 @@ public class DrawServiceRealTime: MonoBehaviour
     // handle the bar and the loading text while drawing and inspecting the trajectory
     private void handleMenu(bool loading)
     {
+
+        if (collisionDetectedinTrajectory) {
+            collisionWarning.SetActive(true);
+        }
         bar.SetActive(!loading);
         loadingText.SetActive(loading);
         planRequestGeneratorRealTime.PrevRecordedTrajectories.SetInteractable(!loading);
@@ -269,6 +347,8 @@ public class DrawServiceRealTime: MonoBehaviour
         backButton.interactable = !loading;
         addToTrainingButton.interactable = !loading;
 
+        
+
         if (!loading) {
             // set slider position to end of bar
             Vector3 currRectTransform = sliderPosition.GetComponent<RectTransform>().anchoredPosition;
@@ -276,6 +356,15 @@ public class DrawServiceRealTime: MonoBehaviour
             sliderPosition.GetComponent<RectTransform>().anchoredPosition = currRectTransform;
         }
     
+    }
+
+    public void SetCollisionDetected(Vector3 contactPoint)
+    {
+        if (state == State.DrawTrajectory) {
+            collisionDetectedinTrajectory = true;
+        }
+        GameObject collisionIndicator = Instantiate(collisionIndicatorPrefab, contactPoint, Quaternion.identity);
+        collisionIndicators.Add(collisionIndicator);
     }
 
     public bool isStateDrawTrajectory()

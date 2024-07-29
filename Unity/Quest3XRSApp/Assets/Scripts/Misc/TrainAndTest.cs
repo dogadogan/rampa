@@ -17,13 +17,15 @@ public class TrainAndTest : MonoBehaviour
     private string trainTriggerService = "start_training";
     private string testService = "sample";
     private string deleteService = "delete_training_data";
-
     private string getTrainingDataService = "get_training_data";
 
+    public GameObject collisionWarning;
     ROSConnection m_Ros;
     public TrajectoryHelperFunctions HelperFunctions;
     public GameObject source;
     public GameObject target;
+
+    private bool collisionDetectedinTrajectory;
 
 
     private List<GameObject> waypoints = new List<GameObject>();
@@ -31,17 +33,31 @@ public class TrainAndTest : MonoBehaviour
     private List<double[]> jointAngles = new List<double[]>();
     
     public GameObject conditionPrefab;
+    public GameObject obstaclePrefab;
+    private GameObject obstacle;
     public TrajectoryPlanner trajectoryPlanner;
     public PrevRecordedTrajectories prevRecordedTrajectories;
 
     public Button testButtoninMainMenu;   
 
+    private List<GameObject> collisionIndicators = new List<GameObject>();
+    public GameObject collisionIndicatorPrefab;
+
     private enum State {
         Untrained,
         Training,
-        Trained
+        Trained, 
+        Testing
     }
     private State state;
+
+    private enum Obstacle {
+        Present,
+        NotPresent
+    }
+
+    private Obstacle obstacleState;
+    public TMP_Text obstacleText;
 
     public TMP_Text loadingText;
 
@@ -50,6 +66,7 @@ public class TrainAndTest : MonoBehaviour
     public List<Button> TestMenu_ButtonsList;
     public Button TestMenu_ExecuteOnRealRobotButton;
 
+    public Button[] ScaleButtons;
     public TMP_Dropdown modelDropdown;
     
     // Start is called before the first frame update
@@ -65,6 +82,9 @@ public class TrainAndTest : MonoBehaviour
         testButtoninMainMenu.interactable = false;
 
         loadingText.text = "no training data";
+
+        obstacleState = Obstacle.NotPresent;
+        obstacleText.text = "add obstacle";
         
 
         m_Ros = ROSConnection.GetOrCreateInstance();
@@ -76,8 +96,53 @@ public class TrainAndTest : MonoBehaviour
         m_Ros.RegisterRosService<GetTrainingDataServiceRequest, GetTrainingDataServiceResponse>(getTrainingDataService);
 
     }
+
+    public void HandleObstacle() {
+        if (obstacleState == Obstacle.NotPresent) {
+            obstacle = Instantiate<GameObject>(obstaclePrefab);
+            obstacleState = Obstacle.Present;
+            obstacleText.text = "remove obstacle";
+            foreach (var button in ScaleButtons)
+            {
+                button.interactable = true;
+            }
+
+        } else {
+            Destroy(obstacle);
+            obstacleState = Obstacle.NotPresent;
+            obstacleText.text = "add obstacle";
+            foreach (var button in ScaleButtons)
+            {
+                button.interactable = false;
+            }
+        }
+    }    
+
+    public void IncXScale() {
+        debugText.text += "\nincx";
+        obstacle.transform.localScale += new Vector3(0.1f, 0, 0);
+    }
+    public void DecXScale() {
+        if (obstacle.transform.localScale.x > 0.1f)
+            obstacle.transform.localScale -= new Vector3(0.1f, 0, 0);
+        
+    }
+    public void IncYScale() {
+        obstacle.transform.localScale += new Vector3(0, 0.1f, 0);
+    }
+    public void DecYScale() {
+        if (obstacle.transform.localScale.y > 0.1f)
+            obstacle.transform.localScale -= new Vector3(0, 0.1f, 0);
+    }
+    public void IncZScale() {
+        obstacle.transform.localScale += new Vector3(0, 0, 0.1f);
+    }
+    public void DecZScale() {
+        if (obstacle.transform.localScale.z > 0.1f)
+            obstacle.transform.localScale -= new Vector3(0, 0, 0.1f);
+    }
     
-    public void SendTrainingData( List<Vector3> poses, List<Quaternion> orientations)
+    public void SendTrainingData( List<Vector3> poses, List<Quaternion> orientations, float context = 0)
     {
         var request = new TrainingDataServiceRequest();
         Debug.LogWarning("asd in function");
@@ -90,6 +155,7 @@ public class TrainAndTest : MonoBehaviour
             Debug.LogWarning("asd pose:" + pose_list[i].position);
         }
         request.pose_list = pose_list;
+        request.context = context;
         m_Ros.SendServiceMessage<TrainingDataServiceResponse>(collectDataService, request, SendTrainingDataResponse);
         
     }
@@ -107,13 +173,11 @@ public class TrainAndTest : MonoBehaviour
         }
         else if (modelDropdown.value == 1)
         {
-            request.input_msg = "dmp";
-        }
-        else if (modelDropdown.value == 2)
-        {
             request.input_msg = "gmm";
         }
-
+        else if (modelDropdown.value == 2) {
+            request.input_msg = "contextual_promp";
+        }
 
         m_Ros.SendServiceMessage<TrainingServiceResponse>(trainTriggerService, request, TriggerTrainingResponse);
     
@@ -131,6 +195,8 @@ public class TrainAndTest : MonoBehaviour
     {
         // make buttons in main menu uninteractable
         SetAllButtonsInteractable(false);
+        collisionWarning.SetActive(false);
+        state = State.Testing;
         // they are made interactable after the request is completed in PlanRequesstGeneraterWithPoses - ExecuteTrajectories
         
         var request = new SampleServiceRequest();
@@ -144,6 +210,7 @@ public class TrainAndTest : MonoBehaviour
             req_waypoints[i + 1] = HelperFunctions.GeneratePoseMsg(waypoints[i].transform.position, waypoints[i].transform.rotation);
         }
         request.condition_poses = req_waypoints;
+        request.context = obstacle.transform.localScale;
         m_Ros.SendServiceMessage<SampleServiceResponse>(testService, request, TestModelResponse);
     }
     
@@ -250,6 +317,13 @@ public class TrainAndTest : MonoBehaviour
         {
             button.interactable = interactable;
         }
+
+        if (collisionDetectedinTrajectory) {
+            collisionWarning.SetActive(true);
+        }
+
+        state = State.Trained;
+        collisionDetectedinTrajectory = false;
     }
 
     public void SetExecutionPermissionOnRealRobot(bool permission)
@@ -266,5 +340,24 @@ public class TrainAndTest : MonoBehaviour
         waypoints.Clear();
     }
 
+    public void SetCollisionDetected(Vector3 contactPoint) {
+        if (state == State.Testing)
+        {
+            collisionDetectedinTrajectory = true;
+        }
+        GameObject collisionIndicator = Instantiate(collisionIndicatorPrefab, contactPoint, Quaternion.identity);
+        collisionIndicators.Add(collisionIndicator);
+    }
+
+    public void CloseWarning() {
+        collisionWarning.SetActive(false);
+    }
+
+    public bool isTesting() {
+        return state == State.Testing;
+    }
+
+
     
 }
+
