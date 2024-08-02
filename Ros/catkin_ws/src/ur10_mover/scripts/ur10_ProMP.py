@@ -49,7 +49,8 @@ g_or_y = GMM(n_components=num_comp, random_state=1234)
 g_or_z = GMM(n_components=num_comp, random_state=1234)
 g_or_w = GMM(n_components=num_comp, random_state=1234)
 
-gmm_context = ""
+gmm_context_pos = []
+gmm_context_or = []
 
 def slerp(q1,q2,t):
     dot = np.dot(q1,q2)
@@ -193,20 +194,21 @@ def start_training(req):
 
     rospy.loginfo("Reading data files")
     trajectories = read_data_files()
-    trajectories = np.array(trajectories)
-    rospy.loginfo(trajectories.shape)
-    contexts = trajectories[:,:,7]
+    
     context = []
-    for ctxt in contexts:
-        context.append(ctxt[0])
+    for traj in trajectories:
+        context.append(traj[0][7])
     context = np.array(context)
-    rospy.loginfo(context)
-    trajectories = trajectories[:,:,:7]
+
+    trajectories = [[pose[0:7] for pose in traj] for traj in trajectories]
+
     number_of_demonstrations = len(trajectories)
     all_demonstrations = []
     for trajectory in trajectories:
-        interpolated_points = interpolate_points(trajectory[:,:3],sample_length)
-        interpolated_quaternions = interpolate_quaternions(trajectory[:,-4:], sample_length)
+        pos_trajectory = [pose[0:3] for pose in trajectory]
+        or_trajectory = [pose[3:7] for pose in trajectory]
+        interpolated_points = interpolate_points(pos_trajectory,sample_length)
+        interpolated_quaternions = interpolate_quaternions(or_trajectory, sample_length)
 
         interpolated_data = np.concatenate((interpolated_points, interpolated_quaternions), axis = -1)
 
@@ -268,27 +270,31 @@ def start_training(req):
         last_training = "gmm" 
 
     elif (req.input_msg == "contextual_promp"):
-
+        
         timesteps = np.linspace(0, 1, sample_length)
         timesteps = np.tile(timesteps, (number_of_demonstrations, 1))
         weights_pos = np.empty((number_of_demonstrations, n_dims_pos * num_comp))
         weights_or = np.empty((number_of_demonstrations, n_dims_or * num_comp))
-
+        
         p_pos.imitate(timesteps, demo_data_pos)
         p_or.imitate(timesteps, demo_data_or)
 
         for demo_idx in range(number_of_demonstrations):
             weights_pos[demo_idx] = p_pos.weights(timesteps[demo_idx], demo_data_pos[demo_idx]).flatten()
             weights_or[demo_idx] = p_or.weights(timesteps[demo_idx], demo_data_or[demo_idx]).flatten()
-            
-        weights = np.concatenate((weights_pos, weights_or), axis=-1)
 
-        context_features = context.reshape(-1, 1)   # Reshape to column vector so it can be concatenated
-        X = np.hstack((context_features, weights))
+        # weights = np.concatenate((weights_pos, weights_or), axis=-1)
 
-        global gmm_context
-        gmm_context = GMM(n_components=3, random_state=0)
-        gmm_context.from_samples(X)
+        context_features = context.reshape(-1, 1)  # Reshape to column vector so it can be concatenated
+        X_pos = np.hstack((context_features, weights_pos))
+        X_or = np.hstack((context_features, weights_or))
+
+        global gmm_context_pos
+        global gmm_context_or
+        gmm_context_pos = GMM(n_components=3, random_state=0)
+        gmm_context_or = GMM(n_components=3, random_state=0)
+        gmm_context_pos.from_samples(X_pos)
+        gmm_context_or.from_samples(X_or)
     
     isTraining = False
     response.output_msg = "success"
@@ -390,20 +396,27 @@ def sample_trajectory(req):
         timesteps = np.linspace(0, 1, sample_length)
         timesteps = np.tile(timesteps, (num_demo, 1))
 
-        new_context_feature = req.context # Novel context
-        pmp = get_promp_from_context(gmm_context, new_context_feature)
+        new_context_feature = req.context  # Novel context
+        pmp_pos = get_promp_from_context(gmm_context_pos, new_context_feature, True)
+        pmp_or = get_promp_from_context(gmm_context_or, new_context_feature, False)
 
         # Generate trajectory based on the adapted ProMP
-        mean_trajectory = pmp.mean_trajectory(timesteps[0])
-        trajectory_pos = mean_trajectory
 
+        for i in range(len(condition_poses)):
+            pose = condition_poses[i]
+            pmp_pos.condition_position([pose[0], pose[1], pose[2]], t=T[i])
 
+        for i in range(len(condition_orientations)):
+            orientation = condition_orientations[i]
+            pmp_or.condition_position([orientation[0], orientation[1], orientation[2], orientation[3]], t=T[i])
+
+        mean_trajectory_pos = pmp_pos.mean_trajectory(timesteps[0])
+        mean_trajectory_or = pmp_or.mean_trajectory(timesteps[0])
+        trajectory_pos = mean_trajectory_pos
+        trajectory_or = mean_trajectory_or
 
     rospy.loginfo("SAMPLED TRAJECTORY")
 
-    
-
-        
     
     sample = []
     if (last_training == "promp"):
@@ -432,7 +445,6 @@ def sample_trajectory(req):
 
     return response
 
-
 def plot(demo_data, sample):
     # (100,4)
 
@@ -444,9 +456,6 @@ def plot(demo_data, sample):
             plt.scatter(T, data[:,i])
         plt.title(f'{i} vs. time')
         plt.show()
-
-
-
 
 def delete_training_data(req):
 
@@ -504,18 +513,13 @@ def send_training_data(req):
     return response
 
     
-
-
 def proMP_server():
     
     rospy.Service("save_training_data", TrainingDataService, save_trajectory_to_data)
     rospy.Service("start_training", TrainingService, start_training)
     rospy.Service("sample",SampleService,sample_trajectory)
-    
     rospy.Service("delete_training_data", TrainingService, delete_training_data)
-
     rospy.Service("get_training_data", GetTrainingDataService, send_training_data)
-
     rospy.spin()
 
 if __name__ == "__main__":
