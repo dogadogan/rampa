@@ -54,7 +54,7 @@ CMAKE_BINARY_DIR = /home/user/ARobot/Ros/catkin_ws/build
 include ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_GetTrainingDataService.dir/progress.make
 
 ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_GetTrainingDataService:
-	cd /home/user/ARobot/Ros/catkin_ws/build/ur10_mover && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py ur10_mover /home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/GetTrainingDataService.srv geometry_msgs/Pose:geometry_msgs/Quaternion:geometry_msgs/Point:ur10_mover/ListOfPoses
+	cd /home/user/ARobot/Ros/catkin_ws/build/ur10_mover && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py ur10_mover /home/user/ARobot/Ros/catkin_ws/src/ur10_mover/srv/GetTrainingDataService.srv geometry_msgs/Pose:ur10_mover/ListOfPoses:geometry_msgs/Point:geometry_msgs/Quaternion
 
 _ur10_mover_generate_messages_check_deps_GetTrainingDataService: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_GetTrainingDataService
 _ur10_mover_generate_messages_check_deps_GetTrainingDataService: ur10_mover/CMakeFiles/_ur10_mover_generate_messages_check_deps_GetTrainingDataService.dir/build.make

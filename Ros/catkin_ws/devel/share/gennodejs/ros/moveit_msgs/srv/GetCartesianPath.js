@@ -13,8 +13,8 @@ const _finder = _ros_msg_utils.Find;
 const _getByteLength = _ros_msg_utils.getByteLength;
 let RobotState = require('../msg/RobotState.js');
 let Constraints = require('../msg/Constraints.js');
-let geometry_msgs = _finder('geometry_msgs');
 let std_msgs = _finder('std_msgs');
+let geometry_msgs = _finder('geometry_msgs');
 
 //-----------------------------------------------------------
 
