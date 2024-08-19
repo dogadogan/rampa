@@ -18,7 +18,7 @@ public class TrajectoryHelperFunctions : MonoBehaviour
 
     public TMP_Text debugText;
 
-    float OFFSET = 0.3f;
+    public float OFFSET = 0.3f;
     public double[] CurrentJointConfig()
     {
         double[] joints = new double[Sliders.Length] ;
@@ -31,10 +31,8 @@ public class TrajectoryHelperFunctions : MonoBehaviour
         return joints;
     }
 
-    public PoseMsg GeneratePoseMsg(Vector3 pose, Quaternion orientation)
-    {
-
-
+    public PoseMsg GeneratePoseMsg(Vector3 pose, Quaternion orientation, bool isTrainingSet = false)
+    {   
         // debugText.text += "baseLink:  " + orientation.eulerAngles + "\n";
 
         Vector3 direction = pose - baseLink.transform.position;
@@ -49,6 +47,15 @@ public class TrajectoryHelperFunctions : MonoBehaviour
         Quaternion rotatedOrientation = baseReverseRotation * orientation;
 
         // debugText.text += "rotatedOrientation:  " + rotatedOrientation.eulerAngles + "\n";
+
+        if (isTrainingSet)
+        {
+            return new PoseMsg
+            {
+                position = rotatedDirection.To<FLU>(),
+                orientation = rotatedOrientation.To<FLU>()
+            };
+        }
 
         Vector3 rotatedDirectionWithOffset = TranslatePointInReverseDirection(rotatedDirection, rotatedOrientation, OFFSET);
 

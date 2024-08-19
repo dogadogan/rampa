@@ -18,7 +18,6 @@ public class DrawServiceWithInspect : MonoBehaviour
     private Vector3 trajectorySamplePoints_point1;
     private Vector3 trajectorySamplePoints_point2;
     private State state;
-
     public TMP_Dropdown recordOrientationDropdown;
     public HandOrientation handOrientation;
     public OVRInput.Controller controllerOrientation;
@@ -32,7 +31,6 @@ public class DrawServiceWithInspect : MonoBehaviour
     public Button redrawButton;
     public GameObject executeButton;
     public Button addToTrainingButton;
-    public GameObject anotherTrajectoryButton;
     public GameObject executeOnRealRobotButton;
 
     public GameObject collisionWarning;
@@ -60,7 +58,6 @@ public class DrawServiceWithInspect : MonoBehaviour
         lineRenderer.startColor = lineColor;
         lineRenderer.endColor = lineColor;
         
-        anotherTrajectoryButton.SetActive(false);
         executeOnRealRobotButton.SetActive(false);
         
         trajectorySamplePoints_point1 = new Vector3(0, 0, 0);
@@ -72,16 +69,18 @@ public class DrawServiceWithInspect : MonoBehaviour
     public void HandleAddContextButton() {
         if (!isContextual) {
             isContextual = true;
-            foreach (Button button in contextMenu) {
+            foreach (var button in contextMenu)
+            {
                 button.interactable = true;
-            }  
+            }
             obstacle = Instantiate(contextPrefab, new Vector3(0, 0, 0), Quaternion.identity);
             addContextButton.GetComponentInChildren<TMP_Text>().text = "remove context";
         }
         else {
             isContextual = false;
             Destroy(obstacle);
-            foreach (Button button in contextMenu) {
+            foreach (var button in contextMenu)
+            {
                 button.interactable = false;
             }
             addContextButton.GetComponentInChildren<TMP_Text>().text = "add context";
@@ -205,11 +204,11 @@ public class DrawServiceWithInspect : MonoBehaviour
 
                 lineRenderer.positionCount = 0;
                 handleMenu(true);
-                foreach (Button button in contextMenu) {
+                foreach (var button in contextMenu)
+                {
                     button.interactable = false;
                 }
 
-                anotherTrajectoryButton.SetActive(false);
                 executeOnRealRobotButton.SetActive(false);
                 executeButton.SetActive(true);
 
@@ -241,12 +240,13 @@ public class DrawServiceWithInspect : MonoBehaviour
                 else {
                     state = State.ExecuteTrajectory;
                     loadingText.GetComponent<TMP_Text>().text = "executing trajectory";
-
                 }
                 break;
 
             case  State.ExecuteTrajectory:
                 state = State.InspectTrajectory;
+                PlanRequestGeneratorWithPoses.SetJointAnglesForRealRobot();
+                executeOnRealRobotButton.SetActive(true);
 
                 PlanRequestGeneratorWithPoses.SetCurrentIndexPointer();
                 targetPoints.Clear();
@@ -300,14 +300,19 @@ public class DrawServiceWithInspect : MonoBehaviour
 
     public void ResetDrawingState(bool anotherTrajectory = false)
     {
-
+        
         ClearCollisionIndicators();
 
-        if (isContextual) {
-            Destroy(obstacle);
-        }
-        foreach (Button button in contextMenu) {
+        if (!anotherTrajectory) {
+            if (isContextual) {
+                Destroy(obstacle);
+            }
+            foreach (var button in contextMenu)
+            {
                 button.interactable = false;
+            }
+            isContextual = false;
+            addContextButton.GetComponentInChildren<TMP_Text>().text = "add context";
         }
 
         state = State.Initial;
@@ -337,7 +342,6 @@ public class DrawServiceWithInspect : MonoBehaviour
         PlanRequestGeneratorWithPoses.PrevRecordedTrajectories.SetInteractable(true);
 
         addContextButton.interactable = true;
-        anotherTrajectoryButton.SetActive(anotherTrajectory);
 
         // do not set active if no solution found 
         
@@ -383,6 +387,7 @@ public class DrawServiceWithInspect : MonoBehaviour
         }
         GameObject collisionIndicator = Instantiate(collisionIndicatorPrefab, contactPoint, Quaternion.identity);
         collisionIndicators.Add(collisionIndicator);
+        
     }
 
     private void ClearCollisionIndicators() {

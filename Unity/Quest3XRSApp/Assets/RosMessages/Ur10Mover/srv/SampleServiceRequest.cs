@@ -15,17 +15,20 @@ namespace RosMessageTypes.Ur10Mover
 
         public string input_msg;
         public Geometry.PoseMsg[] condition_poses;
+        public double context;
 
         public SampleServiceRequest()
         {
             this.input_msg = "";
             this.condition_poses = new Geometry.PoseMsg[0];
+            this.context = 0.0;
         }
 
-        public SampleServiceRequest(string input_msg, Geometry.PoseMsg[] condition_poses)
+        public SampleServiceRequest(string input_msg, Geometry.PoseMsg[] condition_poses, double context)
         {
             this.input_msg = input_msg;
             this.condition_poses = condition_poses;
+            this.context = context;
         }
 
         public static SampleServiceRequest Deserialize(MessageDeserializer deserializer) => new SampleServiceRequest(deserializer);
@@ -34,6 +37,7 @@ namespace RosMessageTypes.Ur10Mover
         {
             deserializer.Read(out this.input_msg);
             deserializer.Read(out this.condition_poses, Geometry.PoseMsg.Deserialize, deserializer.ReadLength());
+            deserializer.Read(out this.context);
         }
 
         public override void SerializeTo(MessageSerializer serializer)
@@ -41,13 +45,15 @@ namespace RosMessageTypes.Ur10Mover
             serializer.Write(this.input_msg);
             serializer.WriteLength(this.condition_poses);
             serializer.Write(this.condition_poses);
+            serializer.Write(this.context);
         }
 
         public override string ToString()
         {
             return "SampleServiceRequest: " +
             "\ninput_msg: " + input_msg.ToString() +
-            "\ncondition_poses: " + System.String.Join(", ", condition_poses.ToList());
+            "\ncondition_poses: " + System.String.Join(", ", condition_poses.ToList()) +
+            "\ncontext: " + context.ToString();
         }
 
 #if UNITY_EDITOR

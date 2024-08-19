@@ -3,6 +3,9 @@ using Unity.Robotics.ROSTCPConnector;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Unity.Robotics.ROSTCPConnector.ROSGeometry;
+using RosMessageTypes.Trajectory;
+using RosMessageTypes.Geometry;
 
 public class TrajectoryPlanner : MonoBehaviour
 {
@@ -16,6 +19,7 @@ public class TrajectoryPlanner : MonoBehaviour
     public PlanRequestGeneratorWithTarget PlanRequestGeneratorWithTarget;
     public PlanRequestGeneratorWithPoses PlanRequestGeneratorWithPoses;
     public PlanRequestGeneratorRealTime PlanRequestGeneratorRealTime;
+    public TrajectoryHelperFunctions TrajectoryHelperFunctions;
 
     void Start()
     {
@@ -25,6 +29,24 @@ public class TrajectoryPlanner : MonoBehaviour
     
     public void SendRequest(PlannerServiceRequest request)
     {
+
+        if (request.request_type == "poses_training") {
+
+            var oldPoses = request.pose_list;
+            request.pose_list = new PoseMsg[oldPoses.Length];
+            debugText.text += "\n Transforming poses to FLU";
+            for (int i = 0; i < request.pose_list.Length; i++) {
+                Quaternion or = oldPoses[i].orientation.From<FLU>();
+                Vector3 pos = oldPoses[i].position.From<FLU>();
+                Vector3 posWithOffset = TrajectoryHelperFunctions.TranslatePointInReverseDirection(pos, or, TrajectoryHelperFunctions.OFFSET);
+                request.pose_list[i] = new PoseMsg
+                {
+                    position = posWithOffset.To<FLU>(),
+                    orientation = or.To<FLU>()
+                };
+            }
+        }
+
         m_Ros.SendServiceMessage<PlannerServiceResponse>(m_RosServiceName, request, TrajectoryResponse);
     }
     

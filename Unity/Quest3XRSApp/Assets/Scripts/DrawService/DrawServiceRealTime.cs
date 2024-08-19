@@ -25,7 +25,6 @@ public class DrawServiceRealTime: MonoBehaviour
     public Button nextButton;
     public Button redrawButton;
     public Button addToTrainingButton;
-    public GameObject anotherTrajectoryButton;
     public GameObject executeOnRealRobotButton;
 
 
@@ -40,7 +39,7 @@ public class DrawServiceRealTime: MonoBehaviour
     private State state;
     // private float threshold = 0.01f;
 
-    private int WAY_POINT_FREQ = 10;
+    private int WAY_POINT_FREQ = 4 ;
 
     public GameObject collisionWarning;
     private bool collisionDetectedinTrajectory = false;
@@ -64,7 +63,6 @@ public class DrawServiceRealTime: MonoBehaviour
 
         loadingText.GetComponent<TMP_Text>().text = "pinch to start drawing";
 
-        anotherTrajectoryButton.SetActive(false);
         executeOnRealRobotButton.SetActive(false);
 
         ResetDrawingState();
@@ -73,7 +71,8 @@ public class DrawServiceRealTime: MonoBehaviour
     public void HandleAddContextButton() {
         if (!isContextual) {
             isContextual = true;
-            foreach (Button button in contextMenu) {
+            foreach (var button in contextMenu)
+            {
                 button.interactable = true;
             }
             obstacle = Instantiate(contextPrefab, new Vector3(0, 0, 0), Quaternion.identity);
@@ -82,8 +81,9 @@ public class DrawServiceRealTime: MonoBehaviour
         else {
             isContextual = false;
             Destroy(obstacle);
-            foreach (Button button in contextMenu) {
-            button.interactable = false;
+            foreach (var button in contextMenu)
+            {
+                button.interactable = false;
             }
             addContextButton.GetComponentInChildren<TMP_Text>().text = "add context";
         }
@@ -205,10 +205,10 @@ public class DrawServiceRealTime: MonoBehaviour
                 lineRenderer.positionCount = 0;
                 
                 handleMenu(true);
-                foreach (Button button in contextMenu) {
+                foreach (var button in contextMenu)
+                {
                     button.interactable = false;
                 }
-                anotherTrajectoryButton.SetActive(false);
                 executeOnRealRobotButton.SetActive(false);
             
                 StartCoroutine(DrawTrajectory(0.05f));
@@ -221,6 +221,8 @@ public class DrawServiceRealTime: MonoBehaviour
                 }
                 else {
                     state = State.InspectTrajectory;
+                    planRequestGeneratorRealTime.SetJointAnglesForRealRobot();
+                    executeOnRealRobotButton.SetActive(true);
                     planRequestGeneratorRealTime.SetCurrentIndexPointer();
                     handleMenu(false);
                 }
@@ -285,11 +287,16 @@ public class DrawServiceRealTime: MonoBehaviour
         collisionDetectedinTrajectory = false;
         collisionWarning.SetActive(false);
         
-        if (isContextual) {
-            Destroy(obstacle);
-        }
-        foreach (Button button in contextMenu) {
-            button.interactable = false;
+        if (!anotherTrajectory) {
+            if (isContextual) {
+                Destroy(obstacle);
+            }
+            foreach (var button in contextMenu)
+            {
+                button.interactable = false;
+            }
+            isContextual = false;
+            addContextButton.GetComponentInChildren<TMP_Text>().text = "add context";
         }
         
 
@@ -305,7 +312,6 @@ public class DrawServiceRealTime: MonoBehaviour
         planRequestGeneratorRealTime.PrevRecordedTrajectories.SetInteractable(true);
         addContextButton.interactable = true;
         
-        anotherTrajectoryButton.SetActive(anotherTrajectory);
         
 
 

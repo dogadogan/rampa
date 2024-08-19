@@ -16,8 +16,8 @@ public class CollisionDetection : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-
         debugText.text += "Collision detected\n";
+        debugText.text += "Collision game object: " + collision.gameObject.name + "\n";
 
         Vector3 collisionPoint = collision.contacts[0].point;
 

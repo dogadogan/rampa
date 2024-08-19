@@ -1,0 +1,13 @@
+geometry_msgs/Pose pose
+string arm
+
+---
+
+sensor_msgs/JointState[] joints
+
+bool[] isValid
+
+uint8 RESULT_INVALID = 0
+
+uint8[] result_type
+

@@ -143,6 +143,9 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
     }
     
     
+    public void SetJointAnglesForRealRobot() {
+        realRobotCommunication.setJointAngles(previousPoints);
+    }
     
 
     public void ResetGenerator(bool addToTrainingSet = false)
@@ -151,9 +154,9 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
         if (addToTrainingSet) {
             // store the current trajectory
             if (previousPoints.Count > 0) {
-                realRobotCommunication.setJointAngles(previousPoints);
+                // realRobotCommunication.setJointAngles(previousPoints);
                 PrevRecordedTrajectories.AddTrajectory(previousPoses, previousOrientations);
-                executeOnRealRobotButton.SetActive(true);
+                // executeOnRealRobotButton.SetActive(true);
             }
 
             // handle show-traj buttons

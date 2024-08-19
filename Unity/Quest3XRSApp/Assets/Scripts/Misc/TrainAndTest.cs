@@ -120,39 +120,35 @@ public class TrainAndTest : MonoBehaviour
 
     public void IncXScale() {
         debugText.text += "\nincx";
-        obstacle.transform.localScale += new Vector3(0.1f, 0, 0);
+        obstacle.transform.localScale += new Vector3(0.02f, 0, 0);
     }
     public void DecXScale() {
-        if (obstacle.transform.localScale.x > 0.1f)
-            obstacle.transform.localScale -= new Vector3(0.1f, 0, 0);
+        if (obstacle.transform.localScale.x > 0.03f)
+            obstacle.transform.localScale -= new Vector3(0.02f, 0, 0);
         
     }
     public void IncYScale() {
-        obstacle.transform.localScale += new Vector3(0, 0.1f, 0);
+        obstacle.transform.localScale += new Vector3(0, 0.02f, 0);
     }
     public void DecYScale() {
-        if (obstacle.transform.localScale.y > 0.1f)
-            obstacle.transform.localScale -= new Vector3(0, 0.1f, 0);
+        if (obstacle.transform.localScale.y > 0.03f)
+            obstacle.transform.localScale -= new Vector3(0, 0.02f, 0);
     }
     public void IncZScale() {
-        obstacle.transform.localScale += new Vector3(0, 0, 0.1f);
+        obstacle.transform.localScale += new Vector3(0, 0, 0.02f);
     }
     public void DecZScale() {
-        if (obstacle.transform.localScale.z > 0.1f)
-            obstacle.transform.localScale -= new Vector3(0, 0, 0.1f);
+        if (obstacle.transform.localScale.z > 0.03f)
+            obstacle.transform.localScale -= new Vector3(0, 0, 0.02f);
     }
     
     public void SendTrainingData( List<Vector3> poses, List<Quaternion> orientations, float context = 0)
     {
         var request = new TrainingDataServiceRequest();
-        Debug.LogWarning("asd in function");
-        Debug.LogWarning("asd count:" + poses.Count);
-        
         PoseMsg[] pose_list = new PoseMsg[poses.Count];
         for (int i = 0; i < poses.Count; i++)
         {
-            pose_list[i] = HelperFunctions.GeneratePoseMsg(poses[i], orientations[i]);
-            Debug.LogWarning("asd pose:" + pose_list[i].position);
+            pose_list[i] = HelperFunctions.GeneratePoseMsg(poses[i], orientations[i], true);
         }
         request.pose_list = pose_list;
         request.context = context;
@@ -200,17 +196,20 @@ public class TrainAndTest : MonoBehaviour
         // they are made interactable after the request is completed in PlanRequesstGeneraterWithPoses - ExecuteTrajectories
         
         var request = new SampleServiceRequest();
-        var start_point = HelperFunctions.GeneratePoseMsg(source.transform.position, source.transform.rotation);
-        var end_point = HelperFunctions.GeneratePoseMsg(target.transform.position, source.transform.rotation);
+        var start_point = HelperFunctions.GeneratePoseMsg(source.transform.position, source.transform.rotation, true);
+        var end_point = HelperFunctions.GeneratePoseMsg(target.transform.position, source.transform.rotation, true);
         var req_waypoints = new PoseMsg[waypoints.Count + 2]; 
         req_waypoints[0] = start_point;
         req_waypoints[waypoints.Count + 1] = end_point;
         for (int i = 0; i < waypoints.Count; i++)
         {
-            req_waypoints[i + 1] = HelperFunctions.GeneratePoseMsg(waypoints[i].transform.position, waypoints[i].transform.rotation);
+            req_waypoints[i + 1] = HelperFunctions.GeneratePoseMsg(waypoints[i].transform.position, waypoints[i].transform.rotation, true);
         }
         request.condition_poses = req_waypoints;
-        request.context = obstacle.transform.localScale;
+        if (obstacleState == Obstacle.Present)
+            request.context = obstacle.transform.localScale.y;
+        else
+            request.context = 0;
         m_Ros.SendServiceMessage<SampleServiceResponse>(testService, request, TestModelResponse);
     }
     
@@ -351,6 +350,15 @@ public class TrainAndTest : MonoBehaviour
 
     public void CloseWarning() {
         collisionWarning.SetActive(false);
+
+        foreach (var indicator in collisionIndicators)
+        {
+            Destroy(indicator);
+        }
+        collisionIndicators.Clear();
+        obstacleState = Obstacle.NotPresent;
+        obstacleText.text = "add obstacle";
+
     }
 
     public bool isTesting() {

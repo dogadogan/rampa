@@ -90,7 +90,9 @@ public class PlanRequestGeneratorWithPoses : MonoBehaviour
     
     IEnumerator ExecuteTrajectories(PlannerServiceResponse response, bool fromTraining = false)
     {
-
+        if (fromTraining) {
+            previousPoints.Clear();
+        }
         if (response.trajectories != null)
         {
             // For every trajectory plan returned
@@ -108,10 +110,6 @@ public class PlanRequestGeneratorWithPoses : MonoBehaviour
 
                 }
             } 
-        }
-
-        foreach (var pose in previousPoses) {
-            // debugText.text += pose.ToString();
         }
 
         if (fromTraining) {
@@ -217,15 +215,18 @@ public class PlanRequestGeneratorWithPoses : MonoBehaviour
     }
 
 
+    public void SetJointAnglesForRealRobot() {
+        realRobotCommunication.setJointAngles(previousPoints);
+    }
 
     public void ResetGenerator(bool addToTrainingSet = false)
     {
         if (addToTrainingSet) {
             // store the current trajectory
             if (previousPoints.Count > 0) {
-                realRobotCommunication.setJointAngles(previousPoints);
+                // realRobotCommunication.setJointAngles(previousPoints);
                 PrevRecordedTrajectories.AddTrajectory(previousPoses, previousOrientations);
-                executeOnRealRobotButton.SetActive(true);
+                // executeOnRealRobotButton.SetActive(true);
             }
 
             // handle show-traj buttons
