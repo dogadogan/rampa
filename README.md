@@ -5,7 +5,7 @@ Robotic Augmented Reality for Machine Programming and Automation
 ### Requirements
 The entire project is developed with
 1. Python 3.8
-2. Unity x.x
+2. Unity 2022.3.22f1
 
 ### Running
 1. Clone the repo
