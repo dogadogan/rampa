@@ -1,5 +1,5 @@
 # RAMPA
-AR Robot simulation and control project
+Robotic Augmented Reality for Machine Programming and Automation
 
 ## Getting Started
 ### Requirements
