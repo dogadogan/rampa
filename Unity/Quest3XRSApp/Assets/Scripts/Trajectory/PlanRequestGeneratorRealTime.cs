@@ -12,6 +12,8 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
     const float k_JointAssignmentWait = 0.05f;
 
     public DrawServiceRealTime DrawServiceRealTime;
+
+    public TMP_Dropdown recordOrientationDropdown;
     public RealRobotCommunication RealRobotCommunication;
     public TrajectoryHelperFunctions HelperFunctions;
     public TrajectoryPlanner TrajectoryPlanner;
@@ -80,6 +82,12 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
     {
         var request = new PlannerServiceRequest();
         request.request_type = "realTime";
+        if (recordOrientationDropdown.value == 0) {
+            request.input_msg = "down";
+        }
+        else if (recordOrientationDropdown.value == 3) {
+            request.input_msg = "hook";
+        }
         request.joints_input = jointConfig;
 
         previousPoses.Add(pose);
@@ -97,6 +105,7 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
     
     public void ProcessResponse(PlannerServiceResponse response)
     {
+        
 
         if (response.output_msg == "Timeout")
         {
@@ -113,7 +122,6 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
     IEnumerator ExecuteTrajectories(PlannerServiceResponse response)
     {
 
-
         // For every trajectory plan returned
         for (var poseIndex = 0; poseIndex < response.trajectories.Length; poseIndex++)
         {
@@ -123,7 +131,6 @@ public class PlanRequestGeneratorRealTime : MonoBehaviour
             {
                 if (t == lastPoint)
                 {
-                    
                     previousPoints.Add(HelperFunctions.GetJointAngles(t));
                 }
 

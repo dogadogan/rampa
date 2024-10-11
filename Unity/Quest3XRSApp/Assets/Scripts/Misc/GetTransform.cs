@@ -38,7 +38,7 @@ public class GetTransform : MonoBehaviour
                 //isFirst = false;
                 baseLink.TeleportRoot(position, orientation);
                 counter++;
-                if (counter > 100) {
+                if (counter > 1000) {
                     isFirst = false;
                     counter = 0;
                 }

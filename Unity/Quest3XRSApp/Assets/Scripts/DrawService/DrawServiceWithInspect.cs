@@ -6,6 +6,9 @@ using UnityEngine.UI;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine.Serialization;
+using Unity.Robotics.ROSTCPConnector.ROSGeometry;
+using RosMessageTypes.Trajectory;
+using RosMessageTypes.Geometry;
 
 public class DrawServiceWithInspect : MonoBehaviour
 {
@@ -155,7 +158,7 @@ public class DrawServiceWithInspect : MonoBehaviour
 
                 if (!isFirstPart) {
                     
-                    if (recordOrientationDropdown.value != 0) {
+                    if (recordOrientationDropdown.value == 1 || recordOrientationDropdown.value == 2) {
                         if (recordOrientationDropdown.value == 1) {
                         // not important
                         handOrientation.UpdateHandOrientationIndicator(hand.PointerPose.position, hand.PointerPose.position);
@@ -165,9 +168,16 @@ public class DrawServiceWithInspect : MonoBehaviour
                         targetPoints.Add(hand.PointerPose.position);
                     }
                     else {
-                        debugText.text += "adding point with fixed orientation\n";
-                        targetOrientations.Add(Quaternion.Euler(180,0,0));
-                        targetPoints.Add(hand.PointerPose.position);
+                        if (recordOrientationDropdown.value == 0) {
+                            // down orientation
+                            targetOrientations.Add(Quaternion.Euler(180,0,0));
+                            targetPoints.Add(hand.PointerPose.position);
+                        }
+                        else {
+                            // hook orientation
+                            targetOrientations.Add(Quaternion.Euler(180,0,0));
+                            targetPoints.Add(hand.PointerPose.position);
+                        }
                     }
                 }
             }

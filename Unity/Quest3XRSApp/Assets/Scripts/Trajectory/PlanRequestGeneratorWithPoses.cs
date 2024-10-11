@@ -16,6 +16,7 @@ public class PlanRequestGeneratorWithPoses : MonoBehaviour
     public RealRobotCommunication realRobotCommunication;
     public TrajectoryHelperFunctions HelperFunctions;
     public TrajectoryPlanner TrajectoryPlanner;
+    public TMP_Dropdown recordOrientationDropdown;
 
     // new instance variables for inspecting trajectory
     public PrevRecordedTrajectories PrevRecordedTrajectories;
@@ -55,6 +56,14 @@ public class PlanRequestGeneratorWithPoses : MonoBehaviour
 
         Vector3[] poses = poseList.ToArray();
         Quaternion[] orientations = orientationList.ToArray();
+
+
+        if (recordOrientationDropdown.value == 0) {
+            request.input_msg = "down";
+        }
+        else if (recordOrientationDropdown.value == 3) {
+            request.input_msg = "hook";
+        }
 
         request.request_type = "poses";
         request.joints_input = HelperFunctions.CurrentJointConfig();
