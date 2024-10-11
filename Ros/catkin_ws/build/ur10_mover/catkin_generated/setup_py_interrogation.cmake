@@ -1,0 +1,7 @@
+set(ur10_mover_SETUP_PY_SETUP_MODULE "setuptools")
+set(ur10_mover_SETUP_PY_VERSION "0.0.0")
+set(ur10_mover_SETUP_PY_SCRIPTS "")
+set(ur10_mover_SETUP_PY_PACKAGES "ur10_mover")
+set(ur10_mover_SETUP_PY_PACKAGE_DIRS "scripts/ur10_mover")
+set(ur10_mover_SETUP_PY_MODULES "")
+set(ur10_mover_SETUP_PY_MODULE_DIRS "")

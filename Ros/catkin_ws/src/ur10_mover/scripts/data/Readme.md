@@ -1,1 +1,0 @@
-This folder contains data samples for the AI model.

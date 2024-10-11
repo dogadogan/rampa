@@ -1,0 +1,8 @@
+prefix=/home/user/ARobot/Ros/catkin_ws/devel
+
+Name: ur10_moveit_config
+Description: Description of ur10_moveit_config
+Version: 1.3.2
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

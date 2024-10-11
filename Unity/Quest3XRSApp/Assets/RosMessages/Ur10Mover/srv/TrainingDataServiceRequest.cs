@@ -15,17 +15,20 @@ namespace RosMessageTypes.Ur10Mover
 
         public string input_msg;
         public Geometry.PoseMsg[] pose_list;
+        public double context;
 
         public TrainingDataServiceRequest()
         {
             this.input_msg = "";
             this.pose_list = new Geometry.PoseMsg[0];
+            this.context = 0.0;
         }
 
-        public TrainingDataServiceRequest(string input_msg, Geometry.PoseMsg[] pose_list)
+        public TrainingDataServiceRequest(string input_msg, Geometry.PoseMsg[] pose_list, double context)
         {
             this.input_msg = input_msg;
             this.pose_list = pose_list;
+            this.context = context;
         }
 
         public static TrainingDataServiceRequest Deserialize(MessageDeserializer deserializer) => new TrainingDataServiceRequest(deserializer);
@@ -34,6 +37,7 @@ namespace RosMessageTypes.Ur10Mover
         {
             deserializer.Read(out this.input_msg);
             deserializer.Read(out this.pose_list, Geometry.PoseMsg.Deserialize, deserializer.ReadLength());
+            deserializer.Read(out this.context);
         }
 
         public override void SerializeTo(MessageSerializer serializer)
@@ -41,13 +45,15 @@ namespace RosMessageTypes.Ur10Mover
             serializer.Write(this.input_msg);
             serializer.WriteLength(this.pose_list);
             serializer.Write(this.pose_list);
+            serializer.Write(this.context);
         }
 
         public override string ToString()
         {
             return "TrainingDataServiceRequest: " +
             "\ninput_msg: " + input_msg.ToString() +
-            "\npose_list: " + System.String.Join(", ", pose_list.ToList());
+            "\npose_list: " + System.String.Join(", ", pose_list.ToList()) +
+            "\ncontext: " + context.ToString();
         }
 
 #if UNITY_EDITOR

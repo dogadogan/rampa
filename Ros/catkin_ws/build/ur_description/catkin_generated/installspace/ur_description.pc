@@ -1,0 +1,8 @@
+prefix=/home/user/ARobot/Ros/catkin_ws/install
+
+Name: ur_description
+Description: Description of ur_description
+Version: 1.3.2
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

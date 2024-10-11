@@ -1,0 +1,8 @@
+prefix=/home/user/ARobot/Ros/catkin_ws/devel
+
+Name: moveit_msgs
+Description: Description of moveit_msgs
+Version: 0.11.1
+Cflags: -I/home/user/ARobot/Ros/catkin_ws/devel/include
+Libs: -L${prefix}/lib 
+Requires: message_runtime std_msgs actionlib_msgs sensor_msgs geometry_msgs trajectory_msgs shape_msgs object_recognition_msgs octomap_msgs

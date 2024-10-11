@@ -1,14 +1,5 @@
 {
   "dependencies": {
-    "com.meta.xr.depthapi": {
-      "version": "https://github.com/oculus-samples/Unity-DepthAPI.git?path=/Packages/com.meta.xr.depthapi",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {
-        "com.unity.xr.oculus": "4.2.0-exp-env-depth.2"
-      },
-      "hash": "0596292096cb962a0e856ba6bd1ba6146b8f9625"
-    },
     "com.meta.xr.mrutilitykit": {
       "version": "62.0.0",
       "depth": 1,

@@ -1,0 +1,8 @@
+prefix=/home/user/ARobot/Ros/catkin_ws/install
+
+Name: ur10_mover
+Description: Description of ur10_mover
+Version: 0.0.0
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib 
+Requires: 
