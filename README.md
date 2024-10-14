@@ -20,7 +20,7 @@ The entire project is developed with
    -  Run the UR10 driver
    -   Run the MoveIt Planner: roslaunch ur10_moveit_config moveit_planning_execution.launch
    -   Run the following command: roslaunch ur10_mover server.launch tcp_ip:=TCP_IP_HERE tcp_port:=10000
-   -   Using your headset, open the Unity application you built. ur10_mover server will inform you when a connection is established. The application is ready to use.
+   -   Using your headset, open the Unity application you built. ur10_mover server will inform you when a connection is established. The application is now ready to use.
 
 
 ## How to use RAMPA
