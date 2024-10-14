@@ -47,4 +47,6 @@ You can train an ML model using your saved trajectories. Pressing "train a new m
 
 #### Testing the trained model
 
+### Menus in the application
+
 
