@@ -6,17 +6,16 @@ This repository includes the source code for the paper "RAMPA: **R**obotic **A**
 <img width="400" alt="Introduction" src="https://github.com/user-attachments/assets/1828158f-2924-4065-ac3e-a80a64c5cc32">
 </p>
 
-RAMPA is a comprehensive and intuitive AR-driven framework for demonstrating robotic skill trajectories, integrating trajectory visualizations and modifications, real-time hand mimicry, and training and testing ML models.  
+RAMPA is an *end-to-end* AR-based PfD framework to enable the demonstration of robotic trajectories, training, and testing ML model augmented by real-time hand mimicry, visualization of the robot's motion, and trajectory adjustment in situ. 
 
 
 
-<!--This work has been submitted to the *IEEE RA-L* for possible publication on **October 12, 2024-->!
+
+
+<!--This work has been submitted to the *IEEE RA-L* for possible publication on **October 12, 2024-->
 
 <!--  The video of the work : 
-      The preprint :-->!
-      
-
-
+      The preprint :-->
 ## How to use RAMPA
 
 ### Drawing a trajectory
