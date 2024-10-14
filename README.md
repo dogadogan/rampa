@@ -40,6 +40,8 @@ To condition the trained model and generate a new trajectory, enter the "Test Mo
 The entire project is developed with
 1. Python 3.8
 2. Unity 2022.3.22f1
+3. Hardware for AR: Meta Quest 3
+4. Robotic Hardware: Universal Robots UR10
 
 ### Running
 1. Clone the repo
