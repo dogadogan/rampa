@@ -6,20 +6,15 @@ This repository includes the source code for the paper "RAMPA: **R**obotic **A**
 <img width="400" alt="Introduction" src="https://github.com/user-attachments/assets/1828158f-2924-4065-ac3e-a80a64c5cc32">
 </p>
 
-<!--RAMPA is an *end-to-end* AR-based PfD framework to enable the demonstration of robotic trajectories, training, and testing ML model augmented by real-time hand mimicry, visualization of the robot's motion, and trajectory adjustment in situ. By integrating in-situ simulation, real-time spatial understanding, and direct manipulation capabilities, RAMPA enhances the physical safety, flexibility of robotic operations, and efficiency of Programming from Demonstration (PfD) procedures, hence, the effectiveness of human-robot collaboration. 
-
-Our comprehensive evaluation includes the experiment consisting of three robotic tasks and extensive analysis using quantitative metrics, incorporating standard surveys.  
-
-
-
-This work has been submitted to the *IEEE RA-L* for possible publication on **October 12, 2024-->
+<!--RAMPA is an *end-to-end* AR-based PfD framework to enable the demonstration of robotic trajectories, training, and testing ML model augmented by real-time hand mimicry, visualization of the robot's motion, and trajectory adjustment in situ. By integrating in-situ simulation, real-time spatial understanding, and direct manipulation capabilities, RAMPA enhances the physical safety, flexibility of robotic operations, and efficiency of Programming from Demonstration (PfD) procedures, hence, the effectiveness and accessibility of human-robot collaboration. To assess the competence and performance of the RAMPA and compare it with kinesthetic control, manually moving the robot for demonstration, we conducted a comprehensive evaluation consisting of an experiment with three robotic tasks, 20 participants including both experienced and novice users, an extensive analysis using quantitative metrics such as task completion time and standard surveys concerning the usability, user experience, and task load. This work has been submitted to the *IEEE RA-L* for possible publication on **October 12, 2024-->
 
 <!--  The video of the work : 
       The preprint :-->
+      
 ## How to use RAMPA
 
 ### Drawing a trajectory
-To start drawing a trajectory, click the "record trajectory" button on the main menu. The application will wait for you to pinch your right hand to draw a trajectory. If you select the "follow real-time" toggle in the main menu, the simulated robot will follow your hand as you draw the trajectory. Otherwise, it will simulate the entire trajectory after you finish drawing. From the orientation dropdown in the main menu, you can select whether you want to fix an orientation or record the orientation of your hand while drawing the trajectory. You can save the trajectory you've drawn by clicking "add to training set".
+To start drawing a trajectory, click the "record trajectory" button on the main menu. The application will wait for you to pinch your right hand to draw a trajectory. If you select the "follow real-time" toggle in the main menu, the simulated robot will follow your hand as you draw the trajectory. Otherwise, it will simulate the entire trajectory after you finish drawing. From the orientation dropdown in the main menu, you can select whether you want to fix an orientation or record the orientation of your hand while drawing the trajectory. You can save the trajectory you've drawn by clicking the "add to training set".
 
 <p align="center">
 <img width="400" alt="Screenshot 2024-10-14 at 16 43 10" src="https://github.com/user-attachments/assets/a184748a-105a-4110-836e-780c0ad89bd1">
