@@ -1,13 +1,26 @@
 # RAMPA Robotic Augmented Reality for Machine Programming and Automation
 
-This repository includes the source code for the paper "RAMPA: **R**obotic **A**ugmented Reality for **M**achine **P**rogramming and **A**utomation" by Fatih Dogangun, Serdar Bahar, Yigit Yildirim, Bora Toprak Temir, Emre Ugur, Mustafa Doga Dogan, members of the CoLoRs Lab, Bogazici University.
+This repository includes the source code for the paper "RAMPA: **R**obotic **A**ugmented Reality for **M**achine **P**rogramming and **A**utomation" by Fatih Dogangun, Serdar Bahar, Yigit Yildirim, Bora Toprak Temir, Emre Ugur, Mustafa Doga Dogan, members of the [CoLoRs Lab, Bogazici University](https://colors.cmpe.boun.edu.tr).
 
-RAMPA is a comprehensive and intuitive AR-driven framework for demonstrating robotic skill trajectories, integrating trajectory visualizations and modifications, real-time hand mimicry, and training and testing ML models.
+<p align="center">
+<img width="400" alt="Introduction" src="https://github.com/user-attachments/assets/1828158f-2924-4065-ac3e-a80a64c5cc32">
+</p>
+
+RAMPA is a comprehensive and intuitive AR-driven framework for demonstrating robotic skill trajectories, integrating trajectory visualizations and modifications, real-time hand mimicry, and training and testing ML models.  
+
+
+
+<!--This work has been submitted to the *IEEE RA-L* for possible publication on **October 12, 2024-->!
+
+<!--  The video of the work : 
+      The preprint :-->!
+      
+
 
 ## How to use RAMPA
 
 ### Drawing a trajectory
-To start drawing a trajectory, click the "record trajectory" button on the main menu. The application will wait for you to pinch your right hand to draw a trajectory. If you select the "follow real-time" toggle in the main menu, the simulated robot will follow your hand as you draw the trajectory. Otherwise, it will simulate the entire trajectory after you finish drawing. From the orientation dropdown in the main menu, you can select whether you want to fix an orientation or record the orientation of your hand while drawing the trajectory. You can save the trajectory you've drawn with clicking "add to training set".
+To start drawing a trajectory, click the "record trajectory" button on the main menu. The application will wait for you to pinch your right hand to draw a trajectory. If you select the "follow real-time" toggle in the main menu, the simulated robot will follow your hand as you draw the trajectory. Otherwise, it will simulate the entire trajectory after you finish drawing. From the orientation dropdown in the main menu, you can select whether you want to fix an orientation or record the orientation of your hand while drawing the trajectory. You can save the trajectory you've drawn by clicking "add to training set".
 
 <p align="center">
 <img width="400" alt="Screenshot 2024-10-14 at 16 43 10" src="https://github.com/user-attachments/assets/a184748a-105a-4110-836e-780c0ad89bd1">
