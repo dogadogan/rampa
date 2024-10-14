@@ -24,9 +24,27 @@ The entire project is developed with
 
 
 ## How to use RAMPA
-<img width="736" alt="Screenshot 2024-10-14 at 10 21 22" src="https://github.com/user-attachments/assets/3b02b442-c713-403b-93f0-60d23f3acef0">
+<p align="center">
+<img width="400" align="center" alt="Screenshot 2024-10-14 at 10 21 22" src="https://github.com/user-attachments/assets/3b02b442-c713-403b-93f0-60d23f3acef0">
+</p>
 
 ### Drawing a trajectory
-To start drawing a trajectory, press "record trajectory" button on the main menu. The application will wait for you to pinch your right hand to start drawing a trajectory. If you select the "follow real-time" toggle in the main menu, 
+To start drawing a trajectory, press "record trajectory" button on the main menu. The application will wait for you to pinch your right hand to start drawing a trajectory. If you select the "follow real-time" toggle in the main menu, the simulated robot will follow your hand as you draw the trajectory, otherwise, it will simulate the entire trajectory after you finish drawing. From the orientation dropdown in the main menu you can select whether you want to fix an orientation, or to also record your orientation of your hand while drawing the trajectory. You can save the trajectory you've drawn with pressing "add to training set".
+
+#### Inspecting the trajectory
+Use the backward, forward and play buttons provided in the trajectory capture menu to inspect the trajectory you've drawn. Pressing "redraw from current waypoint" will erase the trajectory after the current waypoint and the application will expect you to draw the rest of the trajectory.
+
+<p align="center">
+<img width="400" alt="Screenshot 2024-10-14 at 12 47 07" src="https://github.com/user-attachments/assets/2b1a563b-8b26-4def-a2b2-22c17869582e">
+</p>
+
+#### Auto-calibration
+Selecting the "auto-transform" toggle will teleport the base of the simulated robot to the left controller with a relative offset. With a tool as shown above, and changing the offset values manually, you can also co-locate the simulated robot with your actual robot.
 
 ### Training an ML model
+
+You can train an ML model using your saved trajectories. Pressing "train a new model" button will open the ML training menu. From the dropdown, you can see the currently implemented ML models. You can also implement the ML model you choose and it here. To trigger training, press "start training", the menu will inform you when the training is completed. 
+
+#### Testing the trained model
+
+
