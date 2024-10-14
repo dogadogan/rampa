@@ -23,3 +23,10 @@ The entire project is developed with
    -   Using your headset, open the Unity application you built. ur10_mover server will inform you when a connection is established. The application is ready to use.
 
 
+## How to use RAMPA
+<img width="736" alt="Screenshot 2024-10-14 at 10 21 22" src="https://github.com/user-attachments/assets/3b02b442-c713-403b-93f0-60d23f3acef0">
+
+### Drawing a trajectory
+To start drawing a trajectory, press "record trajectory" button on the main menu. The application will wait for you to pinch your right hand to start drawing a trajectory. If you select the "follow real-time" toggle in the main menu, 
+
+### Training an ML model
