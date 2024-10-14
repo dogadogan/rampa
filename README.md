@@ -30,6 +30,9 @@ Use the backward, forward, and play buttons provided in the trajectory capture m
 #### Auto-calibration
 Selecting the "auto-transform" toggle will teleport the base of the simulated robot to the left controller with a relative offset. With a tool as shown above and changing the offset values manually, you can also co-locate the simulated robot with your actual robot.
 
+#### Execution on the actual robot
+You can execute the simulated trajectory on the actual robot by clicking "execute on real robot". At the moment the button is clicked, the joint trajectory will be published to the relevant rostopic, making the actual robot move. You can also execute the current trajectory after redrawing the trajectory. Please be mindful that clicking the button will cause the robot to move immediately.
+
 ### Training an ML model
 
 You can train an ML model using your saved trajectories. Clicking the "train a new model" button will open the ML training menu. From the dropdown, you can see the currently implemented ML models. You can also implement the ML model you choose and add it here. To trigger training, click the "start training". The menu will inform you when the training is completed. 
@@ -40,7 +43,7 @@ You can train an ML model using your saved trajectories. Clicking the "train a n
   
 #### Testing the trained model
 
-To condition the trained model and generate a new trajectory, enter the "Test Model" menu by clicking the "test trained model" button. Before generating a new trajectory, the start and end points of the desired trajectory should be specified. This is done by placing the virtual cubes at the desired positions with the correct orientations. The blue cube corresponds to the start point, and the green cube the end point. Way-points can be added using the "+/-" buttons in the "Test Model" menu. For each way-point added, the time stamp of all the waypoints is recalculated by evenly dividing the interval with the number of way-points. Also, to exactly specify an orientation regarding orientation indicators in the saved trajectories, (1) the arrow going out of the cube should be in the same direction as the indicator, (2) the side of the virtual cube that has a letter should be in the same direction as of the red side of the indicator. However, these are purely choices of implementations and can be changed easily from the corresponding scripts.
+To condition the trained model and generate a new trajectory, enter the "Test Model" menu by clicking the "test trained model" button. Before generating a new trajectory, the start and end points of the desired trajectory should be specified. This is done by placing the virtual cubes at the desired positions with the correct orientations. The blue cube corresponds to the start point, and the green cube the end point. Way-points can be added using the "+/-" buttons in the "Test Model" menu. For each way-point added, the time stamp of all the waypoints is recalculated by evenly dividing the interval with the number of way-points. Also, to exactly specify an orientation regarding orientation indicators in the saved trajectories, (1) the arrow going out of the cube should be in the same direction as the indicator, (2) the side of the virtual cube that has a letter should be in the same direction as of the red side of the indicator. However, these are purely choices of implementations and can be changed easily from the corresponding scripts. After simulation, you can execute the returned trajectory on the actual robot by clicking "execute trajectory on the real robot".
 
 ## Getting Started
 ### Requirements
