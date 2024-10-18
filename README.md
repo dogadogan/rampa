@@ -6,11 +6,11 @@ This repository includes the source code for the paper "RAMPA: **R**obotic **A**
 <img width="400" alt="Introduction" src="https://github.com/user-attachments/assets/1828158f-2924-4065-ac3e-a80a64c5cc32">
 </p>
 
-<!--RAMPA is an *end-to-end* AR-based PfD framework to enable the demonstration of robotic trajectories, training, and testing ML model augmented by real-time hand mimicry, visualization of the robot's motion, and trajectory adjustment in situ. By integrating in-situ simulation, real-time spatial understanding, and direct manipulation capabilities, RAMPA enhances the physical safety, flexibility of robotic operations, and efficiency of Programming from Demonstration (PfD) procedures, hence, the effectiveness and accessibility of human-robot collaboration. To assess the competence and performance of the RAMPA and compare it with kinesthetic control, manually moving the robot for demonstration, we conducted a comprehensive evaluation consisting of an experiment with three robotic tasks, 20 participants including both experienced and novice users, an extensive analysis using quantitative metrics such as task completion time and standard surveys concerning the usability, user experience, and task load. This work has been submitted to the *IEEE RA-L* for possible publication on **October 12, 2024-->
+RAMPA is an *end-to-end* AR-based PfD framework to enable the demonstration of robotic trajectories, training, and testing ML model augmented by real-time hand mimicry, visualization of the robot's motion, and trajectory adjustment in situ. By integrating in-situ simulation, real-time spatial understanding, and direct manipulation capabilities, RAMPA enhances the physical safety, flexibility of robotic operations, and efficiency of Programming from Demonstration (PfD) procedures, hence, the effectiveness and accessibility of human-robot collaboration. To assess the competence and performance of the RAMPA and compare it with kinesthetic control, manually moving the robot for demonstration, we conducted a comprehensive evaluation consisting of an experiment with three robotic tasks, 20 participants including both experienced and novice users, an extensive analysis using quantitative metrics such as task completion time and standard surveys concerning the usability, user experience, and task load. This work has been submitted to the *IEEE RA-L* for possible publication on **October 12, 2024**
+   
+The preprint: https://arxiv.org/abs/2410.13412
 
-<!--   
-      The preprint :-->
-The video of the work : https://youtu.be/TEluXV2OGDo
+The video of the work: https://youtu.be/TEluXV2OGDo
 ## How to use RAMPA
 
 ### Drawing a trajectory
