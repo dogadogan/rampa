@@ -1,6 +1,6 @@
-# RAMPA: Robotic Augmented Reality for Machine Programming and Automation
+# RAMPA: Robotic Augmented Reality for Machine Programming by Demonstration
 
-This repository includes the source code for the paper "RAMPA: **R**obotic **A**ugmented Reality for **M**achine **P**rogramming and **A**utomation" by Fatih Dogangun, Serdar Bahar, Yigit Yildirim, Bora Toprak Temir, Emre Ugur, Mustafa Doga Dogan, members of the [CoLoRs Lab, Bogazici University](https://colors.cmpe.boun.edu.tr).
+This repository includes the source code for the paper "RAMPA: **R**obotic **A**ugmented Reality for **M**achine **P**rogramming by Demonstr**A**tion" by Fatih Dogangun, Serdar Bahar, Yigit Yildirim, Bora Toprak Temir, Emre Ugur, Mustafa Doga Dogan, members of the [CoLoRs Lab, Bogazici University](https://colors.cmpe.boun.edu.tr).
 
 <p align="center">
 <img width="400" alt="Introduction" src="https://github.com/user-attachments/assets/1828158f-2924-4065-ac3e-a80a64c5cc32">
