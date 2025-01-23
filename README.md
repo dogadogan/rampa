@@ -11,6 +11,31 @@ RAMPA is an *end-to-end* AR-based PfD framework to enable the demonstration of r
 The preprint: https://arxiv.org/abs/2410.13412
 
 The video of the work: https://youtu.be/TEluXV2OGDo
+
+## Comparison of RAMPA with other AR-based robotic programming frameworks
+
+A comprehensive comparison with existing AR-based systems is provided in the table below, evaluating several key features among recent works in AR-based robotic programming.
+
+| **Feature / Method**                             | **Quintero et al. [1]** | **Luebbers et al. [2]** | **Lotsaris et al. [3]** | **Chen et al. (Mr. LfD) [4]** | **Chen et al. (ARCap) [5]** | **RAMPA** |
+|--------------------------------------------------|:-----------------------------------------------:|:---------------------------------------------:|:-------------------------:|:------------------------------:|:------------------------------:|:---------------------:|
+| **End-to-End: Demonstration, Training and Deploy in AR** | No (AR trajectory definition only) | No (recording/training outside AR) | No  (training/deploy outside AR) | No (training/deploy outside AR) |No (training/deploy outside AR) | **Yes** |
+| **Integrated ML System in AR: Training + Deployment**    | No (trajectory-based programming) | **Yes** (Supports offline training, limited with constraints-based LfD) | No (trajectory-based programming)  | No (Not integrated, but supports offline batch training of ML models after data collection) | No (Not integrated, but supports offline batch training of ML models after data collection) | **Yes** (Supports on-the-fly offline batch training within AR for LfD models)  |
+| **Full Trajectory Modification: Rewinding, Redrawing Pre- and Post-Demonstration** | No (Allows users to revise and adjust trajectories in AR before deployment)  | No (Users can refine constraints to adjust learned skills within AR) | No (Allows users to revise and adjust trajectories in AR before deployment)| No (Focuses on demonstration capture)| No (Focuses on demonstration capture) | **Yes** (Supports rewinding, partial redrawing within AR, pre- and post-demonstration) |
+| **Online Hand Mimicking by Simulated/Actual Robot**               | No                                              | No                                            | No                        | **Yes** (Online hand mimicking by real robot)                       | **Yes**  (Online hand mimicking by virtual robot)                      | **Yes** (Online hand mimicking by virtual robot)              |
+| **Trajectory Visualization with Simulated Robot**                     | **Yes**   (Displays AR overlays with full kinematic simulation of the trajectory)                                      | Partial  (Displays AR overlays for constraints without full simulation)                                     | Partial (Uses a virtual gripper for demonstration)                  | No                             | **Yes** (Displays AR overlays without full kinematic simulation of the trajectory)                       | **Yes**  (Displays AR overlays with full kinematic simulation of the trajectory)             |
+| **Is Headset and Robot Platform Sufficient?**                     | No (MYO Armband needed)                                         | **Yes**                                       | **Yes**                   | **Yes**                             |       Partial (possible to use with lacking features)  | **Yes**               |
+| **Trajectory Drawing Method**                    | Point-based                                     | None                                          | Point-based               | Hand gestures                  | Hand gestures                  | Hand gestures         |
+
+[1] C. P. Quintero, S. Li, M. K. Pan, W. P. Chan, H. M. Van der Loos, and E. Croft, “Robot programming through augmented trajectories in augmented reality,” in IROS. IEEE, 2018, pp. 1838–1844.
+
+[2] M. B. Luebbers, C. Brooks, C. L. Mueller, D. Szafir, and B. Hayes, “Arc-lfd: Using augmented reality for interactive long-term robot skill maintenance via constrained learning from demonstration,” in ICRA, 2021, pp. 3794–3800.
+
+[3] K. Lotsaris, C. Gkournelos, N. Fousekis, N. Kousi, and S. Makris, “Ar based robot programming using teaching by demonstration techniques,” Procedia CIRP, vol. 97, pp. 459–463, 01 2021.
+
+[4] J. Chen, D. Salas, M. Bilal, Q. Zhou, and W. Johal, “Mr. lfd: A mixed reality interface for robot learning from demonstration,” 2024.
+
+[5] S. Chen, C. Wang, K. Nguyen, L. Fei-Fei, and C. K. Liu, “Arcap: Collecting high-quality human demonstrations for robot learning with augmented reality feedback,” 2024.
+
 ## How to use RAMPA
 
 ### Drawing a trajectory
