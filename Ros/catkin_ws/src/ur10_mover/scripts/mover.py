@@ -24,7 +24,7 @@ from ur10_mover.srv import DiscardService, DiscardServiceRequest, DiscardService
 
 from sensor_msgs.msg import JointState
 from geometry_msgs.msg import Pose, WrenchStamped, Transform
-from ur10_interface import UR10
+from xarm7_interface import XArm7
 
 
 config_one_euro_filter = {
@@ -37,7 +37,7 @@ f_x = OneEuroFilter(**config_one_euro_filter)
 f_y = OneEuroFilter(**config_one_euro_filter)
 f_z = OneEuroFilter(**config_one_euro_filter)
 
-joint_names = ['shoulder_pan_joint', 'shoulder_lift_joint', 'elbow_joint', 'wrist_1_joint', 'wrist_2_joint', 'wrist_3_joint']
+joint_names = ['joint1', 'joint2', 'joint3', 'joint4', 'joint5', 'joint6', 'joint7']
 
 #Between Melodic and Noetic, the return type of plan() changed. moveit_commander has no __version__ variable, so checking the python version as a proxy
     
@@ -233,7 +233,7 @@ def return_joint_state(req):
     response = StateServiceResponse()
     try:
         current_joint_angles = robot.get_joint_position()
-        if len(current_joint_angles) < 6:
+        if len(current_joint_angles) < 7:
             response.output_msg = "Driver could not be reached"
             return response
     except:
@@ -280,8 +280,8 @@ def moveit_server():
     rospy.spin()
 
 rospy.init_node('ur10_mover_server')
-robot = UR10()
-group_name = "manipulator"
+robot = XArm7()
+group_name = "xarm7"
 move_group = moveit_commander.MoveGroupCommander(group_name)
 
 rospy.sleep(2)
